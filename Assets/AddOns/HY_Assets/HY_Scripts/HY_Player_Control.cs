@@ -48,6 +48,7 @@ public class HY_Player_Control : MonoBehaviour
     AudioClip jumpSound,fallInWater,collideSound;
     bool collideToWater;
     public GameObject dummyScreen;
+    [SerializeField] HY_CameraControl camControl;
     void Start()
     {
         collideToWater= false;
@@ -161,6 +162,10 @@ public class HY_Player_Control : MonoBehaviour
             // move.Normalize();
 
             move.y = 0f;
+            if (camControl != null)
+            {
+                camControl.playerMoveDir = move;
+            }
             if (transformControl)
             {
                 transform.position += move * moveSpeed * Time.deltaTime;
