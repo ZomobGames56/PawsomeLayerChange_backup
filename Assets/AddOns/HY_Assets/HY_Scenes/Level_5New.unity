@@ -1367,6 +1367,11 @@ PrefabInstance:
       objectReference: {fileID: 860558647}
     - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
+      propertyPath: joystick
+      value: 
+      objectReference: {fileID: 2053921985}
+    - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
       propertyPath: jumpSound
       value: 
       objectReference: {fileID: 8300000, guid: f3260b89c5883f040a71cb22ad9629d7, type: 3}
@@ -1618,6 +1623,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c7a63b1eace674face7e22e130ff32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &369849017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 369849020}
+  - component: {fileID: 369849019}
+  - component: {fileID: 369849018}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &369849018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 369849017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.StandaloneInputModule
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &369849019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 369849017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventSystem
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &369849020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 369849017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &392821785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,6 +2076,11 @@ PrefabInstance:
     - target: {fileID: 5211623916306978069, guid: 0f7ef2745d05d6d43bfb602db109f676,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7074218274474136142, guid: 0f7ef2745d05d6d43bfb602db109f676,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4200,6 +4278,18 @@ Transform:
   - {fileID: 1640489805}
   m_Father: {fileID: 6834584259919402310}
   m_LocalEulerAnglesHint: {x: 0, y: 55, z: 0}
+--- !u!114 &1070189799 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4329789578676583595, guid: 0f7ef2745d05d6d43bfb602db109f676,
+    type: 3}
+  m_PrefabInstance: {fileID: 551839642}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4827755f1dafcfa4386a2f0f10fb7cc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!64 &1114362990
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4793,7 +4883,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &1346721992
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7553,6 +7643,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &2053921985 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4480761967478326952, guid: 0f7ef2745d05d6d43bfb602db109f676,
+    type: 3}
+  m_PrefabInstance: {fileID: 551839642}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2073695210
 GameObject:
   m_ObjectHideFlags: 0
@@ -7682,6 +7784,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 160704851}
+    - target: {fileID: 4139911821551715629, guid: f9cfa429a895dad4a9a902147dfa15ab,
+        type: 3}
+      propertyPath: TouchField
+      value: 
+      objectReference: {fileID: 1070189799}
     - target: {fileID: 4139911821551715629, guid: f9cfa429a895dad4a9a902147dfa15ab,
         type: 3}
       propertyPath: windowSensi
@@ -17898,3 +18005,4 @@ SceneRoots:
   - {fileID: 1784215763}
   - {fileID: 860558647}
   - {fileID: 1585929458}
+  - {fileID: 369849020}
