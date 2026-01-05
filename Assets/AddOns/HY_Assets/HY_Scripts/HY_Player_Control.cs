@@ -1,4 +1,4 @@
-  using System.Collections;
+﻿  using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
@@ -100,43 +100,110 @@ public class HY_Player_Control : MonoBehaviour
    
     public void PlayerMovement()
     {
-        if ((Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer && canControl))
+        if ((Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer && canControl
+            || Application.platform == RuntimePlatform.WindowsEditor))
         {
-            //Debug.Log("Mobile");
+            #region
+            ////Debug.Log("Mobile");
             //joystick.gameObject.SetActive(true);
-            move = (cam.right * joystick.Horizontal +
-                   cam.forward * joystick.Vertical).normalized;
+            //move = (cam.right * joystick.Horizontal +
+            //       cam.forward * joystick.Vertical).normalized;
+            //move.y = 0f;
+            //if (transformControl)
+            //{
+            //    transform.position += move * moveSpeed * Time.deltaTime;
+            //   // Debug.Log("Transform one is calling");
+            //}
+            //if (rigidBodyControl)
+            //{
+            //    if (rb != null)
+            //    {
+            //        rb.MovePosition(transform.position + move * moveSpeed * Time.fixedDeltaTime);
+            //       // Debug.Log("rigid one is calling");
+
+            //    }
+            //}
+
+            //if (move.magnitude != 0)
+            //{
+            //  //  dustEffect.Play();
+            //    Rotate();
+            //}
+            ////if (move.magnitude == 0)
+            ////{
+            ////    dustEffect.Stop();
+            ////}
+            #endregion
+            joystick.gameObject.SetActive(true);
+
+            Vector3 camForwad = cam.forward;
+            Vector3 camRight = cam.right;
+            camForwad.y = 0f;
+            camRight.y = 0f;
+            camForwad.Normalize();
+            camRight.Normalize();
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+            move = camRight * joystick.Horizontal + camForwad * joystick.Vertical;
+
+
+
+            //joystick.gameObject.SetActive(true);
+            //move = (cam.right * joystick.Horizontal +
+            //       cam.forward * joystick.Vertical).normalized;
+            //move.y = 0f;
+
+            move = Vector3.ClampMagnitude(move, 1f);
+            //if (move.magnitude > 1)
+            //{
+            //    //move = move.normalized;
+            //}
+            // move.Normalize();
+
             move.y = 0f;
             if (transformControl)
             {
                 transform.position += move * moveSpeed * Time.deltaTime;
-               // Debug.Log("Transform one is calling");
+                Debug.Log("Transform one is calling");
             }
             if (rigidBodyControl)
             {
                 if (rb != null)
                 {
-                    rb.MovePosition(transform.position + move * moveSpeed * Time.fixedDeltaTime);
-                   // Debug.Log("rigid one is calling");
+                    // rb.MovePosition(transform.position + move * moveSpeed * Time.fixedDeltaTime);
+                    //rb.linearVelocity = Vector3 velocity = rb.linearVelocity;
+                    Vector3 velocity = rb.linearVelocity;
+                    if (move.sqrMagnitude > 0.01f)
+                    {
+                        velocity.x = move.x * moveSpeed;
+                        velocity.z = move.z * moveSpeed;
+                    }
+                    else
+                    {
+                        // Hard stop when input released
+                        velocity.x = 0f;
+                        velocity.z = 0f;
+                    }
+
+                    rb.linearVelocity = velocity;
+                    // rb.velocity = move*moveSpeed;
+
+
+                    //animator.SetFloat("Run",rb.velocity.magnitude);
+                    //Debug.Log("rigid one is calling");
 
                 }
             }
-            
             if (move.magnitude != 0)
             {
-              //  dustEffect.Play();
                 Rotate();
+                // dustEffect.Play();
             }
-            //if (move.magnitude == 0)
-            //{
-            //    dustEffect.Stop();
-            //}
-            
         }
 
-        if ((Application.platform == RuntimePlatform.WindowsPlayer||Application.platform == RuntimePlatform.WindowsEditor) && canControl)
+        if ((Application.platform == RuntimePlatform.WindowsPlayer) && canControl)
         {
-            // joystick.gameObject.SetActive(false);
+             joystick.gameObject.SetActive(false);
             Vector3 camForwad = cam.forward;
             Vector3 camRight = cam.right;
             camForwad.y = 0f;
@@ -386,6 +453,7 @@ public class HY_Player_Control : MonoBehaviour
             //inAirTime += Time.deltaTime;
         }
     }
+
 
     float InAirTime()
     {

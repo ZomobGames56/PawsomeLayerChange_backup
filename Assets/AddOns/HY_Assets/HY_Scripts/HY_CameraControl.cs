@@ -19,7 +19,7 @@ public class HY_CameraControl : MonoBehaviour
 
     private void Start()
     {
-        //rot = Quaternion.Euler(xAxisValue, yAxisValue, 0);
+        rot = Quaternion.Euler(xAxisValue, yAxisValue, 0);
         // transform.rotation=Quaternion.Euler(180,0,0);
         //dir = new Vector3(11, 3, 0.5f);
         currentX = transform.rotation.x;
@@ -27,17 +27,17 @@ public class HY_CameraControl : MonoBehaviour
     }
     private void Update()
     {
-        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-        {
+       // if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+      //  {
 
             MouseRotation();
-        }
+       // }
 
-        if (Application.platform == RuntimePlatform.WindowsPlayer ||
-             Application.platform == RuntimePlatform.WindowsEditor)
-        {
-            RotationWithMouseOnly();
-        }
+        //if (Application.platform == RuntimePlatform.WindowsPlayer ||
+        //     Application.platform == RuntimePlatform.WindowsEditor)
+        //{
+        //    RotationWithMouseOnly();
+        //}
         RenderSettings.skybox.SetFloat("_Rotation", Time.time * rotationSpeed);
         // ObstacleAvoidance();
     }
