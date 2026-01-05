@@ -1,5 +1,4 @@
-﻿  using System.Collections;
-using System.Runtime.CompilerServices;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,13 +44,13 @@ public class HY_Player_Control : MonoBehaviour
     ParticleSystem dustEffect;
 
     [SerializeField]
-    AudioClip jumpSound,fallInWater,collideSound;
+    AudioClip jumpSound, fallInWater, collideSound;
     bool collideToWater;
     public GameObject dummyScreen;
     [SerializeField] HY_CameraControl camControl;
     void Start()
     {
-        collideToWater= false;
+        collideToWater = false;
         isCalled = false;
         canControl = true;
         rb = GetComponent<Rigidbody>();
@@ -70,7 +69,7 @@ public class HY_Player_Control : MonoBehaviour
         jumpbtnPressed = false;
     }
     // Update is called once per frame
-    
+
     void Update()
     {
         PlayerOutOfBounds();
@@ -89,16 +88,16 @@ public class HY_Player_Control : MonoBehaviour
     }
     private void FixedUpdate()
     {
-     if(canControl == true)
+        if (canControl == true)
         {
             PlayerMovement();
-        }   
+        }
     }
     void HangingAnimation()
     {
         animator.SetBool("Hanging", true);
     }// hanging animation true..
-   
+
     public void PlayerMovement()
     {
         if ((Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer && canControl
@@ -149,19 +148,12 @@ public class HY_Player_Control : MonoBehaviour
 
 
 
-            //joystick.gameObject.SetActive(true);
-            //move = (cam.right * joystick.Horizontal +
-            //       cam.forward * joystick.Vertical).normalized;
-            //move.y = 0f;
+
 
             move = Vector3.ClampMagnitude(move, 1f);
-            //if (move.magnitude > 1)
-            //{
-            //    //move = move.normalized;
-            //}
-            // move.Normalize();
 
             move.y = 0f;
+            // for camera rotation.!!!!!!
             if (camControl != null)
             {
                 camControl.playerMoveDir = move;
@@ -206,9 +198,9 @@ public class HY_Player_Control : MonoBehaviour
             }
         }
 
-        if ((Application.platform == RuntimePlatform.WindowsPlayer) && canControl)
+        else if ((Application.platform == RuntimePlatform.WindowsPlayer) && canControl)
         {
-             joystick.gameObject.SetActive(false);
+            joystick.gameObject.SetActive(false);
             Vector3 camForwad = cam.forward;
             Vector3 camRight = cam.right;
             camForwad.y = 0f;
@@ -217,7 +209,7 @@ public class HY_Player_Control : MonoBehaviour
             camRight.Normalize();
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
-            move = camRight* h + camForwad * v;
+            move = camRight * h + camForwad * v;
             move = Vector3.ClampMagnitude(move, 1f);
             if (move.magnitude > 1)
             {
@@ -262,7 +254,7 @@ public class HY_Player_Control : MonoBehaviour
             if (move.magnitude != 0)
             {
                 Rotate();
-               // dustEffect.Play();
+                // dustEffect.Play();
             }
         }
 
@@ -354,7 +346,7 @@ public class HY_Player_Control : MonoBehaviour
             inAir = false;
 
         }
-        if (collision.transform.tag == "Water"&& !collideToWater)
+        if (collision.transform.tag == "Water" && !collideToWater)
         {
             OnCollideWater();
         }
@@ -364,10 +356,10 @@ public class HY_Player_Control : MonoBehaviour
             HY_PlayerRagdollActive.instance.OnObstacleCollide();
         }
     }
-   
+
     void PlayerOutOfBounds()
     {
-        if (transform.position.y <= -51&& !isCalled)
+        if (transform.position.y <= -51 && !isCalled)
         {
             // gameObject.SetActive(false
             isCalled = true;
