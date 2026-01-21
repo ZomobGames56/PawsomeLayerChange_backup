@@ -18,11 +18,5 @@ public class Test_Force : MonoBehaviour
         rb.AddTorque(Vector3.one * tq_Speed, ForceMode.Force);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.tag == "Water")
-        {
-            transform.position = startPos.position;
-        }
-    }
+  
 }

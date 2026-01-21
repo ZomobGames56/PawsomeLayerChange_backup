@@ -23,8 +23,8 @@ public class HY_CameraControl : MonoBehaviour
     Quaternion rot;
     Vector3 dir;
 
-    float currentX;
-    float currentY;
+    public float currentX;
+    public float currentY;
 
     // 🔥 received from player
     [HideInInspector] public Vector3 playerMoveDir;
@@ -32,10 +32,10 @@ public class HY_CameraControl : MonoBehaviour
     void Start()
     {
         currentY = 30f;   // starting pitch
-        currentX = transform.rotation.eulerAngles.y;
+        currentX = 360f;
     }
 
-    void Update()
+    void LateUpdate()
     {
         MouseRotation();
     }
@@ -67,37 +67,7 @@ public class HY_CameraControl : MonoBehaviour
             // keep internal yaw synced (prevents snap)
             currentX = manualRot.eulerAngles.y;
         }
-        // 2️⃣ AUTO YAW ASSIST — LEFT / RIGHT ONLY (NO BACKWARD)
-        //if (playerMoveDir.sqrMagnitude > 0.01f)
-        //{
-        //    // camera forward on XZ plane
-        //    Vector3 camForward = transform.forward;
-        //    camForward.y = 0;
-        //    camForward.Normalize();
-
-        //    Vector3 camRight = transform.right;
-        //    camRight.y = 0;
-        //    camRight.Normalize();
-
-        //    // how much player is moving sideways relative to camera
-        //    float sideAmount = Vector3.Dot(playerMoveDir.normalized, camRight);
-
-        //    // ignore backward / forward movement
-        //    if (Mathf.Abs(sideAmount) > 0.1f)
-        //    {
-        //        float yawOffset = sideAmount * followStrength * 60f;
-
-        //        float targetYaw = currentX + yawOffset;
-
-        //        currentX = Mathf.Lerp(
-        //            currentX,
-        //            targetYaw,
-        //            followYawSpeed * Time.deltaTime
-        //        );
-        //    }
-        //}
-
-        // 3️⃣ APPLY
+        
         rot = manualRot;
         dir = new Vector3(0, 0, -dis);
 
