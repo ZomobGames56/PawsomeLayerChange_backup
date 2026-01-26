@@ -15,8 +15,8 @@ public class HY_MakeItChild : MonoBehaviour
             other.gameObject.GetComponent<HY_Player_Control>().rigidBodyControl = false;
             other.gameObject.GetComponent<HY_Player_Control>().transformControl = true;
 
-            
             print("Trigger");
+            
         }
         if (other.tag == "Enemy")
         {
