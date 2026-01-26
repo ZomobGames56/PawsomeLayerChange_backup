@@ -23,7 +23,7 @@ public class HY_DeathZone : MonoBehaviour
         eliminationTxt.text=count+"/9".ToString();
     }
 
-    [System.Obsolete]
+   
     private void OnTriggerEnter(Collider other)
     {
         switch (other.tag)
@@ -34,11 +34,11 @@ public class HY_DeathZone : MonoBehaviour
                 //Eliminate Text Shown
                 other.gameObject.SetActive(false);
                 enemyDeathCount = -1;
-                Instantiate(effect, other.transform.position, Quaternion.EulerRotation(90, 0, 0));
+                Instantiate(effect, other.transform.position, Quaternion.Euler(90, 0, 0));
                 break;
             case "Enemy":
                 //effect show
-                Instantiate(effect, other.transform.position, Quaternion.EulerRotation(90, 0, 0));
+                Instantiate(effect, other.transform.position, Quaternion.Euler(90, 0, 0));
                 other.gameObject.SetActive(false);
                 enemyDeathCount++;
                 break;

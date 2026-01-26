@@ -52,6 +52,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour
         Parent.transform.position = transform.position;
         animator.enabled = true;
         HY_Player_Control.canControl = true;
+        Debug.Log("Just called");
         foreach (var child in childRbs)
         {
             child.isKinematic = true;
@@ -66,6 +67,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour
         DisableKinamatic();
         StartCoroutine(ResetRagoll(3f));
         HY_Player_Control.canControl = false;
+        Debug.Log("Just called");
     }
    // [System.Obsolete]
     private void OnCollisionEnter(Collision collision)
@@ -79,10 +81,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour
                // StartCoroutine(ResetRagoll(5f));
                 Debug.Log("Collide Obstacle "+ gameObject.name);
                 break;
-            case "Water":
-                Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
-                StartCoroutine(ResetRagoll(0.95f));
-                break;
+            
         }
 
 
