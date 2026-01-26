@@ -1,13 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Rotator : MonoBehaviour
 {
-    public Vector3 rotationAmount;
-    // Update is called once per frame
-    void Update()
+    public Vector3 rotationSpeed;
+
+    Rigidbody rb;
+
+    void Awake()
     {
-        transform.Rotate(rotationAmount * Time.deltaTime);
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void FixedUpdate()
+    {
+        Quaternion delta = Quaternion.Euler(rotationSpeed * Time.fixedDeltaTime);
+        rb.MoveRotation(rb.rotation * delta);
     }
 }
