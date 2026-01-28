@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public class HY_Player_Control : MonoBehaviour
     Vector3 move;
     [SerializeField]
     float moveSpeed = 10f, force = 7f, defaultSpeed = 0.97f, onSliderSpeed = 2.0f,
-        waitForSec = 0.5f;//Jump Force
+        waitForSec = 0.5f, transformMoveSpeed= 8f;//Jump Force
     [SerializeField]
     public Animator animator;
     [SerializeField]
@@ -50,36 +51,36 @@ public class HY_Player_Control : MonoBehaviour
     public GameObject dummyScreen;
     [SerializeField] HY_CameraControl camControl;
 
-    [SerializeField]
-    Transform TempSpawnPoint;
 
-    //Test
-
-    public GameObject cube;
+    void OnEnable()
+    {
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+    }
 
     void Start()
     {
         collideToWater = false;
-        isCalled = false;
-        canControl = true;
-        rb = GetComponent<Rigidbody>();
-        isGrounded = false;
-        animator = GetComponent<Animator>();
-        transform.position = spawnPoint.position;
-        playerScale = new Vector3(scale, scale, scale);
-        transform.localScale = playerScale;
-        rigidBodyControl = true;
-        transformControl = false;
-        jumpbtnPressed = false;
-        if (spawnPoint == null)
-        {
-            cube.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-        }
-        else
-        {
-            cube.gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
 
-        }
+        isCalled = false;
+
+        canControl = true;
+
+        rb = GetComponent<Rigidbody>();
+
+        isGrounded = false;
+
+        animator = GetComponent<Animator>();
+
+        transform.position = spawnPoint.position;
+
+        playerScale = new Vector3(scale, scale, scale);
+
+        transform.localScale = playerScale;
+      //  rigidBodyControl = true;
+      //  transformControl = false;
+        jumpbtnPressed = false;
+
     }
     // Update is called once per frame
 
@@ -105,7 +106,6 @@ public class HY_Player_Control : MonoBehaviour
         {
             PlayerMovement();
         }
-
     }
     void HangingAnimation()
     {
@@ -152,28 +152,23 @@ public class HY_Player_Control : MonoBehaviour
 
             Vector3 camForwad = cam.forward;
 
-
             Vector3 camRight = cam.right;
-            camForwad.y = 0f;
-            camRight.y = 0f;
-            camForwad.Normalize();
-            camRight.Normalize();
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+            camForwad.y = 0f; camRight.y = 0f;
+            camForwad.Normalize(); camRight.Normalize();
+            // float h = Input.GetAxis("Horizontal");
+            // float v = Input.GetAxis("Vertical");
             move = camRight * joystick.Horizontal + camForwad * joystick.Vertical;
-
-
-
-
 
             move = Vector3.ClampMagnitude(move, 1f);
 
             move.y = 0f;
+
             // for camera rotation.!!!!!!
-            if (camControl != null)
+            if (camControl != null && canControl)
             {
                 camControl.playerMoveDir = move;
             }
+
             if (transformControl)
             {
                 transform.position += move * moveSpeed * Time.deltaTime;
@@ -183,8 +178,7 @@ public class HY_Player_Control : MonoBehaviour
             {
                 if (rb != null)
                 {
-                    // rb.MovePosition(transform.position + move * moveSpeed * Time.fixedDeltaTime);
-                    //rb.linearVelocity = Vector3 velocity = rb.linearVelocity;
+
                     Vector3 velocity = rb.linearVelocity;
                     if (move.sqrMagnitude > 0.01f)
                     {
@@ -227,10 +221,7 @@ public class HY_Player_Control : MonoBehaviour
             float v = Input.GetAxis("Vertical");
             move = camRight * h + camForwad * v;
             move = Vector3.ClampMagnitude(move, 1f);
-            if (move.magnitude > 1)
-            {
-                //move = move.normalized;
-            }
+            
             // move.Normalize();
 
             move.y = 0f;
@@ -281,6 +272,7 @@ public class HY_Player_Control : MonoBehaviour
         {
             animator.SetBool("Jump", true);
             //HY_AudioManager.instance.PlayAudioEffectOnce(jumpSound);
+
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
             isGrounded = false;
             inAir = true;
@@ -335,20 +327,7 @@ public class HY_Player_Control : MonoBehaviour
 
     public void OnCollisionStay(Collision collision)
     {
-        //if (collision.transform.tag == "LeftMover" ||
-        //    collision.transform.tag == "RightMover")
 
-        //{
-
-        //    animator.SetBool("Hanging", false);
-
-        //    // isGrounded = true;
-        //    jumpbtnPressed = false;
-        //    inAir = false;
-        //    moveSpeed = defaultSpeed;
-        //    animator.SetBool("Dash", false);
-        //    isDashing = false;
-        //}
         if (collision.transform.tag == "Slider")
         {
             moveSpeed = onSliderSpeed;
@@ -362,62 +341,84 @@ public class HY_Player_Control : MonoBehaviour
             inAir = false;
 
         }
-        if (collision.transform.tag == "Water" && !collideToWater)
-        {
-            collideToWater = true;
-            //transform.position = spawnPoint.position;
-            OnCollideWater();
-        }
+        
+      
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
         if (collision.transform.tag == "Obstacle")
         {
             HY_AudioManager.instance.PlayAudioEffectOnce(collideSound);
             HY_PlayerRagdollActive.instance.OnObstacleCollide();
         }
+        if (collision.transform.tag == "Water" && !collideToWater)
+        {
+            collideToWater = true;
+            OnCollideWater();
+        }
     }
-
     void PlayerOutOfBounds()
     {
         if (transform.position.y <= -51 && !isCalled)
         {
+            Debug.Log("Player out of bound");
             // gameObject.SetActive(false
             isCalled = true;
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 500f);
-            //Instantiate(effect, transform.position, Quaternion.EulerRotation(90, 0, 0));
-            // rb.isKinematic = true;
-            StartCoroutine(SpawnWait());
-            // set control false.
             canControl = false;
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 500f);
+            rb.isKinematic = true;
+            StartCoroutine(SpawnWait());
+          
+
         }
     }
-
+    
     //This function is responsible for Transform collide with water.
     private void OnCollideWater()
     {
-
         canControl = false;
-
         HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
         Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
-        transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 500f);
-
+        transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
+        
         StartCoroutine(SpawnWait());
-
-
     }
     public IEnumerator SpawnWait()
     {
-        isCalled = false;
-        canControl = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         yield return new WaitForSeconds(waitForSec);
-        transform.localScale = Vector3.Lerp(Vector3.zero, playerScale, 500f);
-        // rb.isKinematic = false;
 
+        // Stop physics
+        
+
+        // Teleport correctly
         transform.position = spawnPoint.position;
-        Debug.Log("SpawnPlayer");
-        transform.rotation = spawnPoint.localRotation;
-        canControl = true;
+        transform.rotation = spawnPoint.rotation;
 
+        // Reset scale instantly
+        transform.localScale = playerScale;
+
+        // Reset states
+        canControl = true;
+        isCalled = false;
+        isGrounded = true;
+        inAir = false;
+        jumpbtnPressed = false;
+        isDashing = false;
+        moveSpeed = defaultSpeed;
+
+        animator.SetBool("Dash", false);
+        animator.SetBool("Hanging", false);
+        animator.SetBool("Jump", false);
+
+        if (camControl != null)
+        {
+            camControl.currentX = 360f;
+        }
+        rb.isKinematic = false;
     }
+
     private void OnTriggerEnter(Collider other)
     {
         switch (other.tag)
@@ -436,7 +437,8 @@ public class HY_Player_Control : MonoBehaviour
                 break;
             case "Goal":
                 dummyScreen.SetActive(true);
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
+                rb.isKinematic = true;
                 break;
 
 
@@ -448,7 +450,8 @@ public class HY_Player_Control : MonoBehaviour
         if (other.tag == "Ground")
         {
             collideToWater = false;
-
+            canControl = true;
+            isCalled = false;   
             isGrounded = true;
             animator.SetBool("Hanging", false);
             jumpbtnPressed = false;

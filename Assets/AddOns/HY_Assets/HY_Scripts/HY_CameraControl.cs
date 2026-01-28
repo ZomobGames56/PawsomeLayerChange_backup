@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 public class HY_CameraControl : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class HY_CameraControl : MonoBehaviour
     // 🔥 received from player
     [HideInInspector] public Vector3 playerMoveDir;
 
+
+   
     void Start()
     {
         currentY = 30f;   // starting pitch

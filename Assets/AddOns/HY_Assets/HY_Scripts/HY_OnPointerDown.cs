@@ -15,7 +15,7 @@ public class HY_OnPointerDown : MonoBehaviour, IPointerDownHandler
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        player_Ref.MobileJumpBtn();
+        player_Ref.MobileJumpBtn();     
         Debug.Log("Jump Function");
     }
 

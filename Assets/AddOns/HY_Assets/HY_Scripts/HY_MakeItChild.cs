@@ -1,22 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HY_MakeItChild : MonoBehaviour
 {
-   
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            
+
             other.transform.SetParent(transform);
             //set movement with transform
-            other.gameObject.GetComponent<HY_Player_Control>().rigidBodyControl = false;
-            other.gameObject.GetComponent<HY_Player_Control>().transformControl = true;
+             other.gameObject.GetComponent<HY_Player_Control>().rigidBodyControl = false;
+             other.gameObject.GetComponent<HY_Player_Control>().transformControl = true;
 
             print("Trigger");
-            
+
         }
         if (other.tag == "Enemy")
         {

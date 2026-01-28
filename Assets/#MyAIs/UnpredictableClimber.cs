@@ -28,7 +28,8 @@ public class UnpredictableClimber : MonoBehaviour
     [SerializeField]
     Animator animator;
     float animationDamp = 0.1f;
-
+    [SerializeField]
+    GameObject losePanel;
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -78,7 +79,9 @@ public class UnpredictableClimber : MonoBehaviour
                 // Goal Reached
                 Debug.Log("**Final Waypoint Reached! Climb Complete.**");
                 agent.isStopped = true;
+                agent.velocity = Vector3.zero;  
                 currentState = AIState.GoalReached;
+                animator.enabled = false;
                 return;
             }
         }
@@ -166,5 +169,14 @@ public class UnpredictableClimber : MonoBehaviour
     {
         float speed = agent.velocity.magnitude;
         animator.SetFloat("Run", speed, animationDamp, Time.deltaTime);
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Goal")
+        {
+            losePanel.SetActive(true);
+        }
     }
 }

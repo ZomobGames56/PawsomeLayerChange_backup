@@ -15,7 +15,7 @@ public class ImpactBall : MonoBehaviour
     }
     private void Start()
     {
-        rb.AddForce(Vector3.forward*(-50),ForceMode.Impulse);
+        rb.AddForce(Vector3.right*(700),ForceMode.Impulse);
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -36,7 +36,7 @@ public class ImpactBall : MonoBehaviour
         float t = Mathf.InverseLerp(minImpactSpeed, maxImpactSpeed, speed);
 
         // Scale force like Stumble Guys
-        float force = Mathf.Lerp(5f, maxKnockbackForce, t);
+        float force = Mathf.Lerp(1f, maxKnockbackForce, t);
 
         Vector3 hitNormal = collision.contacts[0].normal;
         knockback.ApplyKnockbackFromNormal(hitNormal, force);

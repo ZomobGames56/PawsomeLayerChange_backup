@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class HY_PlayerRagdollActive : MonoBehaviour
@@ -27,9 +26,14 @@ public class HY_PlayerRagdollActive : MonoBehaviour
         animator = GetComponentInParent<Animator>();
 
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            OnObstacleCollide();
 
-
-
+        }
+    }
     void EnableKinamatic()
     {
         foreach (var child in childRbs)
@@ -69,7 +73,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour
         HY_Player_Control.canControl = false;
         Debug.Log("Just called");
     }
-   // [System.Obsolete]
+    // [System.Obsolete]
     private void OnCollisionEnter(Collision collision)
     {
         switch (collision.gameObject.tag)
@@ -78,20 +82,21 @@ public class HY_PlayerRagdollActive : MonoBehaviour
                 HY_Player_Control.canControl = false;
                 animator.enabled = false;
                 DisableKinamatic();
-               // StartCoroutine(ResetRagoll(5f));
-                Debug.Log("Collide Obstacle "+ gameObject.name);
+                // StartCoroutine(ResetRagoll(5f));
+                Debug.Log("Collide Obstacle " + gameObject.name);
                 break;
-            
+
         }
 
 
     }
+
     public void OnObstacleCollide()
     {
         HY_Player_Control.canControl = false;
         animator.enabled = false;
         DisableKinamatic();
-        StartCoroutine(ResetRagoll(1f));
+        StartCoroutine(ResetRagoll(2.5f));
     }
 
 
