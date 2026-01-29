@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HY_Player_Control : MonoBehaviour
@@ -13,7 +13,7 @@ public class HY_Player_Control : MonoBehaviour
     Vector3 move;
     [SerializeField]
     float moveSpeed = 10f, force = 7f, defaultSpeed = 0.97f, onSliderSpeed = 2.0f,
-        waitForSec = 0.5f, transformMoveSpeed= 8f;//Jump Force
+        waitForSec = 0.5f, transformMoveSpeed = 8f;//Jump Force
     [SerializeField]
     public Animator animator;
     [SerializeField]
@@ -52,11 +52,7 @@ public class HY_Player_Control : MonoBehaviour
     [SerializeField] HY_CameraControl camControl;
 
 
-    void OnEnable()
-    {
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
-    }
+
 
     void Start()
     {
@@ -72,13 +68,20 @@ public class HY_Player_Control : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
-        transform.position = spawnPoint.position;
+        if (rb != null&& rigidBodyControl)
+        {
 
+            rb.position = spawnPoint.position;
+            rb.rotation = spawnPoint.rotation;
+
+        }
+
+        //rb.MovePosition(spawnPoint.position);
         playerScale = new Vector3(scale, scale, scale);
 
         transform.localScale = playerScale;
-      //  rigidBodyControl = true;
-      //  transformControl = false;
+        //  rigidBodyControl = true;
+        //  transformControl = false;
         jumpbtnPressed = false;
 
     }
@@ -221,7 +224,7 @@ public class HY_Player_Control : MonoBehaviour
             float v = Input.GetAxis("Vertical");
             move = camRight * h + camForwad * v;
             move = Vector3.ClampMagnitude(move, 1f);
-            
+
             // move.Normalize();
 
             move.y = 0f;
@@ -341,8 +344,8 @@ public class HY_Player_Control : MonoBehaviour
             inAir = false;
 
         }
-        
-      
+
+
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -366,13 +369,13 @@ public class HY_Player_Control : MonoBehaviour
             isCalled = true;
             canControl = false;
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 500f);
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
             StartCoroutine(SpawnWait());
-          
+
 
         }
     }
-    
+
     //This function is responsible for Transform collide with water.
     private void OnCollideWater()
     {
@@ -380,22 +383,21 @@ public class HY_Player_Control : MonoBehaviour
         HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
         Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
         transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
-        
+
         StartCoroutine(SpawnWait());
     }
     public IEnumerator SpawnWait()
     {
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+       
         yield return new WaitForSeconds(waitForSec);
 
         // Stop physics
-        
+
 
         // Teleport correctly
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
-
+        rb.position = spawnPoint.position;
+        rb.rotation = spawnPoint.rotation;
+        //rb.isKinematic = false;
         // Reset scale instantly
         transform.localScale = playerScale;
 
@@ -438,6 +440,7 @@ public class HY_Player_Control : MonoBehaviour
             case "Goal":
                 dummyScreen.SetActive(true);
                 //Time.timeScale = 0;
+                StartCoroutine(LevelSelectionScene());
                 rb.isKinematic = true;
                 break;
 
@@ -445,13 +448,18 @@ public class HY_Player_Control : MonoBehaviour
         }
 
     }
+    IEnumerator LevelSelectionScene()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(6);
+    }
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Ground")
         {
             collideToWater = false;
             canControl = true;
-            isCalled = false;   
+            isCalled = false;
             isGrounded = true;
             animator.SetBool("Hanging", false);
             jumpbtnPressed = false;

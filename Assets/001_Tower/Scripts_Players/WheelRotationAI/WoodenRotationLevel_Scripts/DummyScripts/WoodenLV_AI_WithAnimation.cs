@@ -5,8 +5,10 @@ using UnityEngine;
 public class WoodenLV_AI_WithAnimation : MonoBehaviour
 {
     [SerializeField] Transform jumpTarget, preDefinedJMT, testTarget;
-    [SerializeField] float upForce = 6f;
-    [SerializeField] float forwardForce = 4f, moveForce = 5f;
+    [SerializeField]
+    float upForce = 6f;
+    [SerializeField]
+    float forwardForce = 4f, moveForce = 5f;
     [SerializeField] Transform moveTarget;
 
     Rigidbody rb;
@@ -16,9 +18,12 @@ public class WoodenLV_AI_WithAnimation : MonoBehaviour
     bool canMoveTowardTarget;
     bool once = true;
 
-    [SerializeField] float stoppingDis = 1f;
-    [SerializeField] float rotationSpeed = 10f;
-    [SerializeField] float runDampTime = 0.1f;
+    [SerializeField] 
+    float stoppingDis = 1f;
+    [SerializeField] 
+    float rotationSpeed = 10f;
+    [SerializeField]
+    float runDampTime = 0.1f;
 
     [SerializeField] GameObject dummyPanel;
     [SerializeField] TextMeshProUGUI looseText;

@@ -81,7 +81,7 @@ public class UnpredictableClimber : MonoBehaviour
                 agent.isStopped = true;
                 agent.velocity = Vector3.zero;  
                 currentState = AIState.GoalReached;
-                animator.enabled = false;
+               // animator.enabled = false;
                 return;
             }
         }

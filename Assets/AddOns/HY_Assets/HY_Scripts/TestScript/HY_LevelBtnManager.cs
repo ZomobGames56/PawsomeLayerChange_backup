@@ -48,6 +48,28 @@ public class HY_LevelBtnManager : MonoBehaviour
        // cloudObj.SetActive(true);
         StartCoroutine(LoadSceneAsync(5));
     }
+
+    public void Level_5()
+    {
+        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
+        // cloudObj.SetActive(true);
+        StartCoroutine(LoadSceneAsync(8));
+    }
+
+    public void Level_6()
+    {
+        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
+        // cloudObj.SetActive(true);
+        StartCoroutine(LoadSceneAsync(9));
+    }
+
+    public void Level_7()
+    {
+        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
+        // cloudObj.SetActive(true);
+        StartCoroutine(LoadSceneAsync(10));
+    }
+
     public void LoadHome()
     {
         cloudObj.SetActive(true);

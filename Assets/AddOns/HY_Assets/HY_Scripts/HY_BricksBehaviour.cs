@@ -63,7 +63,7 @@ public class HY_BricksBehaviour : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
-            transform.localPosition = new Vector3(transform.localPosition.x, 0f, transform.localPosition.z);
+          //  transform.localPosition = new Vector3(transform.localPosition.x, 0f, transform.localPosition.z);
         }
     }
     private void OnCollisionStay(Collision collision)
@@ -74,6 +74,8 @@ public class HY_BricksBehaviour : MonoBehaviour
             //transform.localPosition = new Vector3(transform.localPosition.x, -0.01f, transform.localPosition.z);
             if (HY_StartPause.countOver == true)
             {
+                Debug.LogWarning("this is me");
+                
                 StartCoroutine(WaitMan());
             }
             //transform.localScale = new Vector3(1f,.25f, 1f);
