@@ -26,7 +26,8 @@ public class HY_CameraControl : MonoBehaviour
 
     public float currentX;
     public float currentY;
-
+    [SerializeField]
+    int currentY_ = 360;
     // 🔥 received from player
     [HideInInspector] public Vector3 playerMoveDir;
 
@@ -35,7 +36,7 @@ public class HY_CameraControl : MonoBehaviour
     void Start()
     {
         currentY = 30f;   // starting pitch
-        currentX = 360f;
+        currentX = currentY_;
     }
 
     void LateUpdate()
