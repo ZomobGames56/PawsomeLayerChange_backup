@@ -4,47 +4,40 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class UnpredictableClimber : MonoBehaviour
 {
-    // --- Public Variables to Set in Inspector ---
+    [Header("Path")]
+    public Transform[] pathWaypoints;
+    public float waypointArrivalDistance = 3f;
 
-    [Header("Path Progression")]
-    public Transform[] pathWaypoints;       // Waypoints defining the climb order (Bottom to Top)
-    public float waypointArrivalDistance = 3.0f; // How close AI must get to a waypoint to proceed to the next
+    [Header("Random Walk")]
+    public float targetUpdateInterval = 1f;
+    public float randomStepDistance = 5f;
+    public float maxLateralWiggle = 3f;
 
-    [Header("Random Walk Settings")]
-    public float targetUpdateInterval = 1.0f;   // How often (in seconds) to pick a new random sub-goal
-    public float randomStepDistance = 5.0f;     // How far the random sub-goal can be generated
-    public float maxLateralWiggle = 3.0f;       // Max distance the random point can be offset sideways
-
-    // --- Private Components & State ---
-    private NavMeshAgent agent;
-
-    private int currentWaypointIndex = 0;
-    private float updateTimer = 0f;
-
-    private enum AIState { Moving, GoalReached }
-    private AIState currentState = AIState.Moving;
-    // -- Animator Compoenet --
     [Header("Animator")]
-    [SerializeField]
-    Animator animator;
-    float animationDamp = 0.1f;
-    [SerializeField]
-    GameObject losePanel;
+    public Animator animator;
+
+    private NavMeshAgent agent;
+    private int currentWaypointIndex = 0;
+    private float updateTimer;
+
+    private enum AIState { Moving, GoalReached, Ragdoll }
+    private AIState currentState = AIState.Moving;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+
         agent.autoBraking = false;
 
         if (pathWaypoints.Length == 0)
         {
-            Debug.LogError("Path Waypoints not assigned! Please define the path in the Inspector.");
+            Debug.LogError("No waypoints assigned!");
             enabled = false;
+            return;
         }
-        else
-        {
-            UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
-        }
+
+        UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
     }
 
     private void Update()
@@ -54,129 +47,110 @@ public class UnpredictableClimber : MonoBehaviour
             case AIState.Moving:
                 HandleMoving();
                 break;
+
+            case AIState.Ragdoll:
+                break;
+
             case AIState.GoalReached:
                 break;
         }
     }
 
-    // --- State Handler ---
+    // ---------------- MOVEMENT ----------------
 
     private void HandleMoving()
     {
-        // 1. Check for Waypoint Arrival
-        if (Vector3.Distance(transform.position, pathWaypoints[currentWaypointIndex].position) <= waypointArrivalDistance)
+        if (Vector3.Distance(transform.position,
+            pathWaypoints[currentWaypointIndex].position) <= waypointArrivalDistance)
         {
             currentWaypointIndex++;
-            if (currentWaypointIndex < pathWaypoints.Length)
+
+            if (currentWaypointIndex >= pathWaypoints.Length)
             {
-                Debug.Log($"Waypoint {currentWaypointIndex - 1} reached. Moving to Waypoint {currentWaypointIndex}.");
-                UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
-                updateTimer = 0f; // Reset timer for immediate update
-                return;
-            }
-            else
-            {
-                // Goal Reached
-                Debug.Log("**Final Waypoint Reached! Climb Complete.**");
                 agent.isStopped = true;
-                agent.velocity = Vector3.zero;  
                 currentState = AIState.GoalReached;
-               // animator.enabled = false;
                 return;
             }
+
+            UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
+            updateTimer = 0f;
         }
 
-
-        // 2. Random Walk Logic
         updateTimer -= Time.deltaTime;
 
-        // If timer is up OR we reached the current random sub-goal
-        if (updateTimer <= 0f || !agent.pathPending && agent.remainingDistance < 1.0f)
+        if (updateTimer <= 0f || (!agent.pathPending && agent.remainingDistance < 1f))
         {
             UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
-            updateTimer = targetUpdateInterval;
+            float jitter = Random.Range(0.8f, 1.2f);
+            updateTimer = targetUpdateInterval * jitter;
+           // updateTimer = targetUpdateInterval;
         }
-        if (animator == null) return;
 
         UpdateAnimation();
     }
 
-    // --- Core Randomization Logic (NavMesh Safe and Forward-Only) ---
+    // ---------------- RANDOM TARGET ----------------
 
-    /// <summary>
-    /// Generates a safe, random sub-goal that enforces forward progression toward the high-level waypoint.
-    /// </summary>
-    private void UpdateRandomTarget(Vector3 highLevelGoal)
+    private void UpdateRandomTarget(Vector3 goal)
     {
-        // 1. Find the general direction towards the high-level goal
-        // This vector *must* be calculated from the current position to the goal to enforce forward movement.
-        Vector3 directionToGoal = (highLevelGoal - transform.position).normalized;
+        Vector3 direction = (goal - transform.position).normalized;
+        Vector3 baseTarget = transform.position + direction * randomStepDistance;
 
-        // 2. Create a base point *ahead* of the agent
-        Vector3 baseTarget = transform.position + directionToGoal * randomStepDistance;
-
-        NavMeshHit baseHit;
-        // Safety Check 1: Find a valid point near the calculated forward position
-        if (NavMesh.SamplePosition(baseTarget, out baseHit, randomStepDistance * 2f, NavMesh.AllAreas))
+        if (!NavMesh.SamplePosition(baseTarget, out NavMeshHit baseHit,
+            randomStepDistance * 2f, NavMesh.AllAreas))
         {
-            baseTarget = baseHit.position;
-        }
-        else
-        {
-            // Fallback: If a forward step is unsafe, aim directly for the final waypoint
-            agent.SetDestination(highLevelGoal);
-            Debug.LogWarning("Forward step failed. Aiming directly for waypoint.");
+            agent.SetDestination(goal);
             return;
         }
 
-        // --- Apply Lateral Wiggle to the Valid Base Point ---
-        Vector3 finalDirection = (baseTarget - transform.position).normalized;
+        Vector3 perpendicular = Vector3.Cross(direction, Vector3.up).normalized;
+        float offset = Random.Range(-maxLateralWiggle, maxLateralWiggle);
+        Vector3 randomTarget = baseHit.position + perpendicular * offset;
 
-        // 3. Calculate a sideways vector (perpendicular to the path on the XZ plane)
-        // This ensures the wiggle is perpendicular to the direction of travel.
-        Vector3 perpendicular = Vector3.Cross(finalDirection, Vector3.up).normalized;
-
-        // 4. Apply a random lateral offset (The Wiggle)
-        float randomOffset = Random.Range(-maxLateralWiggle, maxLateralWiggle);
-        Vector3 randomTarget = baseTarget + (perpendicular * randomOffset);
-
-
-        // 5. Safety Check 2: Ensure the Wiggle point is still on the NavMesh
-        NavMeshHit finalHit;
-        if (NavMesh.SamplePosition(randomTarget, out finalHit, maxLateralWiggle * 2f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomTarget, out NavMeshHit finalHit,
+            maxLateralWiggle * 2f, NavMesh.AllAreas))
         {
-            // Final check: Ensure the new target isn't behind the AI's current forward vector
-            // This is implicitly handled by starting the calculation with directionToGoal, but this dot product provides a clear check.
-            if (Vector3.Dot(finalHit.position - transform.position, directionToGoal) < 0)
-            {
-                // The calculated point is behind us relative to the goal direction, use the safer base target.
-                agent.SetDestination(baseTarget);
-            }
-            else
-            {
-                // The random point is valid and forward. Set it as the destination.
-                agent.SetDestination(finalHit.position);
-            }
+            agent.SetDestination(finalHit.position);
         }
         else
         {
-            // Fallback: If the wiggle is unsafe, aim for the safe, center base point
-            agent.SetDestination(baseTarget);
+            agent.SetDestination(baseHit.position);
         }
     }
 
-    void UpdateAnimation()
+    // ---------------- ANIMATION ----------------
+
+    private void UpdateAnimation()
     {
+        if (animator == null) return;
+
         float speed = agent.velocity.magnitude;
-        animator.SetFloat("Run", speed, animationDamp, Time.deltaTime);
+        animator.SetFloat("Run", speed, 0.1f, Time.deltaTime);
     }
 
+    // ---------------- RAGDOLL API ----------------
 
-    private void OnTriggerEnter(Collider other)
+    public void EnterRagdollState()
     {
-        if (other.transform.tag == "Goal")
-        {
-            losePanel.SetActive(true);
-        }
+        currentState = AIState.Ragdoll;
+        agent.isStopped = true;
+        agent.ResetPath();
+
+        if (animator != null)
+            animator.enabled = false;
+    }
+
+    public void ExitRagdollState()
+    {
+        if (currentState == AIState.GoalReached)
+            return;
+
+        currentState = AIState.Moving;
+
+        if (animator != null)
+            animator.enabled = true;
+
+        agent.isStopped = false;
+        UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
     }
 }

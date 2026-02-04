@@ -4703,8 +4703,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTouchField: {fileID: 4774048209137845921}
-  senstivity: 15
-  rb: {fileID: 0}
+  sensitivity: 8
+  torqueStrength: 6
 --- !u!4 &635207692235713501
 Transform:
   m_ObjectHideFlags: 0
@@ -5494,8 +5494,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTouchField: {fileID: 4774048209137845921}
-  senstivity: 15
-  rb: {fileID: 0}
+  sensitivity: 8
+  torqueStrength: 6
 --- !u!1 &993017912030580842
 GameObject:
   m_ObjectHideFlags: 0
@@ -6054,7 +6054,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -6068,9 +6068,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1163292498084828973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8388,7 +8388,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -8402,9 +8402,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &2008732983241520814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9969,7 +9969,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -9983,9 +9983,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!222 &2626880628273395733
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10293,7 +10293,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 1.5
+  m_AngularDamping: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -10307,9 +10307,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!4 &2823974839168037654
 Transform:
   m_ObjectHideFlags: 0
@@ -12599,8 +12599,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTouchField: {fileID: 4774048209137845921}
-  senstivity: 2
-  rb: {fileID: 0}
+  sensitivity: 8
+  torqueStrength: 6
 --- !u!1 &3687044200530724092
 GameObject:
   m_ObjectHideFlags: 0
@@ -15084,7 +15084,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -15098,9 +15098,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!224 &4715291474588492603
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15777,7 +15777,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -100.000244, y: 0}
+  m_AnchoredPosition: {x: -100.00018, y: 0}
   m_SizeDelta: {x: -500, y: -500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5029649303181655862
@@ -18862,8 +18862,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTouchField: {fileID: 4774048209137845921}
-  senstivity: 15
-  rb: {fileID: 0}
+  sensitivity: 8
+  torqueStrength: 6
 --- !u!114 &6341300876459324920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23471,8 +23471,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTouchField: {fileID: 4774048209137845921}
-  senstivity: 15
-  rb: {fileID: 0}
+  sensitivity: 8
+  torqueStrength: 6
 --- !u!222 &7975478962345138032
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25770,8 +25770,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTouchField: {fileID: 4774048209137845921}
-  senstivity: 15
-  rb: {fileID: 0}
+  sensitivity: 8
+  torqueStrength: 6
 --- !u!1 &8663948029905370354
 GameObject:
   m_ObjectHideFlags: 0
@@ -26062,7 +26062,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -26076,9 +26076,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!224 &8787315841755037405
 RectTransform:
   m_ObjectHideFlags: 0

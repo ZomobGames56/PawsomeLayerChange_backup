@@ -2,23 +2,23 @@ using UnityEngine;
 
 public class HipUpForceAdd : MonoBehaviour
 {
+    public static HipUpForceAdd instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     Rigidbody hipRB;
     [SerializeField]
     float force = 6f;
+
     void Start()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         hipRB = GetComponent<Rigidbody>();
     }
-
-    // Update is called once per frame
-    void Update()
+    public void ApplyKnoackBackForce(Vector3 knockBackDirection, float impactForce, float ImpactMultiplier)
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Vector3 dir = Vector3.up;
-            dir.z+= 0.5f;
-            hipRB.AddForce(dir*force, ForceMode.Impulse);
-        }
+        hipRB.AddForce(knockBackDirection*impactForce*ImpactMultiplier, ForceMode.Impulse);
     }
 }

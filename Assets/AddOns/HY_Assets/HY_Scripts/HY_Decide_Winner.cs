@@ -41,7 +41,7 @@ public class HY_Decide_Winner : MonoBehaviour
         once = false;
         if (playerControl == null)
         {
-            playerControl = FindObjectOfType<HY_Player_Control>();
+            playerControl = FindFirstObjectByType<HY_Player_Control>();
         }
         count = 0;
         winnerCount = 0;
@@ -55,6 +55,7 @@ public class HY_Decide_Winner : MonoBehaviour
             winnerCount = 1;
             qualified.gameObject.SetActive(true);
             eliminated.gameObject.SetActive(false);
+            
             HY_AudioManager.instance.PlayAudioEffectOnce(winClip);
             StartCoroutine(ShowWinnerScreen());
            // HY_WinnerShowCase.instance.isPlayerWon = true;
@@ -78,7 +79,7 @@ public class HY_Decide_Winner : MonoBehaviour
        // playerModel.GetComponent<Animator>().enabled = false;
        playerModel.transform.SetParent(stoneModel.transform);
         playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-        playerModel.transform.localRotation = Quaternion.EulerAngles(0, playerRot, 0);
+        playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
         playerModel.GetComponent<Animator>().ResetTrigger("Victory");
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
@@ -93,8 +94,6 @@ public class HY_Decide_Winner : MonoBehaviour
         {
             HY_WinnerShowCase.instance.isPlayerWon = false;
         }
-
-
     }
 
 

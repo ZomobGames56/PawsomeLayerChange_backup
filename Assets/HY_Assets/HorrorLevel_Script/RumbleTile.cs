@@ -40,21 +40,8 @@ public class RumbleTile : MonoBehaviour
         rb.isKinematic = true;
         rb.useGravity = false;
         mr.material = normalMat;
+        //Back to the old position.
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    switch (collision.transform.tag)
-    //    {
-    //        case "Player":
-    //            //
-    //            break;
-    //        case "Ground":
-    //            //
-    //            break;
-    //        default:
-    //            collision.transform.SetParent(transform);
-    //            break;
-    //    }
-    //}
+   
 }

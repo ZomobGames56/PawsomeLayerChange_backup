@@ -4,89 +4,89 @@ using UnityEngine.AI;
 
 public class HY_EnemyRagdoll : MonoBehaviour
 {
-    public static HY_EnemyRagdoll instance;
-    Rigidbody[] childRbs;
-    Animator animator;
-    private NavMeshAgent agent_Ref;
-    [SerializeField]
-    Transform hip;
-    
-    public GameObject Parent;
-    //public HY_NavMeshEnemy _refNavMesh;
-    public NavMeshWithWayPointsAI _refEnemy;
-    void Awake()
+     public static HY_EnemyRagdoll instance;
+    [Header("References")]
+    public GameObject Parent;                 // Main enemy root
+    public Transform hip;                     // Hip bone
+    public UnpredictableClimber movementAI;   // Movement script reference
+
+    private Rigidbody[] childRbs;
+    private Animator animator;
+    private NavMeshAgent agent;
+
+    Rigidbody enemyHipRagdoll;
+    private void Awake()
     {
-       // _refNavMesh = GetComponentInParent<HY_NavMeshEnemy>();
-       _refEnemy= GetComponentInParent<NavMeshWithWayPointsAI>();
         childRbs = GetComponentsInChildren<Rigidbody>();
-        EnableKinamatic();
-        animator = GetComponentInParent<Animator>();
-        agent_Ref = GetComponentInParent<NavMeshAgent>();
+        animator = Parent.GetComponent<Animator>();
+        agent = Parent.GetComponent<NavMeshAgent>();
+        enemyHipRagdoll = GetComponent<Rigidbody>();
+        EnableKinematic();
+
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
+
+    // ---------------- RAGDOLL CONTROL ----------------
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            agent_Ref.enabled = false;
             EnemyRagdoll();
         }
     }
-    void EnableKinamatic()
-    {
-        foreach (var child in childRbs)
-        {
-            child.isKinematic = true;
-            child.constraints = RigidbodyConstraints.FreezeAll;
-        }
-    }
-    public void DisableKinamatic()
-    {
-        foreach (var child in childRbs)
-        {
-            child.isKinematic = false;
-            child.constraints = RigidbodyConstraints.None;
-        }
-    }
-    public IEnumerator ResetRagoll()
-    {
-        yield return new WaitForSeconds(3f);
-       // HY_NavMeshEnemy.goRagdoll = false;
-        Parent.transform.position = transform.position;
-        animator.enabled = true;
-       // _refEnemy.SetDestination();
-        //_refEnemy.followPath = true;
-        foreach (var child in childRbs)
-        {
-            child.isKinematic = true;
-            child.constraints = RigidbodyConstraints.FreezeAll;
-        }
-
-
-    }
-    //  Must Use Event here........
     public void EnemyRagdoll()
     {
-        // Debug.Log("Collided to the obstacle");
+        StopAllCoroutines();
+
+        // Disable AI + animation
+        if (movementAI != null)
+            movementAI.EnterRagdollState();
+
         animator.enabled = false;
-        agent_Ref.speed = 0;
-        
-        // followPath = false;
-       // _refEnemy.followPath = false;
-        DisableKinamatic();
-        StartCoroutine(ResetRagoll());
+        agent.enabled = false;
+
+        DisableKinematic();
+
+        StartCoroutine(ResetRagdoll());
     }
-    //[System.Obsolete]
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.transform.tag == "Obstacle" && _refEnemy != null)
-    //    {
-          
-    //        animator.enabled = false;
-    //        agent_Ref.speed = 0;
-          
-    //        DisableKinamatic();
-    //        StartCoroutine(ResetRagoll());
-          
-    //    }
-    //}
+
+    private IEnumerator ResetRagdoll()
+    {
+        yield return new WaitForSeconds(3f);
+
+        // Snap character back to hips
+        Parent.transform.position = hip.position;
+
+        EnableKinematic();
+
+        animator.enabled = true;
+        agent.enabled = true;
+        agent.velocity = Vector3.zero;
+
+        if (movementAI != null)
+            movementAI.ExitRagdollState();
+    }
+
+    // ---------------- RIGIDBODY HELPERS ----------------
+
+    private void EnableKinematic()
+    {
+        foreach (var rb in childRbs)
+        {
+            rb.isKinematic = true;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+    }
+
+    private void DisableKinematic()
+    {
+        foreach (var rb in childRbs)
+        {
+            rb.isKinematic = false;
+            rb.constraints = RigidbodyConstraints.None;
+        }
+    }
 }

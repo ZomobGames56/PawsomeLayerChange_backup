@@ -13,6 +13,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour
     public GameObject Parent;
     [SerializeField] GameObject effect;
     Transform spawnPoint;
+    [SerializeField]
+    Rigidbody parentPlayerRb, hipRB;
     //public HY_NavMeshEnemy _refNavMesh;
     void Awake()
     {
@@ -24,15 +26,9 @@ public class HY_PlayerRagdollActive : MonoBehaviour
         childRbs = GetComponentsInChildren<Rigidbody>();
         EnableKinamatic();
         animator = GetComponentInParent<Animator>();
-
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            OnObstacleCollide();
-
-        }
+        parentPlayerRb = parentPlayerRb.GetComponentInParent<Rigidbody>();
+        hipRB = GetComponent<Rigidbody>();
+        parentPlayerRb.constraints = RigidbodyConstraints.FreezeRotation;
     }
     void EnableKinamatic()
     {
@@ -53,8 +49,10 @@ public class HY_PlayerRagdollActive : MonoBehaviour
     IEnumerator ResetRagoll(float wait)
     {
         yield return new WaitForSeconds(wait);
-        Parent.transform.position = transform.position;
+        parentPlayerRb.constraints = RigidbodyConstraints.None |
+                                          RigidbodyConstraints.FreezeRotation;
         animator.enabled = true;
+        parentPlayerRb.position = hipRB.position;
         HY_Player_Control.canControl = true;
         Debug.Log("Just called");
         foreach (var child in childRbs)
@@ -86,6 +84,10 @@ public class HY_PlayerRagdollActive : MonoBehaviour
                 Debug.Log("Collide Obstacle " + gameObject.name);
                 break;
 
+            case "Water":
+                Debug.Log("Water");
+                break;
+
         }
 
 
@@ -93,10 +95,14 @@ public class HY_PlayerRagdollActive : MonoBehaviour
 
     public void OnObstacleCollide()
     {
+        parentPlayerRb.constraints = RigidbodyConstraints.FreezePositionX |
+                                     RigidbodyConstraints.FreezePositionZ |
+                                     RigidbodyConstraints.FreezeRotation;
+
         HY_Player_Control.canControl = false;
         animator.enabled = false;
         DisableKinamatic();
-        StartCoroutine(ResetRagoll(2.5f));
+        StartCoroutine(ResetRagoll(3f));
     }
 
 

@@ -1,5 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HY_CameraControl : MonoBehaviour
 {
@@ -32,7 +31,7 @@ public class HY_CameraControl : MonoBehaviour
     [HideInInspector] public Vector3 playerMoveDir;
 
 
-   
+
     void Start()
     {
         currentY = 30f;   // starting pitch
@@ -71,7 +70,7 @@ public class HY_CameraControl : MonoBehaviour
             // keep internal yaw synced (prevents snap)
             currentX = manualRot.eulerAngles.y;
         }
-        
+
         rot = manualRot;
         dir = new Vector3(0, 0, -dis);
 

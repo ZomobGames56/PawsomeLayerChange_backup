@@ -1872,6 +1872,7 @@ MonoBehaviour:
   defaultSpeed: 10
   onSliderSpeed: 20
   waitForSec: 0.5
+  transformMoveSpeed: 8
   animator: {fileID: 0}
   isGrounded: 0
   isDashing: 0
@@ -1893,6 +1894,7 @@ MonoBehaviour:
   fallInWater: {fileID: 0}
   collideSound: {fileID: 0}
   dummyScreen: {fileID: 0}
+  camControl: {fileID: 0}
 --- !u!135 &3406274674776526457
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2230,6 +2232,8 @@ MonoBehaviour:
   hip: {fileID: 3861725457133349613}
   Parent: {fileID: 4824952182153011385}
   effect: {fileID: 1687118924408352, guid: 77c69ec12208c4c4380d15e30b6f8f68, type: 3}
+  parentPlayerRb: {fileID: 8554527208338914459}
+  hipRB: {fileID: 8468599087469726529}
 --- !u!1 &6172107289019322964
 GameObject:
   m_ObjectHideFlags: 0
