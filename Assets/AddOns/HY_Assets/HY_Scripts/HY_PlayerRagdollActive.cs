@@ -15,6 +15,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour
     Transform spawnPoint;
     [SerializeField]
     Rigidbody parentPlayerRb, hipRB;
+    bool collideWithWater = false;
     //public HY_NavMeshEnemy _refNavMesh;
     void Awake()
     {
@@ -49,6 +50,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour
     IEnumerator ResetRagoll(float wait)
     {
         yield return new WaitForSeconds(wait);
+
+        if (collideWithWater) yield break;
         parentPlayerRb.constraints = RigidbodyConstraints.None |
                                           RigidbodyConstraints.FreezeRotation;
         animator.enabled = true;
@@ -86,6 +89,19 @@ public class HY_PlayerRagdollActive : MonoBehaviour
 
             case "Water":
                 Debug.Log("Water");
+                collideWithWater = true;
+                parentPlayerRb.constraints = RigidbodyConstraints.None |
+                                         RigidbodyConstraints.FreezeRotation;
+                animator.enabled = true;
+                parentPlayerRb.position = hipRB.position;
+                HY_Player_Control.canControl = true;
+                Debug.Log("Just called");
+                foreach (var child in childRbs)
+                {
+                    child.isKinematic = true;
+                    child.constraints = RigidbodyConstraints.FreezeAll;
+                }
+                //Parent.SetActive(false);
                 break;
 
         }

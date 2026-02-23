@@ -4,7 +4,6 @@ using UnityEngine.AI;
 
 public class HY_EnemyRagdoll : MonoBehaviour
 {
-     public static HY_EnemyRagdoll instance;
     [Header("References")]
     public GameObject Parent;                 // Main enemy root
     public Transform hip;                     // Hip bone
@@ -22,11 +21,6 @@ public class HY_EnemyRagdoll : MonoBehaviour
         agent = Parent.GetComponent<NavMeshAgent>();
         enemyHipRagdoll = GetComponent<Rigidbody>();
         EnableKinematic();
-
-        if (instance == null)
-        {
-            instance = this;
-        }
     }
 
     // ---------------- RAGDOLL CONTROL ----------------

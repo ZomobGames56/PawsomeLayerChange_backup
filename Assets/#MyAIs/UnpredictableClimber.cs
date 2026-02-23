@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -16,12 +16,22 @@ public class UnpredictableClimber : MonoBehaviour
     [Header("Animator")]
     public Animator animator;
 
+    [Header("Mobile Optimization")]
+    public Transform player;
+    public float disableDistance = 30f;
+
     private NavMeshAgent agent;
-    private int currentWaypointIndex = 0;
+    private int currentWaypointIndex;
     private float updateTimer;
+
+    private const int MAX_SAMPLE_ATTEMPTS = 2;
+    private int sampleAttempts;
 
     private enum AIState { Moving, GoalReached, Ragdoll }
     private AIState currentState = AIState.Moving;
+
+    private float arrivalSqr;
+    private float disableSqr;
 
     private void Start()
     {
@@ -29,10 +39,14 @@ public class UnpredictableClimber : MonoBehaviour
         animator = GetComponent<Animator>();
 
         agent.autoBraking = false;
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+        agent.updateRotation = false;
 
-        if (pathWaypoints.Length == 0)
+        arrivalSqr = waypointArrivalDistance * waypointArrivalDistance;
+        disableSqr = disableDistance * disableDistance;
+
+        if (pathWaypoints == null || pathWaypoints.Length == 0)
         {
-            Debug.LogError("No waypoints assigned!");
             enabled = false;
             return;
         }
@@ -42,16 +56,15 @@ public class UnpredictableClimber : MonoBehaviour
 
     private void Update()
     {
+        // 🔴 Mobile AI sleep when far
+        if (player &&
+            (transform.position - player.position).sqrMagnitude > disableSqr)
+            return;
+
         switch (currentState)
         {
             case AIState.Moving:
                 HandleMoving();
-                break;
-
-            case AIState.Ragdoll:
-                break;
-
-            case AIState.GoalReached:
                 break;
         }
     }
@@ -60,8 +73,9 @@ public class UnpredictableClimber : MonoBehaviour
 
     private void HandleMoving()
     {
-        if (Vector3.Distance(transform.position,
-            pathWaypoints[currentWaypointIndex].position) <= waypointArrivalDistance)
+        Vector3 wpPos = pathWaypoints[currentWaypointIndex].position;
+
+        if ((transform.position - wpPos).sqrMagnitude <= arrivalSqr)
         {
             currentWaypointIndex++;
 
@@ -81,18 +95,24 @@ public class UnpredictableClimber : MonoBehaviour
         if (updateTimer <= 0f || (!agent.pathPending && agent.remainingDistance < 1f))
         {
             UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
-            float jitter = Random.Range(0.8f, 1.2f);
-            updateTimer = targetUpdateInterval * jitter;
-           // updateTimer = targetUpdateInterval;
+            updateTimer = targetUpdateInterval * Random.Range(0.8f, 1.2f);
         }
 
         UpdateAnimation();
+        RotateToVelocity();
     }
 
     // ---------------- RANDOM TARGET ----------------
 
     private void UpdateRandomTarget(Vector3 goal)
     {
+        if (sampleAttempts++ > MAX_SAMPLE_ATTEMPTS)
+        {
+            agent.SetDestination(goal);
+            sampleAttempts = 0;
+            return;
+        }
+
         Vector3 direction = (goal - transform.position).normalized;
         Vector3 baseTarget = transform.position + direction * randomStepDistance;
 
@@ -103,9 +123,9 @@ public class UnpredictableClimber : MonoBehaviour
             return;
         }
 
-        Vector3 perpendicular = Vector3.Cross(direction, Vector3.up).normalized;
-        float offset = Random.Range(-maxLateralWiggle, maxLateralWiggle);
-        Vector3 randomTarget = baseHit.position + perpendicular * offset;
+        Vector3 perpendicular = Vector3.Cross(direction, Vector3.up);
+        Vector3 randomTarget = baseHit.position +
+                               perpendicular * Random.Range(-maxLateralWiggle, maxLateralWiggle);
 
         if (NavMesh.SamplePosition(randomTarget, out NavMeshHit finalHit,
             maxLateralWiggle * 2f, NavMesh.AllAreas))
@@ -122,33 +142,43 @@ public class UnpredictableClimber : MonoBehaviour
 
     private void UpdateAnimation()
     {
-        if (animator == null) return;
+        if (!animator) return;
 
-        float speed = agent.velocity.magnitude;
-        animator.SetFloat("Run", speed, 0.1f, Time.deltaTime);
+        float speed01 = agent.velocity.magnitude / agent.speed;
+        animator.SetFloat("Run", speed01, 0.1f, Time.deltaTime);
     }
 
-    // ---------------- RAGDOLL API ----------------
+    private void RotateToVelocity()
+    {
+        Vector3 vel = agent.velocity;
+        vel.y = 0;
+
+        if (vel.sqrMagnitude > 0.01f)
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(vel),
+                Time.deltaTime * 8f
+            );
+    }
+
+    // ---------------- RAGDOLL ----------------
 
     public void EnterRagdollState()
     {
         currentState = AIState.Ragdoll;
-        agent.isStopped = true;
-        agent.ResetPath();
+        //agent.isStopped = true;
+        //agent.ResetPath();
 
-        if (animator != null)
-            animator.enabled = false;
+        if (animator) animator.enabled = false;
     }
 
     public void ExitRagdollState()
     {
-        if (currentState == AIState.GoalReached)
-            return;
+        if (currentState == AIState.GoalReached) return;
 
         currentState = AIState.Moving;
 
-        if (animator != null)
-            animator.enabled = true;
+        if (animator) animator.enabled = true;
 
         agent.isStopped = false;
         UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);

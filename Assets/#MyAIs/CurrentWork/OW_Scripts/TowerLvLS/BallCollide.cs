@@ -41,21 +41,22 @@ public class BallCollide : MonoBehaviour
             
 
         }
-        //if (collision.collider.CompareTag("EnemyHip"))
-        //{
-        //    float impactForce = rb.linearVelocity.magnitude;
-        //    if (impactForce < minImpactForce)
-        //        return;
-        //    Rigidbody enemyRB = collision.collider.GetComponent<Rigidbody>();
-        //    if(enemyRB == null) return;
+        if (collision.collider.CompareTag("EnemyHip"))
+        {
+            float impactForce = rb.linearVelocity.magnitude;
+            if (impactForce < minImpactForce)
+                return;
+            Rigidbody enemyRB = collision.collider.GetComponent<Rigidbody>();
+            if (enemyRB == null) return;
 
-        //    Vector3 dir = collision.contacts[0].normal * -1f;
+            Vector3 dir = collision.contacts[0].normal * -1f;
 
-        //    dir.y = 0.3f;
-        //    HY_EnemyRagdoll.instance.EnemyRagdoll();
-        //    HipUpForceAdd.instance.ApplyKnoackBackForce(dir, impactForce, 15f);
-        //    //  enemyRB.AddForce(dir* impactForce*ImpactMultiplier, ForceMode.Impulse);
-        //}
+            dir.y = 0.3f;
+            //HY_EnemyRagdoll.instance.EnemyRagdoll();
+            collision.gameObject.GetComponentInChildren<HY_EnemyRagdoll>().EnemyRagdoll();
+            HipUpForceAdd.instance.ApplyKnoackBackForce(dir, impactForce, impactMultiplier);
+              //enemyRB.AddForce(dir* impactForce*ImpactMultiplier, ForceMode.Impulse);
+        }
     }
 
     

@@ -24,7 +24,7 @@ public class HY_SpikesRotator : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            HY_PlayerRagdollActive.instance.RagdollActivate();
+            //HY_PlayerRagdollActive.instance.RagdollActivate();
             
             Debug.Log(collision.gameObject.name);
         }
