@@ -79,6 +79,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -956,6 +957,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3306038449846426330
 GameObject:
@@ -1077,6 +1079,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3391767564304908883
 GameObject:
@@ -1350,7 +1353,6 @@ GameObject:
   - component: {fileID: 731905762396318958}
   - component: {fileID: 3785822692999173606}
   - component: {fileID: 1600815665880245673}
-  - component: {fileID: 2365440883233845546}
   m_Layer: 0
   m_Name: mixamorig:Hips
   m_TagString: EnemyHip
@@ -1439,19 +1441,6 @@ MonoBehaviour:
   Parent: {fileID: 4296246200088872076}
   hip: {fileID: 7440634739504952588}
   movementAI: {fileID: 4837777334793088942}
---- !u!114 &2365440883233845546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4108573529654709996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10bdfc7bfede23e4eba45e6a5f35d9c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HipUpForceAdd
-  force: 6
 --- !u!1 &4296246200088872076
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,7 +1470,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4296246200088872076}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -18.99, y: 3.5939598, z: -8.36}
   m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 1
@@ -1616,6 +1605,8 @@ MonoBehaviour:
   randomStepDistance: 5
   maxLateralWiggle: 3
   animator: {fileID: 0}
+  player: {fileID: 0}
+  disableDistance: 30
 --- !u!1 &4506242711022653649
 GameObject:
   m_ObjectHideFlags: 0
@@ -1704,6 +1695,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4794936482403192242
 GameObject:
@@ -2182,6 +2174,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6414654420306373410
 GameObject:
@@ -2660,6 +2653,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &7883556556806841631
 GameObject:
@@ -2749,6 +2743,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8188936554373124248
 GameObject:
@@ -3001,6 +2996,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8519171381465465207
 GameObject:

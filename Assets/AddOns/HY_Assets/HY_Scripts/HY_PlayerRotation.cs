@@ -39,34 +39,34 @@
 //}
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class HY_PlayerRotation : MonoBehaviour
-{
-    [SerializeField] private FixedTouchField playerTouchField;
-    [SerializeField] private float sensitivity = 8f;
-    [SerializeField] private float torqueStrength = 6f;
+//[RequireComponent(typeof(Rigidbody))]
+//public class HY_PlayerRotation : MonoBehaviour
+//{
+//    [SerializeField] private FixedTouchField playerTouchField;
+//    [SerializeField] private float sensitivity = 8f;
+//    [SerializeField] private float torqueStrength = 6f;
 
-    private Rigidbody rb;
+//    private Rigidbody rb;
 
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-        rb.angularDamping = 2f; // helps smooth stopping
+//    private void Awake()
+//    {
+//        rb = GetComponent<Rigidbody>();
+//        rb.angularDamping = 2f; // helps smooth stopping
         
-    }
+//    }
 
-    private void FixedUpdate()
-    {
-        float swipeX = playerTouchField.TouchDist.x;
+//    private void FixedUpdate()
+//    {
+//        float swipeX = playerTouchField.TouchDist.x;
 
-        // small dead zone to avoid jitter
-        if (Mathf.Abs(swipeX) < 5f)
-            return;
+//        // small dead zone to avoid jitter
+//        if (Mathf.Abs(swipeX) < 5f)
+//            return;
 
-        // RIGHT swipe → RIGHT rotation
-        // LEFT swipe → LEFT rotation
-        float torque = swipeX * sensitivity * torqueStrength * Time.fixedDeltaTime;
+//        // RIGHT swipe → RIGHT rotation
+//        // LEFT swipe → LEFT rotation
+//        float torque = swipeX * sensitivity * torqueStrength * Time.fixedDeltaTime;
 
-        rb.AddTorque(-Vector3.up * torque, ForceMode.Acceleration);
-    }
-}
+//        rb.AddTorque(-Vector3.up * torque, ForceMode.Acceleration);
+//    }
+//}

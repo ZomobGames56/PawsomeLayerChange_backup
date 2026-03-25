@@ -16,5 +16,5 @@ public class testmovement : MonoBehaviour
     {
         Vector3 move = transform.right * h + transform.forward * v;
         transform.position += move * speed * Time.fixedDeltaTime;
-    } 
+    } // temp controller 
 }

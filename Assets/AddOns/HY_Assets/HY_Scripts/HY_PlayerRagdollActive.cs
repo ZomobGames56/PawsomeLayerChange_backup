@@ -13,9 +13,6 @@ public class HY_PlayerRagdollActive : MonoBehaviour
     public GameObject Parent;
     [SerializeField] GameObject effect;
     Transform spawnPoint;
-    [SerializeField]
-    Rigidbody parentPlayerRb, hipRB;
-    bool collideWithWater = false;
     //public HY_NavMeshEnemy _refNavMesh;
     void Awake()
     {
@@ -27,9 +24,15 @@ public class HY_PlayerRagdollActive : MonoBehaviour
         childRbs = GetComponentsInChildren<Rigidbody>();
         EnableKinamatic();
         animator = GetComponentInParent<Animator>();
-        parentPlayerRb = parentPlayerRb.GetComponentInParent<Rigidbody>();
-        hipRB = GetComponent<Rigidbody>();
-        parentPlayerRb.constraints = RigidbodyConstraints.FreezeRotation;
+
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            OnObstacleCollide();
+
+        }
     }
     void EnableKinamatic()
     {
@@ -50,12 +53,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour
     IEnumerator ResetRagoll(float wait)
     {
         yield return new WaitForSeconds(wait);
-
-        if (collideWithWater) yield break;
-        parentPlayerRb.constraints = RigidbodyConstraints.None |
-                                          RigidbodyConstraints.FreezeRotation;
+        Parent.transform.position = transform.position;
         animator.enabled = true;
-        parentPlayerRb.position = hipRB.position;
         HY_Player_Control.canControl = true;
         Debug.Log("Just called");
         foreach (var child in childRbs)
@@ -87,23 +86,6 @@ public class HY_PlayerRagdollActive : MonoBehaviour
                 Debug.Log("Collide Obstacle " + gameObject.name);
                 break;
 
-            case "Water":
-                Debug.Log("Water");
-                collideWithWater = true;
-                parentPlayerRb.constraints = RigidbodyConstraints.None |
-                                         RigidbodyConstraints.FreezeRotation;
-                animator.enabled = true;
-                parentPlayerRb.position = hipRB.position;
-                HY_Player_Control.canControl = true;
-                Debug.Log("Just called");
-                foreach (var child in childRbs)
-                {
-                    child.isKinematic = true;
-                    child.constraints = RigidbodyConstraints.FreezeAll;
-                }
-                //Parent.SetActive(false);
-                break;
-
         }
 
 
@@ -111,14 +93,10 @@ public class HY_PlayerRagdollActive : MonoBehaviour
 
     public void OnObstacleCollide()
     {
-        parentPlayerRb.constraints = RigidbodyConstraints.FreezePositionX |
-                                     RigidbodyConstraints.FreezePositionZ |
-                                     RigidbodyConstraints.FreezeRotation;
-
         HY_Player_Control.canControl = false;
         animator.enabled = false;
         DisableKinamatic();
-        StartCoroutine(ResetRagoll(3f));
+        StartCoroutine(ResetRagoll(2.5f));
     }
 
 

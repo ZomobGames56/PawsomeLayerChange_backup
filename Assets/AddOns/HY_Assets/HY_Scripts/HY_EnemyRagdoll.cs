@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class HY_EnemyRagdoll : MonoBehaviour
+public class HY_EnemyRagdoll : MonoBehaviour, IHitAble
 {
     [Header("References")]
     public GameObject Parent;                 // Main enemy root
@@ -13,13 +13,13 @@ public class HY_EnemyRagdoll : MonoBehaviour
     private Animator animator;
     private NavMeshAgent agent;
 
-    Rigidbody enemyHipRagdoll;
+    Rigidbody _Hip;
     private void Awake()
     {
         childRbs = GetComponentsInChildren<Rigidbody>();
         animator = Parent.GetComponent<Animator>();
         agent = Parent.GetComponent<NavMeshAgent>();
-        enemyHipRagdoll = GetComponent<Rigidbody>();
+        _Hip = GetComponent<Rigidbody>();
         EnableKinematic();
     }
 
@@ -82,5 +82,11 @@ public class HY_EnemyRagdoll : MonoBehaviour
             rb.isKinematic = false;
             rb.constraints = RigidbodyConstraints.None;
         }
+    }
+
+    public void ApplyKnoackBackForce(Vector3 knockBackDirection, float impactForce, float ImpactMultiplier)
+    {
+        EnemyRagdoll();
+        _Hip.AddForce(knockBackDirection * impactForce * ImpactMultiplier, ForceMode.Impulse);
     }
 }

@@ -25,7 +25,7 @@ public class RagdollForce : MonoBehaviour
     IEnumerator RagDollGo()
     {
         yield return new WaitForSeconds(0.15f);
-        HY_PlayerRagdollActive.instance.OnObstacleCollide();
+      //  HY_PlayerRagdollActive.instance.OnObstacleCollide();
 
     }
 

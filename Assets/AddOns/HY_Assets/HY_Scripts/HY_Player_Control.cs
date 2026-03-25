@@ -154,8 +154,8 @@ public class HY_Player_Control : MonoBehaviour
             joystick.gameObject.SetActive(true);
 
             Vector3 camForwad = cam.forward;
+
             Vector3 camRight = cam.right;
-               
             camForwad.y = 0f; camRight.y = 0f;
             camForwad.Normalize(); camRight.Normalize();
             // float h = Input.GetAxis("Horizontal");
@@ -285,7 +285,7 @@ public class HY_Player_Control : MonoBehaviour
     }
     public IEnumerator JumpUp()
     {
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(0.2f);
         animator.SetBool("Jump", false);
         animator.SetBool("Hanging", true);
         //rb.AddForce(Vector3.up * (-gravity), ForceMode.Impulse);
@@ -351,7 +351,7 @@ public class HY_Player_Control : MonoBehaviour
     {
         if (collision.transform.tag == "Obstacle")
         {
-            HY_AudioManager.instance.PlayAudioEffectOnce(collideSound);
+           // HY_AudioManager.instance.PlayAudioEffectOnce(collideSound);
             HY_PlayerRagdollActive.instance.OnObstacleCollide();
         }
         if (collision.transform.tag == "Water" && !collideToWater)
@@ -369,7 +369,7 @@ public class HY_Player_Control : MonoBehaviour
             isCalled = true;
             canControl = false;
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 500f);
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
             StartCoroutine(SpawnWait());
 
 
@@ -380,8 +380,7 @@ public class HY_Player_Control : MonoBehaviour
     private void OnCollideWater()
     {
         canControl = false;
-        rb.isKinematic = true;
-        HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
+       // HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
         Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
         transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
 
@@ -393,12 +392,12 @@ public class HY_Player_Control : MonoBehaviour
         yield return new WaitForSeconds(waitForSec);
 
         // Stop physics
-        //rb.isKinematic = false;
 
 
         // Teleport correctly
         rb.position = spawnPoint.position;
         rb.rotation = spawnPoint.rotation;
+        //rb.isKinematic = false;
         // Reset scale instantly
         transform.localScale = playerScale;
 
@@ -459,7 +458,7 @@ public class HY_Player_Control : MonoBehaviour
         if (other.tag == "Ground")
         {
             collideToWater = false;
-           //canControl = true;
+            canControl = true;
             isCalled = false;
             isGrounded = true;
             animator.SetBool("Hanging", false);

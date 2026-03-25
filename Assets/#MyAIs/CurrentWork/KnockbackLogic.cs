@@ -1,13 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class KnockbackLogic : MonoBehaviour
 {
-    /// <summary>
-    /// Player Collide ---> root body off, animator off ---> add force to hip in desired direction.
-    /// </summary>
-
     [SerializeField]
+
     float knockBackforce = 15f, upfoce=5; 
     private void OnCollisionEnter(Collision collision)
     {

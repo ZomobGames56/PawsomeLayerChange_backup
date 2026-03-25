@@ -1,53 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class FixedTouchField : MonoBehaviour , IPointerDownHandler, IPointerUpHandler
+public class FixedTouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [HideInInspector]
-    public Vector2 TouchDist;
-    [HideInInspector]
-    public Vector2 PointerOld;
-    [HideInInspector]
-    protected int PointerId;
-    [HideInInspector]
-    public bool Pressed;
+    public Vector2 TouchDelta;
 
-    // Use this for initialization
+    Vector2 lastPos;
+    bool pressed;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Pressed)
-        {
-            if (PointerId >= 0 && PointerId < Input.touches.Length)
-            {
-                TouchDist = Input.touches[PointerId].position - PointerOld;
-                PointerOld = Input.touches[PointerId].position;
-            }
-            else
-            {
-                TouchDist = new Vector2(Input.mousePosition.x, Input.mousePosition.y) - PointerOld;
-                PointerOld = Input.mousePosition;
-            }
-        }
-        else
-        {
-            TouchDist = new Vector2();
-        }
-    }
-
+    [SerializeField] float minMove = 2f;   // pixels needed before movement registers
+    int activePointerID = -1;
     public void OnPointerDown(PointerEventData eventData)
     {
-        Pressed = true;
-        PointerId = eventData.pointerId;
-        PointerOld = eventData.position;
+        activePointerID = eventData.pointerId;
+        pressed = true;
+        lastPos = eventData.position;
+        TouchDelta = Vector2.zero;
     }
 
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!pressed || eventData.pointerId!=activePointerID) return;
+
+        Vector2 newPos = eventData.position;
+        Vector2 delta = newPos - lastPos;
+
+        //// 👉 if finger didn't actually move → ignore
+        if (delta.sqrMagnitude < minMove * minMove)
+        {
+            TouchDelta = Vector2.zero;
+            return;
+        }
+
+        TouchDelta = delta;
+        lastPos = newPos;
+    }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Pressed = false;
+        if(eventData.pointerId!=activePointerID) return;
+
+        pressed = false;
+        TouchDelta = Vector2.zero;
+    }
+
+    void LateUpdate()
+    {
+        // if holding but finger not moving → stop camera
+        if (pressed)
+            TouchDelta = Vector2.zero;
     }
 }

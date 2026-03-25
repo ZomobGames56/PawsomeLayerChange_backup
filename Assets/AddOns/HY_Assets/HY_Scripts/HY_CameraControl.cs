@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
 public class HY_CameraControl : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class HY_CameraControl : MonoBehaviour
     [SerializeField] float followStrength = 0.4f; // how much it helps
 
     [SerializeField] Transform lookAt;
-    public FixedTouchField TouchField;
+    public FixedTouchField touchField;
 
     Quaternion rot;
     Vector3 dir;
@@ -31,7 +32,7 @@ public class HY_CameraControl : MonoBehaviour
     [HideInInspector] public Vector3 playerMoveDir;
 
 
-
+   
     void Start()
     {
         currentY = 30f;   // starting pitch
@@ -45,9 +46,10 @@ public class HY_CameraControl : MonoBehaviour
 
     void MouseRotation()
     {
+        Vector2 delta = touchField.TouchDelta;
         // 1️⃣ MANUAL CAMERA INPUT
-        currentX += TouchField.TouchDist.x * sensivity * Time.deltaTime;
-        currentY -= TouchField.TouchDist.y * sensivityY * Time.deltaTime;
+        currentX += delta.x * sensivity * Time.deltaTime;
+        currentY -= delta.y * sensivityY * Time.deltaTime;
         currentY = Mathf.Clamp(currentY, minY, maxY);
 
         Quaternion manualRot = Quaternion.Euler(currentY, currentX, 0);
@@ -70,7 +72,7 @@ public class HY_CameraControl : MonoBehaviour
             // keep internal yaw synced (prevents snap)
             currentX = manualRot.eulerAngles.y;
         }
-
+        
         rot = manualRot;
         dir = new Vector3(0, 0, -dis);
 

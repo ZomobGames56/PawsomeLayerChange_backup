@@ -33,6 +33,14 @@ public class UnpredictableClimber : MonoBehaviour
     private float arrivalSqr;
     private float disableSqr;
 
+    private void OnEnable()
+    {
+        mn_GameManager.OnWinEvent += StopMovement;
+    }
+    private void OnDisable()
+    {
+        mn_GameManager.OnWinEvent -= StopMovement;
+    }
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -83,6 +91,8 @@ public class UnpredictableClimber : MonoBehaviour
             {
                 agent.isStopped = true;
                 currentState = AIState.GoalReached;
+                //call the event.
+                mn_GameManager.Won();
                 return;
             }
 
@@ -171,7 +181,12 @@ public class UnpredictableClimber : MonoBehaviour
 
         if (animator) animator.enabled = false;
     }
-
+    void StopMovement()
+    {
+        agent.speed = 0;
+       // agent.isStopped = true;
+        animator.SetFloat("Run", 0);
+    }
     public void ExitRagdollState()
     {
         if (currentState == AIState.GoalReached) return;

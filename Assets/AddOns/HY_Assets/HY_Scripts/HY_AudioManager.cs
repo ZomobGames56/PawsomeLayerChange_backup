@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HY_AudioManager : MonoBehaviour
@@ -35,12 +34,6 @@ public class HY_AudioManager : MonoBehaviour
     {
         bgAudioSource.clip = BackgroundClip;
         bgAudioSource.Play();
-    }
-    private void Update()
-    {
-        
-        //bgAudioSource.volume = musicSlider.value;
-       // forOnShotPlayAudioSource.volume = sfxSlider.value;
     }
     public void PlayAudioEffectOnce(AudioClip effectClip)
     {
