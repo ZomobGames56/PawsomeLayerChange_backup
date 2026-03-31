@@ -62,8 +62,9 @@ public class _CheckWinner : MonoBehaviour
         yield return new WaitForSeconds(timeToShowWinnerScreen);
         // playerModel.GetComponent<Animator>().enabled = false;
         playerModel.transform.SetParent(stoneModel.transform);
+        playerModel.GetComponent<Rigidbody>().isKinematic = true;
         playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-        playerModel.transform.localRotation = Quaternion.EulerAngles(0, playerRot, 0);
+        playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
         if (!playerModel.activeInHierarchy)
         {
             playerModel.SetActive(true);

@@ -45,15 +45,11 @@ public class HY_WinnerShowCase : MonoBehaviour
         StartCoroutine(ChangeColor());
 
     }
-    private void Update()
-    {
-        playerModel.GetComponent<Animator>().enabled = true;
-    }
     IEnumerator ChangeColor()
     {
-        float speed = .5f;
+        float speed = 0.5f;
         ResetAll();
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(0.1f);
         for (int i = 0; i < 5; i++)
         {
             foreach (GameObject go in stoneModels)

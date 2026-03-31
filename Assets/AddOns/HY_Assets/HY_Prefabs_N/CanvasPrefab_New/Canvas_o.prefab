@@ -59,14 +59,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.69411767}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 046bc922d5ebfbf4f99e406282afc936, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -262,8 +262,8 @@ GameObject:
   - component: {fileID: 5346674471423082309}
   - component: {fileID: 6629465511308926240}
   - component: {fileID: 5153780805778579380}
-  - component: {fileID: 1931673312310234176}
   - component: {fileID: 5401231049590469840}
+  - component: {fileID: 9101876018041455015}
   m_Layer: 5
   m_Name: JumpBtn
   m_TagString: Untagged
@@ -329,19 +329,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1931673312310234176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 453062835516894462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eac2913fb9148c41b4594b5e6172426, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player_Ref: {fileID: 0}
 --- !u!114 &5401231049590469840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +373,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &9101876018041455015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453062835516894462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc040a4a97758449aef1081c978ef1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HY_PointerJumpN
+  player_Ref: {fileID: 0}
 --- !u!1 &978203158326804820
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,9 +722,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4827755f1dafcfa4386a2f0f10fb7cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TouchDist: {x: 0, y: 0}
-  PointerOld: {x: 0, y: 0}
-  Pressed: 0
+  TouchDelta: {x: 0, y: 0}
+  minMove: 2
 --- !u!1 &1525007830720753293
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,7 +1912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4793547180246985551
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2555,6 +2554,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

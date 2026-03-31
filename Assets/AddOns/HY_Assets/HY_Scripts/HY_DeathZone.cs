@@ -14,15 +14,6 @@ public class HY_DeathZone : MonoBehaviour
     {
         enemyDeathCount = 0;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // if enemy falls collider will check how many enemy alive 
-        count = enemyDeathCount;
-        eliminationTxt.text=count+"/9".ToString();
-    }
-
    
     private void OnTriggerEnter(Collider other)
     {
@@ -41,8 +32,11 @@ public class HY_DeathZone : MonoBehaviour
                 Instantiate(effect, other.transform.position, Quaternion.Euler(90, 0, 0));
                 other.gameObject.SetActive(false);
                 enemyDeathCount++;
+                count = enemyDeathCount;
+                eliminationTxt.text = count + "/6".ToString();
                 break;
         }
 
     }
+
 }

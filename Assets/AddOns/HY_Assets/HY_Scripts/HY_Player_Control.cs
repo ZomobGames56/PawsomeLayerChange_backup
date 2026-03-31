@@ -393,7 +393,7 @@ public class HY_Player_Control : MonoBehaviour
 
         // Stop physics
 
-
+        rb.linearVelocity = Vector3.zero;
         // Teleport correctly
         rb.position = spawnPoint.position;
         rb.rotation = spawnPoint.rotation;

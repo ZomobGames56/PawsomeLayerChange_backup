@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class HY_PlayerRagdollActive : MonoBehaviour
+public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
 {
     public static HY_PlayerRagdollActive instance;
     Rigidbody[] childRbs;
@@ -13,6 +13,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour
     public GameObject Parent;
     [SerializeField] GameObject effect;
     Transform spawnPoint;
+    Rigidbody _hip;
     //public HY_NavMeshEnemy _refNavMesh;
     void Awake()
     {
@@ -23,6 +24,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour
 
         childRbs = GetComponentsInChildren<Rigidbody>();
         EnableKinamatic();
+        _hip = GetComponent<Rigidbody>();
         animator = GetComponentInParent<Animator>();
 
     }
@@ -99,7 +101,11 @@ public class HY_PlayerRagdollActive : MonoBehaviour
         StartCoroutine(ResetRagoll(2.5f));
     }
 
-
+    public void ApplyKnoackBackForce(Vector3 knockBackDirection, float impactForce, float ImpactMultiplier)
+    {
+        RagdollActivate();
+        _hip.AddForce(knockBackDirection * impactForce * ImpactMultiplier, ForceMode.Impulse);
+    }
 }
 
 

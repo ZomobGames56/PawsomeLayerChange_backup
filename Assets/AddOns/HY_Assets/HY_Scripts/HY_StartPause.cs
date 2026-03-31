@@ -24,7 +24,6 @@ public class HY_StartPause : MonoBehaviour
     {
         if (pauseMenu != null)
         {
-
             pauseMenu.SetActive(false);
         }
         countOver = false;

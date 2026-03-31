@@ -86,22 +86,31 @@ public class HY_NavMeshEnemy : MonoBehaviour
 
         }
     }
-    private void OnCollisionStay(Collision collision)
+    //private void OnCollisionStay(Collision collision)
+    //{
+    //    if (collision.transform.tag == "Slider")
+    //    {
+    //        enmyAnim.SetTrigger("Dashing");
+    //        enmyAnim.SetBool("Dash", true);
+    //        agent.speed = onSliderSpeed;
+    //    }
+    //    //if (collision.transform.tag == "Jumper")
+    //    //{
+    //    //    rb.AddForce(Vector3.up * 23f, ForceMode.Impulse);
+
+
+    //    //}
+
+
+    //}
+    private void OnTriggerStay(Collider other)
     {
-        if (collision.transform.tag == "Slider")
+        if (other.tag == "Slider")
         {
             enmyAnim.SetTrigger("Dashing");
             enmyAnim.SetBool("Dash", true);
             agent.speed = onSliderSpeed;
         }
-        //if (collision.transform.tag == "Jumper")
-        //{
-        //    rb.AddForce(Vector3.up * 23f, ForceMode.Impulse);
-
-
-        //}
-
-
     }
     void AISpeedChange()
     {
