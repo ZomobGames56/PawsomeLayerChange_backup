@@ -17,7 +17,7 @@ public class HY_StartPause : MonoBehaviour
     [SerializeField]
     AudioClip countDownSound, bgMusic;
     [SerializeField]
-    GameObject clouds, pauseMenu, cloudForExit;
+    GameObject clouds, pauseMenu, cloudForExit, instrctionScreen;
 
 
     void Start()
@@ -27,8 +27,10 @@ public class HY_StartPause : MonoBehaviour
             pauseMenu.SetActive(false);
         }
         countOver = false;
-        StartCoroutine(StartCount());
+        instrctionScreen.SetActive(true);
+        Panel.SetActive(false);
         cloudForExit.SetActive(false);
+        clouds.SetActive(true);
 
     }
     private void Update()
@@ -57,7 +59,6 @@ public class HY_StartPause : MonoBehaviour
     IEnumerator StartCount()
     {
 
-        clouds.SetActive(true);
         yield return new WaitForSeconds(1);
         HY_AudioManager.instance.PlayAudioEffectOnce(countDownSound);
         // img.sprite = sprite[2];
@@ -94,6 +95,13 @@ public class HY_StartPause : MonoBehaviour
     {
         yield return new WaitForSeconds(2.5f);
         SceneManager.LoadScene(6);
+    }
+
+    public void LetsGoBtn()
+    {
+        instrctionScreen.SetActive(false);
+        Panel.SetActive(true);
+        StartCoroutine(StartCount());
     }
     void DeactiveAll()
     {

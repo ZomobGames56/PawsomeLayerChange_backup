@@ -20,18 +20,18 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         print(storyOnStartOnly);
-        if(!storyOnStartOnly)
-        {
-            storyPanel.SetActive(true);
-            storyScript.StartStory();
-            storyOnStartOnly = true;
+        //if(!storyOnStartOnly)
+        //{
+        //    storyPanel.SetActive(true);
+        //    storyScript.StartStory();
+        //    storyOnStartOnly = true;
 
-        }
-        else
-        {
-            storyPanel.SetActive(false);
-            playerModel.SetActive(true);
-        }
+        //}
+        //else
+        //{
+        //    storyPanel.SetActive(false);
+        //    playerModel.SetActive(true);
+        //}
         //levelIndex = Random.Range(1, 3);
         loadingScreen.SetActive(false);
         cloudCanvas.SetActive(false);

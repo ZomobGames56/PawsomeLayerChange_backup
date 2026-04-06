@@ -388,9 +388,8 @@ public class HY_Player_Control : MonoBehaviour
     }
     public IEnumerator SpawnWait()
     {
-       
+       rb.isKinematic = true;
         yield return new WaitForSeconds(waitForSec);
-
         // Stop physics
 
         rb.linearVelocity = Vector3.zero;
@@ -400,7 +399,6 @@ public class HY_Player_Control : MonoBehaviour
         //rb.isKinematic = false;
         // Reset scale instantly
         transform.localScale = playerScale;
-
         // Reset states
         canControl = true;
         isCalled = false;

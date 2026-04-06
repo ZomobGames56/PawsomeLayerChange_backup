@@ -13,6 +13,7 @@ public class FixedTouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnPointerDown(PointerEventData eventData)
     {
         activePointerID = eventData.pointerId;
+        print("PointerDown");
         pressed = true;
         lastPos = eventData.position;
         TouchDelta = Vector2.zero;
@@ -34,6 +35,8 @@ public class FixedTouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
         TouchDelta = delta;
         lastPos = newPos;
+        print("Drag");
+
     }
 
     public void OnPointerUp(PointerEventData eventData)

@@ -1,147 +1,159 @@
-using TMPro;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering;
 
 public class HY_NavMeshEnemy : MonoBehaviour
 {
-    [SerializeField]
-    Transform target, playerTrans;
-    [SerializeField]
-    NavMeshAgent agent;
-    [SerializeField]
-    public float rndSpeed = 7.0f, onLinkSpeed = 2;
-    HY_Player_Control plc;
-    [SerializeField]
-    Animator enmyAnim;
-    public bool canMove;
-    public bool touchedFinishLine;
-    //[SerializeField]
-    //float time = 0;//, changeSpeedFloat = 10;
-    public bool followPath;
-    //public static bool goRagdoll = false;
-    Rigidbody rb;
-    bool callOnce;
-    [SerializeField]
-    float onSliderSpeed;
-    [SerializeField]
-    float heightIncrease = 2.0f;
-    void Start()
+    [Header("References")]
+    [SerializeField] Transform target;
+    [SerializeField] NavMeshAgent agent;
+    [SerializeField] Animator enmyAnim;
+
+    [Header("Movement")]
+    public float rndSpeed = 7f;
+    [SerializeField] float onSliderSpeed = 10f;
+    [SerializeField] float jumpHeight = 2f;
+    [SerializeField] float jumpDuration = 0.5f;
+
+    public bool canMove = true;
+    public bool touchedFinishLine = false;
+    public bool followPath = true;
+
+    bool hasSetDestination = false;
+    bool isJumping = false;
+
+    void Awake()
     {
-        //goRagdoll = false;
-        rb = GetComponent<Rigidbody>();
-        agent = GetComponent<NavMeshAgent>();
-        followPath = true;
-        plc = GetComponent<HY_Player_Control>();
-        enmyAnim = GetComponentInChildren<Animator>();
-        if (enmyAnim == null)
-        {
-            enmyAnim = GetComponent<Animator>();
-        }
-        canMove = true;
-        callOnce = true;
+        if (!agent) agent = GetComponent<NavMeshAgent>();
+        if (!enmyAnim) enmyAnim = GetComponentInChildren<Animator>();
+
+        agent.speed = rndSpeed;
     }
 
     void Update()
     {
-        if (HY_StartPause.countOver)
+        if (!HY_StartPause.countOver || !canMove || touchedFinishLine)
         {
-            if (canMove == true)
-            {
-                if (followPath == true && callOnce == true)
-                {
-                    agent.SetDestination(target.position);
-                    callOnce = false;
-                }
-
-                enmyAnim.SetFloat("Run", agent.velocity.sqrMagnitude);
-
-                if (agent.isOnOffMeshLink)
-                {
-                    Vector3 targetPosition = agent.transform.position;
-                    targetPosition.y += heightIncrease;
-                    agent.speed = onLinkSpeed;
-                    enmyAnim.ResetTrigger("Dashing");
-                    enmyAnim.SetBool("Dash", false);
-                    enmyAnim.SetBool("Jump", true);
-                    enmyAnim.SetBool("Hanging", true);
-                }
-                else
-                {
-                    agent.speed = rndSpeed;
-                    enmyAnim.SetBool("Jump", false);
-                    enmyAnim.SetBool("Hanging", false);
-                }
-                //if (Vector3.Distance(transform.position, target.position) <= agent.radius)
-                //{
-                //    agent.ResetPath();
-                //}
-            }
-            else
-            {
-                agent.speed = 0;
-               // agent.isStopped = true;
-            }
-
-
-        }
-    }
-    //private void OnCollisionStay(Collision collision)
-    //{
-    //    if (collision.transform.tag == "Slider")
-    //    {
-    //        enmyAnim.SetTrigger("Dashing");
-    //        enmyAnim.SetBool("Dash", true);
-    //        agent.speed = onSliderSpeed;
-    //    }
-    //    //if (collision.transform.tag == "Jumper")
-    //    //{
-    //    //    rb.AddForce(Vector3.up * 23f, ForceMode.Impulse);
-
-
-    //    //}
-
-
-    //}
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.tag == "Slider")
-        {
-            enmyAnim.SetTrigger("Dashing");
-            enmyAnim.SetBool("Dash", true);
-            agent.speed = onSliderSpeed;
-        }
-    }
-    void AISpeedChange()
-    {
-        // rndSpeed = Random.Range(3, 9);
-
-    }
-    public void SetDestinationTarget()
-    {
-        agent.SetDestination(target.position);
-    }
-
-   
-    public Color pathColor = Color.green;
-    void OnDrawGizmos()
-    {
-        // Make sure we have a NavMeshAgent assigned
-        if (agent == null)
+            agent.isStopped = true;
             return;
+        }
 
-        // Get the path of the agent
-        NavMeshPath path = agent.path;
+        HandleMovement();
+        HandleAnimation();
+        HandleOffMeshLink();
+    }
 
-        // Set the color of the gizmo line
-        Gizmos.color = pathColor;
-
-        // Loop through the corners (waypoints) of the path
-        for (int i = 0; i < path.corners.Length - 1; i++)
+    void HandleMovement()
+    {
+        if (followPath && !hasSetDestination)
         {
-            // Draw a line between each corner
-            Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
+            agent.SetDestination(target.position);
+            hasSetDestination = true;
+        }
+
+        agent.isStopped = false;
+        agent.speed = rndSpeed;
+    }
+
+    void HandleAnimation()
+    {
+        enmyAnim.SetFloat("Run", agent.velocity.magnitude);
+    }
+
+    void HandleOffMeshLink()
+    {
+        if (agent.isOnOffMeshLink && !isJumping)
+        {
+            StartCoroutine(JumpAcrossLink());
         }
     }
 
+    IEnumerator JumpAcrossLink()
+    {
+        isJumping = true;
+
+        agent.isStopped = true;
+        agent.updatePosition = false;
+
+        OffMeshLinkData data = agent.currentOffMeshLinkData;
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
+
+        float time = 0;
+
+        enmyAnim.SetBool("Jump", true);
+        enmyAnim.SetBool("Hanging", true);
+
+        while (time < jumpDuration)
+        {
+            float t = time / jumpDuration;
+
+            float height = Mathf.Sin(Mathf.PI * t) * jumpHeight;
+
+            transform.position = Vector3.Lerp(startPos, endPos, t) + Vector3.up * height;
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = endPos;
+
+        enmyAnim.SetBool("Jump", false);
+        enmyAnim.SetBool("Hanging", false);
+
+        agent.CompleteOffMeshLink();
+        agent.updatePosition = true;
+        agent.isStopped = false;
+
+        isJumping = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Slider"))
+        {
+            StartCoroutine(HandleSlider());
+        }
+
+        if (other.CompareTag("Finish"))
+        {
+            touchedFinishLine = true;
+            StopMovement();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Slider"))
+        {
+            enmyAnim.SetBool("Dash", false);
+        }
+    }
+    IEnumerator HandleSlider()
+    {
+        enmyAnim.SetTrigger("Dashing");
+        enmyAnim.SetBool("Dash", true);
+
+        float originalSpeed = rndSpeed;
+        agent.speed = onSliderSpeed;
+
+        yield return new WaitForSeconds(0.5f);
+
+       // enmyAnim.SetBool("Dash", false);
+        agent.speed = originalSpeed;
+    }
+
+    public void StopMovement()
+    {
+        canMove = false;
+        agent.isStopped = true;
+    }
+
+    public void ResumeMovement()
+    {
+        canMove = true;
+        touchedFinishLine = false;
+        hasSetDestination = false;
+    }
 }

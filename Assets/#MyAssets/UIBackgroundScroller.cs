@@ -9,10 +9,11 @@ public class UIBackgroundScroller : MonoBehaviour
 
     private RawImage img;
     private Vector2 offset;
-
+    Vector2 scale;
     void Start()
     {
         img = GetComponent<RawImage>();
+        scale = img.uvRect.size;
     }
 
     void Update()
@@ -20,6 +21,6 @@ public class UIBackgroundScroller : MonoBehaviour
         offset.x += speedX * Time.deltaTime;
         offset.y += speedY * Time.deltaTime;
 
-        img.uvRect = new Rect(offset, Vector2.one);
+        img.uvRect = new Rect(offset, scale);
     }
 }
