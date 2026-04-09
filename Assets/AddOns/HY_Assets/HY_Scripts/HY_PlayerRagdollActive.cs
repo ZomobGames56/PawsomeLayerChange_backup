@@ -167,7 +167,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         yield return new WaitForSeconds(wait);
         animator.enabled = true;
         _hip.position = spawnPoint.position;
-        Parent.transform.rotation = spawnPoint.localRotation;
+        parentRb.rotation = spawnPoint.rotation;
         parentRb.position = _hip.position;
         ShowPlayer(true);
         //Parent.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
@@ -194,7 +194,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         HY_Player_Control.canControl = false;
         animator.enabled = false;
         DisableKinamatic();
-        StartCoroutine(ResetRagoll(2.5f));
+        //StartCoroutine(ResetRagoll(2.5f));
+        StartCoroutine(RagDollWater(2.5f));
     }
 
     public void ApplyKnoackBackForce(Vector3 knockBackDirection, float impactForce, float ImpactMultiplier)

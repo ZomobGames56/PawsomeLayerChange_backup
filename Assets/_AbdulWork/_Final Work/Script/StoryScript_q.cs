@@ -19,7 +19,7 @@ public class VoiceOver
         this.backImage = backImage;
     }
 }
-public class StoryScript : MonoBehaviour
+public class StoryScript_q : MonoBehaviour
 {
     private static string storyString = "StroyStringPref";
     public bool isSkipping;

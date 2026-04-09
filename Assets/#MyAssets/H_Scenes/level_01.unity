@@ -1936,7 +1936,7 @@ PrefabInstance:
         type: 3}
       propertyPath: joystick
       value: 
-      objectReference: {fileID: 3517908805363585170}
+      objectReference: {fileID: 1976674385}
     - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: secondSp
@@ -38169,6 +38169,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1971240434}
   m_Mesh: {fileID: -4126347574461065863, guid: 56a99e88afb788e4cba0902ea15bfd5e, type: 3}
+--- !u!114 &1976674385 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7653834199629029522, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 5665314480639530970}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a47f546fc70ec8428172694e78e4288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1980470395
 GameObject:
   m_ObjectHideFlags: 0
@@ -55871,18 +55883,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &3517908805363585170 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2698056928542829497, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
-    type: 3}
-  m_PrefabInstance: {fileID: 5665314480639530970}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &3519398872160779195
 Transform:
   m_ObjectHideFlags: 0
@@ -65921,6 +65921,11 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 471006336}
+    - target: {fileID: 978203158326804820, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1334357785293614021, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
       propertyPath: m_IsActive
@@ -65961,6 +65966,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 8430997109180683941}
+    - target: {fileID: 7970201072070721426, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8050963021197776284, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
       propertyPath: m_Pivot.x
