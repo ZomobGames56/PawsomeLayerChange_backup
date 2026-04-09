@@ -3099,13 +3099,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 159926943}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.05341067, z: -0, w: 0.99857265}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -19.87, y: 3.87, z: -9.86}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 6.123, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &174065426
 GameObject:
   m_ObjectHideFlags: 0
@@ -5245,7 +5245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &566192068
 Transform:
   m_ObjectHideFlags: 0
@@ -21662,7 +21662,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1218329852
 Transform:
   m_ObjectHideFlags: 0
@@ -21691,7 +21691,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -23302,7 +23302,7 @@ PrefabInstance:
     - target: {fileID: 94632261138444607, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 156007012577998385, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
@@ -23397,7 +23397,7 @@ PrefabInstance:
     - target: {fileID: 877439198045487558, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 897459052382172803, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
@@ -23656,8 +23656,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8468599087469726529, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8468599087469726529, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
       propertyPath: m_IsKinematic
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8468599087469726529, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8554527208338914459, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8590999540492783936, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}

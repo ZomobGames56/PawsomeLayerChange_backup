@@ -355,11 +355,11 @@ public class HY_Player_Control : MonoBehaviour
             HY_PlayerRagdollActive.instance.OnObstacleCollide();
             print("Player");
         }
-        if (collision.transform.tag == "Water" && !collideToWater)
-        {
-            collideToWater = true;
-            OnCollideWater();
-        }
+        //if (collision.transform.tag == "Water" && !collideToWater)
+        //{
+        //    collideToWater = true;
+        //    OnCollideWater();
+        //}
     }
     void PlayerOutOfBounds()
     {
@@ -394,7 +394,7 @@ public class HY_Player_Control : MonoBehaviour
         
         yield return new WaitForSeconds(waitForSec);
         // Stop physics
-        rb.linearVelocity = Vector3.zero;
+        //rb.linearVelocity = Vector3.zero;
        
 
         // Teleport correctly

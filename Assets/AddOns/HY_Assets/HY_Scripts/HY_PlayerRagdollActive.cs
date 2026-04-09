@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -33,7 +34,13 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         animator = GetComponentInParent<Animator>();
 
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            StartCoroutine(ResetRagoll(0));
+        }
+    }
     void EnableKinamatic()
     {
         foreach (var child in childRbs)
@@ -72,7 +79,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         parentRb.constraints = RigidbodyConstraints.FreezeAll;
         animator.enabled = false;
         DisableKinamatic();
-       coroutine= StartCoroutine(ResetRagoll(3f));
+     //  coroutine= StartCoroutine(ResetRagoll(3f));
         HY_Player_Control.canControl = false;
         Debug.Log("Just called");
     }
@@ -107,35 +114,64 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         }
 
     }
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Water"))
-    //    {
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Water"))
+        {
 
-    //        // water splash
-    //        // hip kinematic on 
+            // water splash
+            // hip kinematic on 
 
-    //        _hip.isKinematic = true;
+            _hip.isKinematic = true;
+           
+            parentRb.isKinematic = true;
 
-    //        //animator.enabled = true;
-    //        //HY_Player_Control.canControl = true;
-    //        //Coroutine coroutine = ResetRagoll(2.5f);
-            
-    //        if (coroutine != null)
-    //        {
-    //            StopCoroutine(coroutine);
-    //            print("Called asshole");
-    //        }
-    //        //Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
-    //        //Parent.transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
-    //        print("Trigger one");
-    //        //foreach (var child in childRbs)
-    //        //{
-    //        //    child.isKinematic = true;
-    //        //    child.constraints = RigidbodyConstraints.FreezeAll;
-    //        //}
-    //    }
-    //}
+            //animator.enabled = true;
+            //HY_Player_Control.canControl = true;
+            //Coroutine coroutine = ResetRagoll(2.5f);
+            //foreach (var child in childRbs)
+            //{
+            //    child.isKinematic = true;
+            //    child.constraints = RigidbodyConstraints.FreezeAll;
+            //}
+
+            //x Vector3 collisionpoint = other.ClosestPoint(transform.position);
+            Instantiate(effect,transform.position, Quaternion.Euler(90, 0, 0));
+            //Parent.transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
+            //StartCoroutine(ResetRagoll(0));
+            //_hip.linearVelocity = Vector3.zero;
+            //parentRb.position = transform.position;
+            StartCoroutine(RagDollWater());
+            print("Trigger one");
+        }
+    }
+
+    IEnumerator RagDollWater()
+    {
+        yield return new WaitForSeconds(0.55f);
+        animator.enabled = true;
+        _hip.position = spawnPoint.position;
+        Parent.transform.rotation = spawnPoint.rotation;
+        parentRb.position = _hip.position;
+        Parent.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
+        parentRb.isKinematic = false;
+
+        parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
+                              RigidbodyConstraints.FreezeRotationY |
+                              RigidbodyConstraints.FreezeRotationZ;
+
+
+        //animator.enabled = true;
+        HY_Player_Control.canControl = true;
+        Debug.Log("Fixed Called");
+        foreach (var child in childRbs)
+        {
+            child.isKinematic = true;
+            child.constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+    }
     public void OnObstacleCollide()
     {
         HY_Player_Control.canControl = false;
