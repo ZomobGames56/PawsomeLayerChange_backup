@@ -384,7 +384,7 @@ public class HY_Player_Control : MonoBehaviour
         print("I Collide");
        // HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
         Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
-        transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
+        //transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
 
         StartCoroutine(SpawnWait());
     }

@@ -72,7 +72,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         parentRb.constraints = RigidbodyConstraints.FreezeAll;
         animator.enabled = false;
         DisableKinamatic();
-       coroutine= StartCoroutine(ResetRagoll(3f));
+        StartCoroutine(ResetRagoll(3f));
         HY_Player_Control.canControl = false;
         Debug.Log("Just called");
     }
