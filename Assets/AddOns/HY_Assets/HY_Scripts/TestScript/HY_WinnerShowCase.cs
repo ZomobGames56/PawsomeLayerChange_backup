@@ -80,6 +80,7 @@ public class HY_WinnerShowCase : MonoBehaviour
                 {
                     stoneModels[j].GetComponent<MeshRenderer>().material = redMaterial;
                     stoneModels[j].GetComponent<Rigidbody>().isKinematic = false;
+                   
 
                 }
             }
@@ -96,6 +97,8 @@ public class HY_WinnerShowCase : MonoBehaviour
             int rnd = Random.Range(2, stoneModels.Count);
             stoneModels[rnd].GetComponent<MeshRenderer>().material = greenMaterial;
             stoneModels[rnd].GetComponent<Rigidbody>().isKinematic = true;
+            //HY_Player_Control.canControl = false;
+            //print("Dhappa");
            
             for (int j = 0; j < stoneModels.Count; j++)
             {
@@ -107,6 +110,7 @@ public class HY_WinnerShowCase : MonoBehaviour
                 {
                     stoneModels[j].GetComponent<MeshRenderer>().material = redMaterial;
                     stoneModels[j].GetComponent<Rigidbody>().isKinematic = false;
+                    playerModel.GetComponent<Rigidbody>().isKinematic = false;
                 }
                 HY_AudioManager.instance.PlayAudioEffectOnce(winSound);
             }

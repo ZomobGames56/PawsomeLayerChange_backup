@@ -21,7 +21,7 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
     Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp;
     [SerializeField]
     float force = 3f;
-    bool allow;
+    bool allow,once;
     
     [SerializeField]
     float waitForSecond = 3.0f;
@@ -35,9 +35,9 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
         enmyAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         currentIndex = 0;
-        Invoke("SetDestination", 5f);
+        StartCoroutine(SetPosition());
         spawnPoint = firstSp;
-
+        once = false;
     }
     private void Update()
     {
@@ -135,9 +135,10 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.gameObject.CompareTag("Obstacle") &&!once)
         {
             Debug.Log("Collide" + gameObject.name);
+            once = true;
             //agent.enabled = false;
             allow = false;
           GetComponent<NavMeshAgent>().enabled = false;
@@ -154,14 +155,27 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
     IEnumerator ResetPosition()
     {
         yield return new WaitForSeconds(waitForSecond);
-        transform.position=spawnPoint.position;
-        GetComponent<NavMeshAgent>().enabled = true;
+        once = false;
+        //NavMeshHit hit;
+        //if (NavMesh.SamplePosition(spawnPoint.position, out hit, 2f, NavMesh.AllAreas))
+        //{
+        //    agent.Warp(hit.position);
+        //}
+        agent.enabled = false;
+        agent.Warp(spawnPoint.position);
+        agent.enabled = true;
+
         allow = true;
         rb.isKinematic = true;
+        yield return new WaitForSeconds(1f);
         SetDestination();
 
     }
-
+    IEnumerator SetPosition()
+    {
+        yield return new WaitUntil(() => HY_StartPause.countOver);
+        SetDestination();
+    }
 
 
 

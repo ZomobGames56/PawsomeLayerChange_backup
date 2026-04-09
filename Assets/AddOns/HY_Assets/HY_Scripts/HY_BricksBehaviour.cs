@@ -1,9 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-
 
 public class HY_BricksBehaviour : MonoBehaviour
 {// Start is called before the first frame update
@@ -45,20 +41,7 @@ public class HY_BricksBehaviour : MonoBehaviour
         }
 
     }
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
-    //    {
-    //        transform.localPosition=new Vector3(transform.localPosition.x,-0.01f,transform.localPosition.z);
-    //    }
-    //}
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
-    //    {
-    //        transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
-    //    }
-    //}
+   
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")

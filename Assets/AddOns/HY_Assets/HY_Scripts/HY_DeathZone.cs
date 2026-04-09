@@ -23,6 +23,8 @@ public class HY_DeathZone : MonoBehaviour
                 //efect show
                 //set Deactive
                 //Eliminate Text Shown
+                other.GetComponent<Rigidbody>().isKinematic = true;
+                HY_Player_Control.canControl = false;
                 other.gameObject.SetActive(false);
                 enemyDeathCount = -1;
                 Instantiate(effect, other.transform.position, Quaternion.Euler(90, 0, 0));
@@ -33,6 +35,7 @@ public class HY_DeathZone : MonoBehaviour
                 other.gameObject.SetActive(false);
                 enemyDeathCount++;
                 count = enemyDeathCount;
+              
                 eliminationTxt.text = count + "/6".ToString();
                 break;
         }

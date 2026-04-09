@@ -16,7 +16,7 @@ public class Cannon : MonoBehaviour
     void Start()
     {
       animator=GetComponent<Animator>();
-        objectPooler = FindObjectOfType<ObjectPooler>();
+        objectPooler = FindFirstObjectByType<ObjectPooler>();
         InvokeRepeating("Shoot", .65f, fireInterval);
     }
 

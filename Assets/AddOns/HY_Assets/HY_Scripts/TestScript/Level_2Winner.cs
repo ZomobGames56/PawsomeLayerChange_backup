@@ -41,7 +41,7 @@ public class Level_2Winner : MonoBehaviour
         once = false;
         if (playerControl == null)
         {
-            playerControl = FindObjectOfType<HY_Player_Control>();
+            playerControl = FindFirstObjectByType<HY_Player_Control>();
         }
         winnerCount = 0;
     }
@@ -77,7 +77,7 @@ public class Level_2Winner : MonoBehaviour
         // playerModel.GetComponent<Animator>().enabled = false;
         playerModel.transform.SetParent(stoneModel.transform);
         playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-        playerModel.transform.localRotation = Quaternion.EulerAngles(0, playerRot, 0);
+        playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
         playerModel.GetComponent<Animator>().ResetTrigger("Victory");
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
@@ -115,6 +115,9 @@ public class Level_2Winner : MonoBehaviour
                 isCalled = true;
             }
             HY_Player_Control.canControl = false;
+            playerControl.GetComponent<Rigidbody>().isKinematic = true;
+            //playerControl.GetComponent<Rigidbody>().position = Vector3.zero;
+
 
 
 

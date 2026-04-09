@@ -59,6 +59,7 @@ public class _CheckWinner : MonoBehaviour
     }
     IEnumerator ShowWinnerScreen()
     {
+        HY_Player_Control.canControl = false;
         yield return new WaitForSeconds(timeToShowWinnerScreen);
         // playerModel.GetComponent<Animator>().enabled = false;
         playerModel.transform.SetParent(stoneModel.transform);

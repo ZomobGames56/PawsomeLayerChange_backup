@@ -122,6 +122,20 @@ public class HY_NavMeshEnemy : MonoBehaviour
             touchedFinishLine = true;
             StopMovement();
         }
+        if (other.CompareTag("EnemyPoint"))
+        {
+            jumpHeight = 7;
+            jumpDuration = 1.35f;
+            rndSpeed = Random.Range(4, 6);
+            Debug.Log("Val Changed");
+        }
+        if (other.CompareTag("RestVal"))
+        {
+            jumpHeight = 2;
+            jumpDuration = 0.5f;
+            Debug.Log("Val Changed");
+        }
+
     }
     private void OnTriggerExit(Collider other)
     {

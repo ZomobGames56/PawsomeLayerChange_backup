@@ -35,6 +35,7 @@ public class HY_Decide_Winner : MonoBehaviour
     float playerRot;
     int winnerCount;
     bool once;
+    Rigidbody playerRb;
     private void Awake()
     {
 
@@ -45,6 +46,7 @@ public class HY_Decide_Winner : MonoBehaviour
         }
         count = 0;
         winnerCount = 0;
+        playerRb = playerControl.GetComponent<Rigidbody>();
         ShowWinnerScreenCamera.SetActive(false);
     }
     void Update()
@@ -55,7 +57,7 @@ public class HY_Decide_Winner : MonoBehaviour
             winnerCount = 1;
             qualified.gameObject.SetActive(true);
             eliminated.gameObject.SetActive(false);
-            
+            playerRb.isKinematic = true;
             HY_AudioManager.instance.PlayAudioEffectOnce(winClip);
             StartCoroutine(ShowWinnerScreen());
            // HY_WinnerShowCase.instance.isPlayerWon = true;
@@ -78,8 +80,13 @@ public class HY_Decide_Winner : MonoBehaviour
         yield return new WaitForSeconds(timeToShowWinnerScreen);
        // playerModel.GetComponent<Animator>().enabled = false;
        playerModel.transform.SetParent(stoneModel.transform);
-        playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-        playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
+
+        // playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
+        //playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
+        Vector3 playerFinalPos = stoneModel.transform.position;
+        playerFinalPos.y += 0.3f;
+        playerRb.position = playerFinalPos;
+        playerRb.rotation = Quaternion.Euler(0, playerRot, 0);
         playerModel.GetComponent<Animator>().ResetTrigger("Victory");
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
@@ -120,8 +127,10 @@ public class HY_Decide_Winner : MonoBehaviour
         {
             //Player Loose //Active Loose Screen.
             isEnemyWin = true;
-            playerControl.GetComponent<Animator>().SetTrigger("Defeat");
             HY_Player_Control.canControl = false;
+            playerControl.GetComponent<Animator>().SetTrigger("Defeat");
+            playerRb.isKinematic = true;
+           
             // other.GetComponent<Animator>().SetTrigger("Victory");
             other.gameObject.GetComponent<HY_NavMeshEnemy>().touchedFinishLine = true;
             if (isCalled == false)

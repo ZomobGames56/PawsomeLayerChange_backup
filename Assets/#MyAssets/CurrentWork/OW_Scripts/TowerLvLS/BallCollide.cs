@@ -18,19 +18,15 @@ public class BallCollide : MonoBehaviour
             // float impactStrength = collision.impulse.magnitude;
 
             float impactforce_ = rb.linearVelocity.magnitude;
-
-            Debug.Log($"impactforce_ Not min: {rb.linearVelocity.magnitude}");
-
             if (impactforce_ < minImpactForce) // tweak value
                 return;
-
-            Debug.Log($"impactforce_ ooo: {rb.linearVelocity.magnitude}");
 
             Rigidbody playerRb = collision.collider.GetComponent<Rigidbody>();
 
             if (playerRb == null) return;
 
             HY_Player_Control.canControl = false;
+           
 
             Vector3 dir = collision.contacts[0].normal * -1f;
 

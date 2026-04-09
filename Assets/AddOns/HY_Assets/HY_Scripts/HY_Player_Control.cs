@@ -50,7 +50,7 @@ public class HY_Player_Control : MonoBehaviour
     bool collideToWater;
     public GameObject dummyScreen;
     [SerializeField] HY_CameraControl camControl;
-
+   public bool testBool;
 
 
 
@@ -59,7 +59,7 @@ public class HY_Player_Control : MonoBehaviour
         collideToWater = false;
 
         isCalled = false;
-
+        testBool = canControl;
         canControl = true;
 
         rb = GetComponent<Rigidbody>();
@@ -89,6 +89,7 @@ public class HY_Player_Control : MonoBehaviour
 
     void Update()
     {
+        testBool = canControl;
         PlayerOutOfBounds();
         if (InAirTime() >= 0.15f)
         {
@@ -175,7 +176,6 @@ public class HY_Player_Control : MonoBehaviour
             if (transformControl)
             {
                 transform.position += move * moveSpeed * Time.deltaTime;
-                Debug.Log("Transform one is calling");
             }
             if (rigidBodyControl)
             {
@@ -353,6 +353,7 @@ public class HY_Player_Control : MonoBehaviour
         {
            // HY_AudioManager.instance.PlayAudioEffectOnce(collideSound);
             HY_PlayerRagdollActive.instance.OnObstacleCollide();
+            print("Player");
         }
         if (collision.transform.tag == "Water" && !collideToWater)
         {
@@ -367,7 +368,7 @@ public class HY_Player_Control : MonoBehaviour
             Debug.Log("Player out of bound");
             // gameObject.SetActive(false
             isCalled = true;
-            canControl = false;
+           // canControl = false;
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 500f);
             //rb.isKinematic = true;
             StartCoroutine(SpawnWait());
@@ -380,6 +381,7 @@ public class HY_Player_Control : MonoBehaviour
     private void OnCollideWater()
     {
         canControl = false;
+        print("I Collide");
        // HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
         Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
         transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
@@ -389,10 +391,12 @@ public class HY_Player_Control : MonoBehaviour
     public IEnumerator SpawnWait()
     {
        rb.isKinematic = true;
+        
         yield return new WaitForSeconds(waitForSec);
         // Stop physics
-
         rb.linearVelocity = Vector3.zero;
+       
+
         // Teleport correctly
         rb.position = spawnPoint.position;
         rb.rotation = spawnPoint.rotation;
@@ -456,7 +460,7 @@ public class HY_Player_Control : MonoBehaviour
         if (other.tag == "Ground")
         {
             collideToWater = false;
-            canControl = true;
+            
             isCalled = false;
             isGrounded = true;
             animator.SetBool("Hanging", false);

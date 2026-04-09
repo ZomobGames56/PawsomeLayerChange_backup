@@ -1476,6 +1476,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 761460779310858302, guid: 1d230bd5a56b2954fab8317af3128507,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2899214528399726624, guid: 1d230bd5a56b2954fab8317af3128507,
         type: 3}
       propertyPath: player
@@ -4289,7 +4294,7 @@ MonoBehaviour:
   player: {fileID: 2137705750}
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 640
   transparentMat: {fileID: 2100000, guid: 77a263c47a378c7428d9e2e98bac4de8, type: 2}
 --- !u!1 &1132701532
 GameObject:
@@ -5000,7 +5005,7 @@ PrefabInstance:
     - target: {fileID: 8128759165604948257, guid: 13cb590197ac29d498b9aa2b98b57220,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.3
+      value: -5.6
       objectReference: {fileID: 0}
     - target: {fileID: 8128759165604948257, guid: 13cb590197ac29d498b9aa2b98b57220,
         type: 3}
@@ -5010,7 +5015,7 @@ PrefabInstance:
     - target: {fileID: 8128759165604948257, guid: 13cb590197ac29d498b9aa2b98b57220,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.2
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 8128759165604948257, guid: 13cb590197ac29d498b9aa2b98b57220,
         type: 3}

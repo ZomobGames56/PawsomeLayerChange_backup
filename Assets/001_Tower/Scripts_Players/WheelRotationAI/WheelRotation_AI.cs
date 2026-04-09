@@ -150,9 +150,10 @@ public class WheelRotation_AI : MonoBehaviour
 
         if (other.CompareTag("Goal"))
         {
-            looseText.text = "Lose";
+            //looseText.text = "Lose";
             dummyPanel.SetActive(true);
-            Time.timeScale = 0;
+            // Notfiy other to kinematic on.
+            
         }
     }
 
