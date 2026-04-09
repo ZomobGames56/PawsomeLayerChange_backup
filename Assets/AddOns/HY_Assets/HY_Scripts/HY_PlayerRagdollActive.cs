@@ -7,7 +7,10 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     public static HY_PlayerRagdollActive instance;
     Rigidbody[] childRbs;
     Animator animator;
-
+    [SerializeField]
+    SkinnedMeshRenderer playerRenderedBody;
+    [SerializeField]
+    MeshRenderer[] childMeshes;
     [SerializeField]
     Transform hip;
 
@@ -125,7 +128,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             _hip.isKinematic = true;
            
             parentRb.isKinematic = true;
-
+            ShowPlayer(false);
             //animator.enabled = true;
             //HY_Player_Control.canControl = true;
             //Coroutine coroutine = ResetRagoll(2.5f);
@@ -138,6 +141,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             //x Vector3 collisionpoint = other.ClosestPoint(transform.position);
             Instantiate(effect,transform.position, Quaternion.Euler(90, 0, 0));
             //Parent.transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
+            //Parent.transform.localScale = Vector3.zero;
             //StartCoroutine(ResetRagoll(0));
             //_hip.linearVelocity = Vector3.zero;
             //parentRb.position = transform.position;
@@ -145,7 +149,15 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             print("Trigger one");
         }
     }
-
+    void ShowPlayer(bool activeState)
+    {
+        foreach (MeshRenderer m in childMeshes)
+        {
+            m.enabled = activeState;
+        }
+        playerRenderedBody.GetComponent<SkinnedMeshRenderer>().enabled = activeState;
+    }
+   
     IEnumerator RagDollWater()
     {
         yield return new WaitForSeconds(0.55f);
@@ -153,7 +165,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         _hip.position = spawnPoint.position;
         Parent.transform.rotation = spawnPoint.rotation;
         parentRb.position = _hip.position;
-        Parent.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        ShowPlayer(true);
+        //Parent.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
         
         parentRb.isKinematic = false;
 

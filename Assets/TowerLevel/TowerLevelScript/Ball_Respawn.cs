@@ -4,9 +4,9 @@ public class Ball_Respawn : MonoBehaviour
 {
     [SerializeField]
     Transform startPos;
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.transform.tag == "Water")
+        if (other.transform.tag == "Water")
         {
             transform.position = startPos.position;
         }
