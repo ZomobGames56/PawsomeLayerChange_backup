@@ -53,12 +53,12 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     IEnumerator ResetRagoll(float wait)
     {
         yield return new WaitForSeconds(wait);
+        animator.enabled = true;
         parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
                                RigidbodyConstraints.FreezeRotationY |
                                RigidbodyConstraints.FreezeRotationZ;
         Parent.transform.position = transform.position;
         print("Repose");
-        animator.enabled = true;
         HY_Player_Control.canControl = true;
         Debug.Log("Just called");
         foreach (var child in childRbs)
@@ -90,20 +90,21 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
                 Debug.Log("Ragdoll " + gameObject.name);
 
                 break;
-            //case "Water":
-            //    parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
-            //                           RigidbodyConstraints.FreezeRotationY |
-            //                           RigidbodyConstraints.FreezeRotationZ;
-            //    Parent.transform.position = transform.position;
-            //    animator.enabled = true;
-            //    HY_Player_Control.canControl = true;
-            //    Debug.Log("Just called");
-            //    foreach (var child in childRbs)
-            //    {
-            //        child.isKinematic = true;
-            //        child.constraints = RigidbodyConstraints.FreezeAll;
-            //    }
-            //    break;
+            case "Water":
+                animator.enabled = true;
+                parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
+                                       RigidbodyConstraints.FreezeRotationY |
+                                       RigidbodyConstraints.FreezeRotationZ;
+                Parent.transform.position = transform.position;
+                HY_Player_Control.canControl = true;
+               
+                Debug.Log("Just called");
+                foreach (var child in childRbs)
+                {
+                    child.isKinematic = true;
+                    child.constraints = RigidbodyConstraints.FreezeAll;
+                }
+                break;
         }
 
     }
