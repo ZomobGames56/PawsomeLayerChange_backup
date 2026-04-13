@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WheelRotation_AI : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public class WheelRotation_AI : MonoBehaviour
     [SerializeField] GameObject dummyPanel;
     public TextMeshProUGUI looseText;
     public int deadCout =0;
+    [SerializeField] float checkRadius = 0.5f;
+    [SerializeField] LayerMask obstacleLayer;
+    [SerializeField] LayerMask groundLayer;
+    [SerializeField] float maxAdjustDistance = 2f;
 
     void Start()
     {
@@ -44,6 +49,7 @@ public class WheelRotation_AI : MonoBehaviour
 
     void Update()
     {
+        if (!HY_StartPause.countOver) return;
         // 🔻 FALL CHECK
         if (transform.position.y < fallYLimit)
         {
@@ -152,11 +158,16 @@ public class WheelRotation_AI : MonoBehaviour
         {
             //looseText.text = "Lose";
             dummyPanel.SetActive(true);
+            StartCoroutine(LevelSelectionScene());
             // Notfiy other to kinematic on.
             
         }
     }
-
+    IEnumerator LevelSelectionScene()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(6);
+    }
     IEnumerator ChangeMoveTarget()
     {
         yield return new WaitForSeconds(1f);
@@ -173,10 +184,12 @@ public class WheelRotation_AI : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        transform.position = spawnPoint.position;
+        Vector3 spawnPos = GetSafeSpawnPosition();
+
+        transform.position = spawnPos;
         transform.rotation = spawnPoint.rotation;
 
-        moveTarget = startMoveTarget; // 🔥 RESTORE OLD TARGET
+        moveTarget = startMoveTarget;
         canMoveTowardTarget = true;
         once = true;
         isGrounded = true;
@@ -184,6 +197,49 @@ public class WheelRotation_AI : MonoBehaviour
         animator.SetBool("Jump", false);
         animator.SetBool("Hanging", false);
         animator.SetFloat("Run", 0f);
+    }
+
+    Vector3 GetSafeSpawnPosition()
+    {
+        Vector3 basePos = spawnPoint.position;
+
+        // Step 1: Check if initial position is free
+        if (!Physics.CheckSphere(basePos, checkRadius, obstacleLayer))
+        {
+            return SnapToGround(basePos);
+        }
+
+        // Step 2: Try nearby positions
+        for (int i = 0; i < 10; i++)
+        {
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-maxAdjustDistance, maxAdjustDistance),
+                0,
+                Random.Range(-maxAdjustDistance, maxAdjustDistance)
+            );
+
+            Vector3 testPos = basePos + randomOffset;
+
+            if (!Physics.CheckSphere(testPos, checkRadius, obstacleLayer))
+            {
+                return SnapToGround(testPos);
+            }
+        }
+
+        // fallback (if everything fails)
+        return SnapToGround(basePos);
+    }
+
+    Vector3 SnapToGround(Vector3 pos)
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(pos + Vector3.up * 2f, Vector3.down, out hit, 5f, groundLayer))
+        {
+            return hit.point;
+        }
+
+        return pos; // fallback
     }
 }
 

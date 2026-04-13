@@ -8,7 +8,7 @@ public class HexaStartBricks : MonoBehaviour
         if (HY_StartPause.countOver)
         {
             transform.localScale = Vector3.zero;
-            gameObject.SetActive(false);
+
         }
     }
 }

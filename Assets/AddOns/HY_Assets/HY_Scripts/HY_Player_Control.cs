@@ -51,7 +51,7 @@ public class HY_Player_Control : MonoBehaviour
     public GameObject dummyScreen;
     [SerializeField] HY_CameraControl camControl;
    public bool testBool;
-
+    public int count;
 
 
     void Start()
@@ -351,7 +351,7 @@ public class HY_Player_Control : MonoBehaviour
     {
         if (collision.transform.tag == "Obstacle")
         {
-           // HY_AudioManager.instance.PlayAudioEffectOnce(collideSound);
+            // HY_AudioManager.instance.PlayAudioEffectOnce(collideSound);
             HY_PlayerRagdollActive.instance.OnObstacleCollide();
             print("Player");
         }
@@ -445,22 +445,11 @@ public class HY_Player_Control : MonoBehaviour
                 StartCoroutine(LevelSelectionScene());
                 rb.isKinematic = true;
                 break;
-
-
         }
-
-    }
-    IEnumerator LevelSelectionScene()
-    {
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(6);
-    }
-    private void OnTriggerStay(Collider other)
-    {
         if (other.tag == "Ground")
         {
             collideToWater = false;
-            
+            count++;
             isCalled = false;
             isGrounded = true;
             animator.SetBool("Hanging", false);
@@ -469,20 +458,32 @@ public class HY_Player_Control : MonoBehaviour
             moveSpeed = defaultSpeed;
             animator.SetBool("Dash", false);
             isDashing = false;
-            // targert point  a-b = c 
-            //in air-timer stop
-            //inAirTime = 0;
+           
         }
     }
+    IEnumerator LevelSelectionScene()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(6);
+    }
+    
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Ground")
+        if (other.CompareTag("Ground"))
         {
-            inAir = true;
-            isGrounded = false;
+            //  isStateLocked = true;
+            //isGrounded = false;
+            count--;
+            if (count == 0)
+            {
+                isGrounded = false;
+                HangingAnimation();
+            }
+            else
+                isGrounded = true;
 
-            //in air-timer go
-            //inAirTime += Time.deltaTime;
+
+
         }
     }
 

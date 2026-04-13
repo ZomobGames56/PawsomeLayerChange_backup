@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public enum PlayerState
@@ -94,13 +95,14 @@ public class PlayerControl : MonoBehaviour, IDamageable
     #endregion
     private void Awake()
     {
+        playerHelath = 100;
         healthbarImg.fillAmount = playerHelath / 100;
     }
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-
+        
         reactionLayer = animator.GetLayerIndex("Reaction Layer");
         actionLayer = animator.GetLayerIndex("Action Layer");
 
@@ -108,7 +110,6 @@ public class PlayerControl : MonoBehaviour, IDamageable
     }
     private void Update()
     {
-
         h = fixedJoystick.Horizontal;
         v = fixedJoystick.Vertical;
 
@@ -495,10 +496,18 @@ public class PlayerControl : MonoBehaviour, IDamageable
         Instantiate(deathEffect, effectPos, Quaternion.Euler(-90, 0, 0));
         yield return new WaitForSeconds(2f);
         Instantiate(scareCrow, transform.position, Quaternion.Euler(0, 180, 0));
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        Horror_LvL_UIManager.PlayerDeadCheck();
+        StartCoroutine(LevelSelection("_Level_Selection"));
     }
-    #endregion
 
+    #endregion
+    IEnumerator LevelSelection(string t)
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(t);
+
+    }
     #region Click Attack System
     // called when button pressed
     public void AttackPress()

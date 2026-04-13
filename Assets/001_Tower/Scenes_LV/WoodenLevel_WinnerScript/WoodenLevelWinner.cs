@@ -10,6 +10,12 @@ public class WoodenLevelWinner : MonoBehaviour
     List<GameObject> enemyList = new List<GameObject>();
     [SerializeField]
     GameObject winPanel, losePanel;
+    [SerializeField]
+    Rigidbody playerRb;
+    private void Start()
+    {
+        playerRb = GetComponent<Rigidbody>();
+    }
     private void OnCollisionEnter(Collision collision)
     {
         switch (collision.transform.tag)
@@ -26,6 +32,7 @@ public class WoodenLevelWinner : MonoBehaviour
                 if (count == enemyList.Count)
                 {
                     winPanel.SetActive(true);
+                    playerRb.isKinematic = true;
                     StartCoroutine(LevelSelectionScene());
                 }
                 break;

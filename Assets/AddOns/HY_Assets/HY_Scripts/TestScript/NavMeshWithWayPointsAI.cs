@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -26,6 +26,12 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
     [SerializeField]
     float waitForSecond = 3.0f;
     bool isCalled;
+
+    [SerializeField] float jumpHeight = 2f;
+    [SerializeField] float jumpDuration = 0.5f;
+    Coroutine jumpCoroutine;
+
+    bool isJumping = false;
     void Start()
     {
         canMove = true;
@@ -46,35 +52,40 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
             if (canMove)
             {
                 enmyAnim.SetFloat("Run", agent.velocity.sqrMagnitude);
-                if (agent.isOnOffMeshLink)
+                //if (agent.isOnOffMeshLink)
+                //{
+                //    agent.speed = onLinkSpeed;
+
+                //    Vector3 targetPosition = agent.transform.position;
+                //    targetPosition.y += heightIncrease;
+
+                //    agent.transform.position = targetPosition;
+
+                //    enmyAnim.ResetTrigger("Dashing");
+                //    enmyAnim.SetBool("Dash", false);
+                //    //enmyAnim.SetBool("Jump", true);
+                //    enmyAnim.SetBool("Hanging", true);
+                //}
+                if (agent.isOnOffMeshLink && !isJumping)
                 {
-                    agent.speed = onLinkSpeed;
-
-                    Vector3 targetPosition = agent.transform.position;
-                    targetPosition.y += heightIncrease;
-
-                    agent.transform.position = targetPosition;
-
-                    enmyAnim.ResetTrigger("Dashing");
-                    enmyAnim.SetBool("Dash", false);
-                    //enmyAnim.SetBool("Jump", true);
-                    enmyAnim.SetBool("Hanging", true);
+                    jumpCoroutine = StartCoroutine(JumpAcrossLink());
                 }
-                else
+                else if (!isJumping) 
                 {
                     if (allow)
                     {
                         agent.speed = rndSpeed;
                     }
+
                     enmyAnim.SetBool("Jump", false);
                     enmyAnim.SetBool("Hanging", false);
                 }
-               
+
             }
-            else
-            {
-                agent.speed = 0;
-            }
+            //else
+            //{
+            //    agent.speed = 0;
+            //}
 
             //if (transform.position.y > -50&& !isCalled)
             //{
@@ -83,6 +94,67 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
             //    SetDestination();
             //}
         }
+    }
+
+    IEnumerator JumpAcrossLink()
+    {
+        isJumping = true;
+
+        agent.isStopped = true;
+        agent.updatePosition = false;
+
+        OffMeshLinkData data = agent.currentOffMeshLinkData;
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = data.endPos + Vector3.up * agent.baseOffset;
+
+        float time = 0;
+
+        enmyAnim.SetBool("Jump", true);
+        enmyAnim.SetBool("Hanging", true);
+
+        while (time < jumpDuration)
+        {
+            if (!isJumping) yield break; // 👈 abort safely
+
+            float t = time / jumpDuration;
+            float height = Mathf.Sin(Mathf.PI * t) * jumpHeight;
+
+            transform.position = Vector3.Lerp(startPos, endPos, t) + Vector3.up * height;
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = endPos;
+
+        enmyAnim.SetBool("Jump", false);
+        enmyAnim.SetBool("Hanging", false);
+
+        agent.CompleteOffMeshLink();
+        agent.updatePosition = true;
+        agent.isStopped = false;
+        agent.ResetPath(); // force recalculation
+        SetDestination();
+        isJumping = false;
+    }
+    void AbortOffMeshLink()
+    {
+        if (!isJumping) return;
+
+        isJumping = false;
+
+        if (jumpCoroutine != null)
+            StopCoroutine(jumpCoroutine);
+
+        agent.updatePosition = true;
+        agent.isStopped = false;
+
+        if (agent.isOnOffMeshLink)
+            agent.CompleteOffMeshLink(); // or ResetPath()
+
+        enmyAnim.SetBool("Jump", false);
+        enmyAnim.SetBool("Hanging", false);
     }
     public void SetDestination()
     {
@@ -139,6 +211,7 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
         {
             Debug.Log("Collide" + gameObject.name);
             once = true;
+            AbortOffMeshLink(); // 👈 ADD THIS
             //agent.enabled = false;
             allow = false;
           GetComponent<NavMeshAgent>().enabled = false;
@@ -164,7 +237,8 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
         agent.enabled = false;
         agent.Warp(spawnPoint.position);
         agent.enabled = true;
-
+        enmyAnim.Rebind();
+        enmyAnim.Update(0f);
         allow = true;
         rb.isKinematic = true;
         yield return new WaitForSeconds(1f);

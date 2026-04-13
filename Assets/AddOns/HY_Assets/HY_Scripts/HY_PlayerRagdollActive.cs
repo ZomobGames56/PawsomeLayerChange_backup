@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -17,13 +16,14 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     public GameObject Parent;
     [SerializeField] GameObject effect;
     [SerializeField]
-    Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp;
+    Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp,cloneSpawnPoint;
     [SerializeField]
     Rigidbody _hip, parentRb;
     [SerializeField]
     GameObject waterSplash;
     Coroutine coroutine;
-
+    public bool collideWater = false;
+    bool once, ragdollActive;
 
     //public HY_NavMeshEnemy _refNavMesh;
     void Awake()
@@ -32,7 +32,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         {
             instance = this;
         }
-
+        once = false;
+        ragdollActive = false;
         childRbs = GetComponentsInChildren<Rigidbody>();
         EnableKinamatic();
         _hip = GetComponent<Rigidbody>();
@@ -62,31 +63,17 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             child.constraints = RigidbodyConstraints.None;
         }
     }
-    IEnumerator ResetRagoll(float wait)
-    {
-        yield return new WaitForSeconds(wait);
-        animator.enabled = true;
-        parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
-                               RigidbodyConstraints.FreezeRotationY |
-                               RigidbodyConstraints.FreezeRotationZ;
-        Parent.transform.position = transform.position;
-        print("Repose");
-        HY_Player_Control.canControl = true;
-        Debug.Log("Just called");
-        foreach (var child in childRbs)
-        {
-            child.isKinematic = true;
-            child.constraints = RigidbodyConstraints.FreezeAll;
-        }
-    }
+
     public void RagdollActivate()
     {
+        if (ragdollActive) return;
+
+        ragdollActive |= true;
         parentRb.constraints = RigidbodyConstraints.FreezeAll;
         animator.enabled = false;
         DisableKinamatic();
-        //  coroutine= StartCoroutine(ResetRagoll(3f));
-        StartCoroutine(RagDollWater(3f));
         HY_Player_Control.canControl = false;
+        coroutine = StartCoroutine(RagDollWater(3f));
         Debug.Log("Just called");
     }
     // [System.Obsolete]
@@ -99,57 +86,53 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
                 animator.enabled = false;
                 DisableKinamatic();
                 parentRb.constraints = RigidbodyConstraints.FreezeAll;
-                // StartCoroutine(ResetRagoll(5f));
+                //StartCoroutine(ResetRagoll(5f));
                 Debug.Log("Ragdoll " + gameObject.name);
 
                 break;
-            //case "Water":
-            //    parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
-            //                           RigidbodyConstraints.FreezeRotationY |
-            //                           RigidbodyConstraints.FreezeRotationZ;
-            //    Parent.transform.position = transform.position;
-            //    animator.enabled = true;
-            //    HY_Player_Control.canControl = true;
-            //    Debug.Log("Just called");
-            //    foreach (var child in childRbs)
-            //    {
-            //        child.isKinematic = true;
-            //        child.constraints = RigidbodyConstraints.FreezeAll;
-            //    }
-            //    break;
         }
 
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Water"))
+        if (other.CompareTag("Water")&& !once)
         {
-
+            if (coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
+            once = true;
+            collideWater = true;
             _hip.isKinematic = true;
-           
+
             parentRb.isKinematic = true;
             ShowPlayer(false);
-            
-            Instantiate(effect,transform.position, Quaternion.Euler(90, 0, 0));
-            
-            StartCoroutine(RagDollWater(0.55f));
+
+            Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
+            StartCoroutine(RagDollWater(1f));
             print("Trigger one");
         }
+
         switch (other.tag)
         {
             case "FirstSp":
                 spawnPoint = firstSp;
+                cloneSpawnPoint = firstSp;
                 break;
             case "SecondSp":
                 spawnPoint = secondSp;
+                cloneSpawnPoint = firstSp;
+
                 break;
             case "ThirdSp":
                 spawnPoint = thirdSp;
+                cloneSpawnPoint = thirdSp;
                 break;
             case "FourthSp":
                 spawnPoint = fourthSp;
+                cloneSpawnPoint = fourthSp;
                 break;
-            
+
 
         }
     }
@@ -161,32 +144,58 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         }
         playerRenderedBody.GetComponent<SkinnedMeshRenderer>().enabled = activeState;
     }
-   
-    IEnumerator RagDollWater(float wait)
+    IEnumerator ResetRagoll(float wait)
     {
         yield return new WaitForSeconds(wait);
         animator.enabled = true;
-        _hip.position = spawnPoint.position;
-        parentRb.rotation = spawnPoint.rotation;
-        parentRb.position = _hip.position;
-        ShowPlayer(true);
-        //Parent.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
-        parentRb.isKinematic = false;
-
         parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
-                              RigidbodyConstraints.FreezeRotationY |
-                              RigidbodyConstraints.FreezeRotationZ;
+                               RigidbodyConstraints.FreezeRotationY |
+                               RigidbodyConstraints.FreezeRotationZ;
 
-
-        //animator.enabled = true;
+        Parent.transform.position = spawnPoint.position;
+      
         HY_Player_Control.canControl = true;
-        Debug.Log("Fixed Called");
+       
         foreach (var child in childRbs)
         {
             child.isKinematic = true;
             child.constraints = RigidbodyConstraints.FreezeAll;
         }
+    }
+    IEnumerator RagDollWater(float wait)
+    {
+        yield return new WaitForSeconds(wait);
+        animator.enabled = true;
+        once = false;
+        ragdollActive = false;
+        parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
+                              RigidbodyConstraints.FreezeRotationY |
+                              RigidbodyConstraints.FreezeRotationZ;
+        if (!collideWater)
+        {
+            _hip.position = transform.position;
+            //parentRb.rotation = spawnPoint.rotation;
+            parentRb.position = _hip.position;
+
+        }
+        if (collideWater)
+        {
+            _hip.position = spawnPoint.position;
+            //parentRb.rotation = spawnPoint.rotation;
+            parentRb.position = _hip.position;
+        }
+
+        
+        ShowPlayer(true);
+        parentRb.isKinematic = false;
+        collideWater = false;
+      
+        foreach (var child in childRbs)
+        {
+            child.isKinematic = true;
+            child.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        HY_Player_Control.canControl = true;
 
     }
     public void OnObstacleCollide()

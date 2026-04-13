@@ -103,6 +103,8 @@ public class Level_2Winner : MonoBehaviour
             isPlayerWin = true;
             playerControl.GetComponent<Animator>().SetTrigger("Victory");
             winnerCount = 1;
+            playerControl.GetComponent<Rigidbody>().isKinematic = true;
+            HY_Player_Control.canControl = false;
             if (isCalled == false)
             {
                 foreach (var item in enemyRef)
@@ -114,8 +116,6 @@ public class Level_2Winner : MonoBehaviour
                 }
                 isCalled = true;
             }
-            HY_Player_Control.canControl = false;
-            playerControl.GetComponent<Rigidbody>().isKinematic = true;
             //playerControl.GetComponent<Rigidbody>().position = Vector3.zero;
 
 

@@ -54,6 +54,7 @@ public class HY_BricksBehaviour : MonoBehaviour
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
             mr.material = red;
+            //if(collision.gameObject.tag=="Player")
             //transform.localPosition = new Vector3(transform.localPosition.x, -0.01f, transform.localPosition.z);
             if (HY_StartPause.countOver == true)
             {

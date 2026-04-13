@@ -12,7 +12,7 @@ public class HY_StartPause : MonoBehaviour
     GameObject[] images;
     [SerializeField]
     Image img;
-    public GameObject Enemies, Panel;
+    public GameObject Enemies, CountDownPanel;
     public static bool countOver;
     [SerializeField]
     AudioClip countDownSound, bgMusic;
@@ -28,7 +28,7 @@ public class HY_StartPause : MonoBehaviour
         }
         countOver = false;
         instrctionScreen.SetActive(true);
-        Panel.SetActive(false);
+        CountDownPanel.SetActive(false);
         cloudForExit.SetActive(false);
         clouds.SetActive(true);
 
@@ -42,6 +42,7 @@ public class HY_StartPause : MonoBehaviour
             Time.timeScale = 0;
         }
     }
+    
     public void Resume()
     {
         Time.timeScale = 1;
@@ -81,6 +82,7 @@ public class HY_StartPause : MonoBehaviour
         // img.sprite = sprite[3];
         yield return new WaitForSeconds(1f);
         countOver = true;
+        mn_GameManager.BallStart();
         HY_AudioManager.instance.StartBackgroundMusic(bgMusic);
         Time.timeScale = 1;
         if (Enemies != null)
@@ -88,7 +90,7 @@ public class HY_StartPause : MonoBehaviour
             Enemies.SetActive(true);
         }
         img.gameObject.SetActive(false);
-        Panel.SetActive(false);
+        CountDownPanel.SetActive(false);
 
     }
     IEnumerator CloudWait()
@@ -100,7 +102,7 @@ public class HY_StartPause : MonoBehaviour
     public void LetsGoBtn()
     {
         instrctionScreen.SetActive(false);
-        Panel.SetActive(true);
+        CountDownPanel.SetActive(true);
         StartCoroutine(StartCount());
     }
     void DeactiveAll()

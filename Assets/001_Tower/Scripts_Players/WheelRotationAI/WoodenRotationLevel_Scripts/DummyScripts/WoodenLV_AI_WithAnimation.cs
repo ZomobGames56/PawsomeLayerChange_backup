@@ -39,6 +39,7 @@ public class WoodenLV_AI_WithAnimation : MonoBehaviour
 
     void Update()
     {
+        if (!HY_StartPause.countOver) return;
         UpdateAnimations();
 
         if (moveTarget != null && canMoveTowardTarget && isGrounded)

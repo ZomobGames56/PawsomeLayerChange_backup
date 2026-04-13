@@ -53,15 +53,18 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
 
     [SerializeField]
     Image healthImg;
+    Vector3 lastPos;
+    float stuckTimer;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         healthImg.fillAmount = m_Health / 100;
-        PickNewRoamPoint();
+        //PickNewRoamPoint();
     }
     private void Update()
     {
+        if (!HY_StartPause.countOver) return;
         if (isStunned) return;
 
         switch (currentBasicState)
@@ -74,6 +77,8 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
     }
     private void FixedUpdate()
     {
+        if (!HY_StartPause.countOver) return;
+        CheckStuck();
         if (isStunned) return;
         switch (currentBasicState)
         {
@@ -92,6 +97,28 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
                 EnemyAnimationState(EnemyState.Run);
                 break;
         }
+    }
+    void CheckStuck()
+    {
+        float distance = Vector3.Distance(transform.position, lastPos);
+
+        if (distance < 0.05f)
+        {
+            stuckTimer += Time.fixedDeltaTime;
+
+            if (stuckTimer > 1f)
+            {
+                // 🔥 Force new direction
+                PickNewRoamPoint();
+                stuckTimer = 0;
+            }
+        }
+        else
+        {
+            stuckTimer = 0;
+        }
+
+        lastPos = transform.position;
     }
     void EnemyAnimationState(EnemyState state, float transtion = 0.25f)
     {
@@ -138,13 +165,36 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
     #region MOVE
     void MoveTo(Vector3 target)
     {
-        //agent.SetDestination(target);
         Vector3 dir = (target - transform.position).normalized;
         dir.y = 0;
 
+        // 🔥 Obstacle detection
+        Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
+
+        if (Physics.Raycast(rayOrigin, transform.forward, 1.2f))
+        {
+            // Try left & right
+            Vector3 left = Quaternion.Euler(0, -45, 0) * transform.forward;
+            Vector3 right = Quaternion.Euler(0, 45, 0) * transform.forward;
+
+            bool leftBlocked = Physics.Raycast(rayOrigin, left, 1f);
+            bool rightBlocked = Physics.Raycast(rayOrigin, right, 1f);
+
+            if (!leftBlocked)
+                dir = left;
+            else if (!rightBlocked)
+                dir = right;
+            else
+                dir = -transform.forward; // 🔥 fallback (go back)
+        }
+
         rb.linearVelocity = new Vector3(dir.x * moveSpeed, rb.linearVelocity.y, dir.z * moveSpeed);
+
         if (dir != Vector3.zero)
-            transform.forward = dir;
+        {
+            Quaternion rot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
+        }
     }
     #endregion
 
@@ -374,6 +424,7 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(2f);
         Instantiate(scareCrow, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
+        Horror_LvL_UIManager.AddCountDead();
     }
     void OnDrawGizmosSelected()
     {
