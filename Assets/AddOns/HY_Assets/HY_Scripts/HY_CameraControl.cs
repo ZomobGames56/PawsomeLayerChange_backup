@@ -55,24 +55,52 @@ public class HY_CameraControl : MonoBehaviour
         Quaternion manualRot = Quaternion.Euler(currentY, currentX, 0);
 
         // 2️⃣ AUTO ALIGN TO PLAYER MOVE (YAW ONLY)
+        //if (playerMoveDir.sqrMagnitude > 0.1f)
+        //{
+        //    Vector3 flatMove = playerMoveDir;
+        //    flatMove.y = 0;
+
+        //    Quaternion targetYaw = Quaternion.LookRotation(flatMove);
+        //    Quaternion yawOnly = Quaternion.Euler(0, targetYaw.eulerAngles.y, 0);
+
+        //    manualRot = Quaternion.Slerp(
+        //        manualRot,
+        //        Quaternion.Euler(currentY, yawOnly.eulerAngles.y, 0),
+        //        followStrength * followYawSpeed * Time.deltaTime
+        //    );
+
+        //    // keep internal yaw synced (prevents snap)
+        //    currentX = manualRot.eulerAngles.y;
+        //}
+
         if (playerMoveDir.sqrMagnitude > 0.1f)
         {
             Vector3 flatMove = playerMoveDir;
             flatMove.y = 0;
 
-            Quaternion targetYaw = Quaternion.LookRotation(flatMove);
-            Quaternion yawOnly = Quaternion.Euler(0, targetYaw.eulerAngles.y, 0);
+            // 🔥 Get camera forward direction
+            Vector3 camForward = transform.forward;
+            camForward.y = 0;
+            camForward.Normalize();
 
-            manualRot = Quaternion.Slerp(
-                manualRot,
-                Quaternion.Euler(currentY, yawOnly.eulerAngles.y, 0),
-                followStrength * followYawSpeed * Time.deltaTime
-            );
+            // 🔥 Check movement direction relative to camera
+            float dot = Vector3.Dot(camForward, flatMove.normalized);
 
-            // keep internal yaw synced (prevents snap)
-            currentX = manualRot.eulerAngles.y;
+            // 👉 Only rotate if NOT moving backward
+            if (dot > 0f) // forward OR sideways
+            {
+                Quaternion targetYaw = Quaternion.LookRotation(flatMove);
+                Quaternion yawOnly = Quaternion.Euler(0, targetYaw.eulerAngles.y, 0);
+
+                manualRot = Quaternion.Slerp(
+                    manualRot,
+                    Quaternion.Euler(currentY, yawOnly.eulerAngles.y, 0),
+                    followStrength * followYawSpeed * Time.deltaTime
+                );
+
+                currentX = manualRot.eulerAngles.y;
+            }
         }
-
         rot = manualRot;
         dir = new Vector3(0, 0, -dis);
 

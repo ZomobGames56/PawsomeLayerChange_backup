@@ -14,7 +14,7 @@ public class WoodenLevelWinner : MonoBehaviour
     Rigidbody playerRb;
     private void Start()
     {
-        playerRb = GetComponent<Rigidbody>();
+        //playerRb = GetComponent<Rigidbody>();
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -32,7 +32,8 @@ public class WoodenLevelWinner : MonoBehaviour
                 if (count == enemyList.Count)
                 {
                     winPanel.SetActive(true);
-                    playerRb.isKinematic = true;
+                    playerRb.GetComponent<Rigidbody>().isKinematic = true;
+
                     StartCoroutine(LevelSelectionScene());
                 }
                 break;

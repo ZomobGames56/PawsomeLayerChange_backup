@@ -15,6 +15,7 @@ public class HY_OnJumper : MonoBehaviour
     {
         if (collision.transform.tag == "Jumper")
         {
+            JumperForce = 55f;
             rb.AddForce(Vector3.up * JumperForce,ForceMode.Impulse);
             //GetComponent<Animator>().SetBool("Hanging", true);
         }

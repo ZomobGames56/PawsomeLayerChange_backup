@@ -17,6 +17,10 @@ public class HorrorLevelFallZone : MonoBehaviour
             other.gameObject.SetActive(false);
             Horror_LvL_UIManager.AddCountDead();
         }
+        if (other.CompareTag("Ground"))
+        {
+            other.gameObject.SetActive(false);
+        }
     }
     IEnumerator LevelSelection(string t)
     {

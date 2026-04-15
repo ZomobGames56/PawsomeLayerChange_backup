@@ -92,6 +92,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     GameObject scareCrow;
     [SerializeField]
     float inputDeadZone = 0.9f;
+    RaycastHit hit;
     #endregion
     private void Awake()
     {
@@ -145,6 +146,12 @@ public class PlayerControl : MonoBehaviour, IDamageable
         Vector3 velocity = rb.linearVelocity;
         if (move.magnitude > inputDeadZone)
         {
+            Vector3 moveDir = move;
+            if (Physics.Raycast(transform.position, moveDir, out hit, 0.6f))
+            {
+                moveDir = Vector3.ProjectOnPlane(moveDir, hit.normal);
+            }
+            
             velocity.x = move.x * moveSpeed;
             velocity.z = move.z * moveSpeed;
 

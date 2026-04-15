@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class HY_Player_Control : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     Joystick joystick;// JoyStick Refrence Given in the canvas.
     [SerializeField]
@@ -50,10 +51,12 @@ public class HY_Player_Control : MonoBehaviour
     bool collideToWater;
     public GameObject dummyScreen;
     [SerializeField] HY_CameraControl camControl;
-   public bool testBool;
+    public bool testBool;
     public int count;
-
-
+    Coroutine jumpRoutine;
+    [SerializeField]
+    LayerMask layer;
+    #endregion 
     void Start()
     {
         collideToWater = false;
@@ -68,7 +71,7 @@ public class HY_Player_Control : MonoBehaviour
 
         animator = GetComponent<Animator>();
 
-        if (rb != null&& rigidBodyControl)
+        if (rb != null && rigidBodyControl)
         {
 
             rb.position = spawnPoint.position;
@@ -179,29 +182,53 @@ public class HY_Player_Control : MonoBehaviour
             }
             if (rigidBodyControl)
             {
+                #region
+                //if (rb != null)
+                //{
+
+                //    Vector3 velocity = rb.linearVelocity;
+                //    if (move.sqrMagnitude > 0.01f)
+                //    {
+                //        velocity.x = move.x * moveSpeed;
+                //        velocity.z = move.z * moveSpeed;
+                //    }
+                //    else
+                //    {
+                //        // Hard stop when input released
+                //        velocity.x = 0f;
+                //        velocity.z = 0f;
+                //    }
+
+                //    rb.linearVelocity = velocity;
+                //    // rb.velocity = move*moveSpeed;
+
+
+                //    // animator.SetFloat("Run",rb.linearVelocity.magnitude);
+                //    //Debug.Log("rigid one is calling");
+
+                //}
+                #endregion Old Input 
                 if (rb != null)
                 {
-
                     Vector3 velocity = rb.linearVelocity;
+
                     if (move.sqrMagnitude > 0.01f)
                     {
-                        velocity.x = move.x * moveSpeed;
-                        velocity.z = move.z * moveSpeed;
+                        Vector3 moveDir = move;
+                        if (Physics.Raycast(transform.position, moveDir, out hit, 0.6f,layer))
+                        {
+                            moveDir = Vector3.ProjectOnPlane(moveDir, hit.normal);
+                        }
+                        velocity.x = moveDir.x * moveSpeed;
+                        velocity.z = moveDir.z * moveSpeed;
                     }
                     else
                     {
-                        // Hard stop when input released
                         velocity.x = 0f;
                         velocity.z = 0f;
                     }
 
                     rb.linearVelocity = velocity;
-                    // rb.velocity = move*moveSpeed;
-
-
-                    // animator.SetFloat("Run",rb.linearVelocity.magnitude);
-                    //Debug.Log("rigid one is calling");
-
                 }
             }
             if (move.magnitude != 0)
@@ -237,27 +264,28 @@ public class HY_Player_Control : MonoBehaviour
             {
                 if (rb != null)
                 {
-                    // rb.MovePosition(transform.position + move * moveSpeed * Time.fixedDeltaTime);
-                    //rb.linearVelocity = Vector3 velocity = rb.linearVelocity;
                     Vector3 velocity = rb.linearVelocity;
+
                     if (move.sqrMagnitude > 0.01f)
                     {
-                        velocity.x = move.x * moveSpeed;
-                        velocity.z = move.z * moveSpeed;
+                        Vector3 moveDir = move;
+
+                        if (Physics.Raycast(transform.position, moveDir, out hit, 0.6f, ~0, QueryTriggerInteraction.Ignore))
+                        {
+                            // 🔥 Remove movement into wall
+                            moveDir = Vector3.ProjectOnPlane(moveDir, hit.normal);
+                        }
+
+                        velocity.x = moveDir.x * moveSpeed;
+                        velocity.z = moveDir.z * moveSpeed;
                     }
                     else
                     {
-                        // Hard stop when input released
                         velocity.x = 0f;
                         velocity.z = 0f;
                     }
 
                     rb.linearVelocity = velocity;
-                    // rb.velocity = move*moveSpeed;
-
-
-                    //animator.SetFloat("Run",rb.velocity.magnitude);
-                    //Debug.Log("rigid one is calling");
 
                 }
             }
@@ -271,24 +299,30 @@ public class HY_Player_Control : MonoBehaviour
     }// joy stick movment.
     public void MobileJumpBtn()
     {
-        if (isGrounded && !jumpbtnPressed)
+        if (isGrounded && !inAir)
         {
-            animator.SetBool("Jump", true);
-            //HY_AudioManager.instance.PlayAudioEffectOnce(jumpSound);
+            if (jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
 
+            animator.SetBool("Jump", true);
+            animator.SetBool("Hanging", false);
+
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+
             isGrounded = false;
             inAir = true;
-            jumpbtnPressed = true;
-            StartCoroutine(JumpUp());
+
+            jumpRoutine = StartCoroutine(JumpUp());
         }
     }
-    public IEnumerator JumpUp()
+    IEnumerator JumpUp()
     {
         yield return new WaitForSeconds(0.2f);
-        animator.SetBool("Jump", false);
-        animator.SetBool("Hanging", true);
-        //rb.AddForce(Vector3.up * (-gravity), ForceMode.Impulse);
+        
+            animator.SetBool("Jump", false);
+            animator.SetBool("Hanging", true);
+        
     }
     IEnumerator Dash()
     {
@@ -368,7 +402,7 @@ public class HY_Player_Control : MonoBehaviour
             Debug.Log("Player out of bound");
             // gameObject.SetActive(false
             isCalled = true;
-           // canControl = false;
+            // canControl = false;
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 500f);
             //rb.isKinematic = true;
             StartCoroutine(SpawnWait());
@@ -382,7 +416,7 @@ public class HY_Player_Control : MonoBehaviour
     {
         canControl = false;
         print("I Collide");
-       // HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
+        // HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
         Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
         transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
 
@@ -390,12 +424,12 @@ public class HY_Player_Control : MonoBehaviour
     }
     public IEnumerator SpawnWait()
     {
-       rb.isKinematic = true;
-        
+        rb.isKinematic = true;
+
         yield return new WaitForSeconds(waitForSec);
         // Stop physics
         //rb.linearVelocity = Vector3.zero;
-       
+
 
         // Teleport correctly
         rb.position = spawnPoint.position;
@@ -446,7 +480,7 @@ public class HY_Player_Control : MonoBehaviour
                 rb.isKinematic = true;
                 break;
         }
-        if (other.tag == "Ground")
+        if (other.CompareTag("Ground"))
         {
             collideToWater = false;
             count++;
@@ -458,7 +492,7 @@ public class HY_Player_Control : MonoBehaviour
             moveSpeed = defaultSpeed;
             animator.SetBool("Dash", false);
             isDashing = false;
-           
+
         }
     }
     IEnumerator LevelSelectionScene()
@@ -466,21 +500,24 @@ public class HY_Player_Control : MonoBehaviour
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(6);
     }
-    
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Ground"))
         {
-            //  isStateLocked = true;
-            //isGrounded = false;
+
             count--;
             if (count == 0)
             {
                 isGrounded = false;
+                inAir = true;
                 HangingAnimation();
             }
             else
+            {
                 isGrounded = true;
+                inAir = false;
+            }
 
 
 

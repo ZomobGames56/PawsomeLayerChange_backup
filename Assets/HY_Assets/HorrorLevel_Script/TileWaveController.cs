@@ -24,6 +24,7 @@ public class TileWaveController : MonoBehaviour
 
     IEnumerator WaveRoutine()
     {
+        yield return new WaitUntil(() => HY_StartPause.countOver);
         int markedCount = 0;
 
         while (markedCount < tilesPerWave)
