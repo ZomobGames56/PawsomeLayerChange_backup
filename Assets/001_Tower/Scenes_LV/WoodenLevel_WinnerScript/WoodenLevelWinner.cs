@@ -12,6 +12,8 @@ public class WoodenLevelWinner : MonoBehaviour
     GameObject winPanel, losePanel;
     [SerializeField]
     Rigidbody playerRb;
+    [SerializeField]
+    Rigidbody[] enemyObject;
     private void Start()
     {
         //playerRb = GetComponent<Rigidbody>();
@@ -24,6 +26,10 @@ public class WoodenLevelWinner : MonoBehaviour
                 //player lost.
                 collision.gameObject.SetActive(false);
                 losePanel.SetActive(true);
+                foreach (Rigidbody r in enemyObject)
+                {
+                    r.GetComponent<Rigidbody>().isKinematic = true;
+                }
                 StartCoroutine(LevelSelectionScene());
                 break;
             case "Enemy":

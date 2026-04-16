@@ -56,6 +56,9 @@ public class HY_Player_Control : MonoBehaviour
     Coroutine jumpRoutine;
     [SerializeField]
     LayerMask layer;
+    [SerializeField]
+    Transform head;
+    int mask;
     #endregion 
     void Start()
     {
@@ -215,7 +218,8 @@ public class HY_Player_Control : MonoBehaviour
                     if (move.sqrMagnitude > 0.01f)
                     {
                         Vector3 moveDir = move;
-                        if (Physics.Raycast(transform.position, moveDir, out hit, 0.6f,layer))
+                        mask = ~layer;
+                        if (Physics.Raycast(head.position, moveDir, out hit, 0.6f, mask, QueryTriggerInteraction.Ignore))
                         {
                             moveDir = Vector3.ProjectOnPlane(moveDir, hit.normal);
                         }
@@ -434,6 +438,7 @@ public class HY_Player_Control : MonoBehaviour
         // Teleport correctly
         rb.position = spawnPoint.position;
         rb.rotation = spawnPoint.rotation;
+        transform.rotation = spawnPoint.rotation;
         //rb.isKinematic = false;
         // Reset scale instantly
         transform.localScale = playerScale;
@@ -455,6 +460,7 @@ public class HY_Player_Control : MonoBehaviour
             camControl.currentX = 360f;
         }
         rb.isKinematic = false;
+        HY_CameraControl.CameraSnapToPlayerDirection(transform);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -523,8 +529,6 @@ public class HY_Player_Control : MonoBehaviour
 
         }
     }
-
-
     float InAirTime()
     {
         if (!isGrounded && inAir && !isDashing)
@@ -536,5 +540,27 @@ public class HY_Player_Control : MonoBehaviour
             inAirTime = 0;
         }
         return inAirTime;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (head == null) return;
+
+        Gizmos.color = Color.red;
+
+        // Draw movement direction ray
+        Vector3 moveDir = move;
+        Gizmos.DrawRay(head.position, moveDir.normalized * 0.6f);
+
+        // Draw hit sphere (optional)
+        if (Physics.Raycast(head.position, moveDir, out RaycastHit hit, 0.6f, ~0, QueryTriggerInteraction.Ignore))
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(hit.point, 0.05f);
+
+            // Draw normal
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(hit.point, hit.normal * 0.3f);
+        }
     }
 }

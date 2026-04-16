@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class FixedTouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
@@ -10,10 +11,14 @@ public class FixedTouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     [SerializeField] float minMove = 2f;   // pixels needed before movement registers
     int activePointerID = -1;
+
+    //test text
+   
+
     public void OnPointerDown(PointerEventData eventData)
     {
         activePointerID = eventData.pointerId;
-        print("PointerDown");
+        
         pressed = true;
         lastPos = eventData.position;
         TouchDelta = Vector2.zero;
@@ -35,7 +40,7 @@ public class FixedTouchField : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
         TouchDelta = delta;
         lastPos = newPos;
-        print("Drag");
+
 
     }
 

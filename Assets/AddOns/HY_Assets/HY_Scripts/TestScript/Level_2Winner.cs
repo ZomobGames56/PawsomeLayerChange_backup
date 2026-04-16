@@ -52,7 +52,7 @@ public class Level_2Winner : MonoBehaviour
         if (isPlayerWin&&!once)
         {
             winnerBGImg.SetActive(true);
-            StartCoroutine(ShowWinnerScreen());
+            //StartCoroutine(ShowWinnerScreen());
             //HY_WinnerShowCase.instance.isPlayerWon=true;
             HY_AudioManager.instance.PlayAudioEffectOnce(winnerClip);
             once = true;
@@ -62,7 +62,7 @@ public class Level_2Winner : MonoBehaviour
         {
             looseBGImg.SetActive(true);
             winnerCount = 1;
-            StartCoroutine(ShowWinnerScreen());
+            //StartCoroutine(ShowWinnerScreen());
            // HY_WinnerShowCase.instance.isPlayerWon=false;
             HY_AudioManager.instance.PlayAudioEffectOnce(looseClip);
             once = true;
@@ -71,30 +71,49 @@ public class Level_2Winner : MonoBehaviour
         
     }
    
-    IEnumerator ShowWinnerScreen()
+    //IEnumerator ShowWinnerScreen()
+    //{
+    //    yield return new WaitForSeconds(timeToShowWinnerScreen);
+    //    // playerModel.GetComponent<Animator>().enabled = false;
+    //    playerModel.transform.SetParent(stoneModel.transform);
+    //    playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
+    //    playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
+    //    playerModel.GetComponent<Animator>().ResetTrigger("Victory");
+    //    mainCamera.SetActive(false);
+    //    mainCanvas.SetActive(false);
+    //    //showWinnerScreenCanvas.SetActive(true);
+    //    ShowWinnerScreenCamera.SetActive(true);
+    //    WinnerShowCaseScriptObj.SetActive(true);
+    //    if(isPlayerWin)
+    //    {
+    //        HY_WinnerShowCase.instance.isPlayerWon = true;
+    //    }
+    //    else if(isEnemyWin)
+    //    {
+    //        HY_WinnerShowCase.instance.isPlayerWon = false;
+    //    }
+
+
+    //}
+
+
+    void PlayerWon()
     {
-        yield return new WaitForSeconds(timeToShowWinnerScreen);
-        // playerModel.GetComponent<Animator>().enabled = false;
-        playerModel.transform.SetParent(stoneModel.transform);
-        playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-        playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
-        playerModel.GetComponent<Animator>().ResetTrigger("Victory");
-        mainCamera.SetActive(false);
-        mainCanvas.SetActive(false);
-        //showWinnerScreenCanvas.SetActive(true);
-        ShowWinnerScreenCamera.SetActive(true);
-        WinnerShowCaseScriptObj.SetActive(true);
-        if(isPlayerWin)
-        {
-            HY_WinnerShowCase.instance.isPlayerWon = true;
-        }
-        else if(isEnemyWin)
-        {
-            HY_WinnerShowCase.instance.isPlayerWon = false;
-        }
-
-
+        winnerBGImg.SetActive(true);
+        HY_AudioManager.instance.PlayAudioEffectOnce(winnerClip);
+        StartCoroutine(LevelSelectionScene());
+        once = true;
     }
+
+    void EnemyWon()
+    {
+        looseBGImg.SetActive(true);
+        winnerCount = 1;
+        HY_AudioManager.instance.PlayAudioEffectOnce(looseClip);
+        StartCoroutine(LevelSelectionScene());
+        once = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
@@ -116,11 +135,8 @@ public class Level_2Winner : MonoBehaviour
                 }
                 isCalled = true;
             }
+            PlayerWon();
             //playerControl.GetComponent<Rigidbody>().position = Vector3.zero;
-
-
-
-
         }
         if (other.tag == "Enemy")
         {
@@ -131,6 +147,7 @@ public class Level_2Winner : MonoBehaviour
             winnerCount = 1;
             // other.GetComponent<Animator>().SetTrigger("Victory");
             other.gameObject.GetComponent<NavMeshWithWayPointsAI>().touchedFinishLine = true;
+            EnemyWon();
             if (isCalled == false)
             {
                 foreach (var item in enemyRef)
@@ -156,4 +173,24 @@ public class Level_2Winner : MonoBehaviour
 
         }
     }
+
+    IEnumerator LevelSelectionScene()
+    {
+        yield return new WaitForSeconds(3f);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(6);
+        asyncLoad.allowSceneActivation = false;
+
+        while (asyncLoad.progress < 0.9f)
+        {
+            // Update loading UI here (progress bar etc.)
+            yield return null;
+        }
+
+        // Small delay if you want
+        yield return new WaitForSeconds(0.5f);
+
+        asyncLoad.allowSceneActivation = true;
+    }
+
 }

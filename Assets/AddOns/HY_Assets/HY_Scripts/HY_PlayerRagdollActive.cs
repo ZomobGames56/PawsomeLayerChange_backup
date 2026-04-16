@@ -180,8 +180,9 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         }
         if (collideWater)
         {
+            parentRb.rotation = spawnPoint.rotation;
+            Parent.transform.rotation = spawnPoint.rotation;
             _hip.position = spawnPoint.position;
-            //parentRb.rotation = spawnPoint.rotation;
             parentRb.position = _hip.position;
         }
 
@@ -195,6 +196,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             child.isKinematic = true;
             child.constraints = RigidbodyConstraints.FreezeAll;
         }
+
+        HY_CameraControl.CameraSnapToPlayerDirection(parentRb.transform);
         HY_Player_Control.canControl = true;
 
     }

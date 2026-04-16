@@ -36,14 +36,14 @@ public class UnpredictableClimber : MonoBehaviour
     private float disableSqr;
     [SerializeField]
     GameObject dummyScreen;
-    private void OnEnable()
-    {
-        mn_GameManager.OnWinEvent += StopMovement;
-    }
-    private void OnDisable()
-    {
-        mn_GameManager.OnWinEvent -= StopMovement;
-    }
+    //private void OnEnable()
+    //{
+    //    mn_GameManager.OnWinEvent += StopMovement;
+    //}
+    //private void OnDisable()
+    //{
+    //    mn_GameManager.OnWinEvent -= StopMovement;
+    //}
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -96,7 +96,7 @@ public class UnpredictableClimber : MonoBehaviour
                 agent.isStopped = true;
                 currentState = AIState.GoalReached;
                 //call the event.
-                mn_GameManager.Won();
+                //mn_GameManager.Won();
                 return;
             }
 
@@ -105,10 +105,10 @@ public class UnpredictableClimber : MonoBehaviour
         }
 
         updateTimer -= Time.deltaTime;
-
-        if (updateTimer <= 0f || (!agent.pathPending && agent.remainingDistance < 1f))
+        if (!agent.isOnNavMesh) return;
+        if (updateTimer <= 0f || (!agent.pathPending && agent.remainingDistance < 1f))//here error
         {
-            UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
+            UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);// here error
             updateTimer = targetUpdateInterval * Random.Range(0.8f, 1.2f);
         }
 
@@ -185,14 +185,14 @@ public class UnpredictableClimber : MonoBehaviour
 
         if (animator) animator.enabled = false;
     }
-    void StopMovement()
-    {
-        agent.speed = 0;
-        // agent.isStopped = true;
-        dummyScreen.SetActive(true);
-        StartCoroutine(LevelSelectionScene());
-        animator.SetFloat("Run", 0);
-    }
+    //void StopMovement()
+    //{
+    //    agent.speed = 0;
+    //    // agent.isStopped = true;
+    //    dummyScreen.SetActive(true);
+    //    StartCoroutine(LevelSelectionScene());
+    //    animator.SetFloat("Run", 0);
+    //}
     IEnumerator LevelSelectionScene()
     {
         yield return new WaitForSeconds(3f);

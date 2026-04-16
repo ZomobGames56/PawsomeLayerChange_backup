@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class HY_CameraControl : MonoBehaviour
 {
+    private static HY_CameraControl instance;
+
+    public static HY_CameraControl Instance
+    {
+        get { return instance; }
+    }
+
     [Header("Distance")]
     [SerializeField] float dis = 3f;
 
@@ -19,7 +26,8 @@ public class HY_CameraControl : MonoBehaviour
     [SerializeField] float followStrength = 0.4f; // how much it helps
 
     [SerializeField] Transform lookAt;
-    public FixedTouchField touchField;
+    [SerializeField]
+    FixedTouchField touchField;
 
     Quaternion rot;
     Vector3 dir;
@@ -27,16 +35,25 @@ public class HY_CameraControl : MonoBehaviour
     public float currentX;
     public float currentY;
     [SerializeField]
-    int currentY_ = 360;
+    int requiredCurrentX = 360;
     //  received from player
     [HideInInspector] public Vector3 playerMoveDir;
 
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
+        instance = this;
+    }
 
     void Start()
     {
         currentY = 30f;   // starting pitch
-        currentX = currentY_;
+        currentX = requiredCurrentX;
     }
 
     void LateUpdate()
@@ -87,7 +104,7 @@ public class HY_CameraControl : MonoBehaviour
             float dot = Vector3.Dot(camForward, flatMove.normalized);
 
             // 👉 Only rotate if NOT moving backward
-            if (dot > 0f) // forward OR sideways
+            if (dot > -0.2f && dot < 0.5f) // forward OR sideways
             {
                 Quaternion targetYaw = Quaternion.LookRotation(flatMove);
                 Quaternion yawOnly = Quaternion.Euler(0, targetYaw.eulerAngles.y, 0);
@@ -106,5 +123,24 @@ public class HY_CameraControl : MonoBehaviour
 
         transform.position = lookAt.position + rot * dir;
         transform.LookAt(lookAt.position);
+    }
+
+    public static void CameraSnapToPlayerDirection(Transform player)
+    {
+        Vector3 forward = player.forward;
+        forward.y = 0f;
+
+        if (forward.sqrMagnitude < 0.01f)
+            return;
+
+        Quaternion targetRot = Quaternion.LookRotation(forward);
+
+        instance.currentX = targetRot.eulerAngles.y;
+
+        // keep pitch same (or reset if you want)
+        // currentY = 30f; // optional
+
+        instance.transform.rotation = Quaternion.Euler(instance.currentY, instance.currentX, 0);
+        Debug.Log("Snap Camera Called");
     }
 }

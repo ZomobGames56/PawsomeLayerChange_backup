@@ -8,7 +8,7 @@ public class HY_LevelBtnManager : MonoBehaviour
 {
 
     [SerializeField]
-    GameObject loadingScreen,cloudObj;//, playerModel;
+    GameObject loadingScreen,cloudObj,enterCloudObj;//, playerModel;
     [SerializeField]
     Image slider;
     float progress;
@@ -19,7 +19,7 @@ public class HY_LevelBtnManager : MonoBehaviour
     private void Start()
     {
         HY_AudioManager.instance.PlayAudioEffectOnce(bgMucis);
-
+        enterCloudObj.SetActive(true);
     }
     public void Level_1()
     {

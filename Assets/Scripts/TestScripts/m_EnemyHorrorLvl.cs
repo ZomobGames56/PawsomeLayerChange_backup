@@ -60,7 +60,7 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         healthImg.fillAmount = m_Health / 100;
-        //PickNewRoamPoint();
+        PickNewRoamPoint();
     }
     private void Update()
     {

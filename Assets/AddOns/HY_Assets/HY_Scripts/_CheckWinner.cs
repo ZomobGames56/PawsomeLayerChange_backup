@@ -57,44 +57,44 @@ public class _CheckWinner : MonoBehaviour
         WhoWon();
 
     }
-    IEnumerator ShowWinnerScreen()
-    {
-        HY_Player_Control.canControl = false;
-        yield return new WaitForSeconds(timeToShowWinnerScreen);
-        // playerModel.GetComponent<Animator>().enabled = false;
-        playerModel.transform.SetParent(stoneModel.transform);
-        playerModel.GetComponent<Rigidbody>().isKinematic = true;
-        playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-        playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
-        if (!playerModel.activeInHierarchy)
-        {
-            playerModel.SetActive(true);
-        }
-        playerModel.GetComponent<Animator>().ResetTrigger("Victory");
-        mainCamera.SetActive(false);
-        mainCanvas.SetActive(false);
-        //showWinnerScreenCanvas.SetActive(true);
-        ShowWinnerScreenCamera.SetActive(true);
-        WinnerShowCaseScriptObj.SetActive(true);
-        if (playerWon)
-        {
-            HY_WinnerShowCase.instance.isPlayerWon = true;
-        }
-        else if (enemyWon)
-        {
-            HY_WinnerShowCase.instance.isPlayerWon = false;
-        }
+    //IEnumerator ShowWinnerScreen()
+    //{
+    //    HY_Player_Control.canControl = false;
+    //    yield return new WaitForSeconds(timeToShowWinnerScreen);
+    //    // playerModel.GetComponent<Animator>().enabled = false;
+    //    playerModel.transform.SetParent(stoneModel.transform);
+    //    playerModel.GetComponent<Rigidbody>().isKinematic = true;
+    //    playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
+    //    playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
+    //    if (!playerModel.activeInHierarchy)
+    //    {
+    //        playerModel.SetActive(true);
+    //    }
+    //    playerModel.GetComponent<Animator>().ResetTrigger("Victory");
+    //    mainCamera.SetActive(false);
+    //    mainCanvas.SetActive(false);
+    //    //showWinnerScreenCanvas.SetActive(true);
+    //    ShowWinnerScreenCamera.SetActive(true);
+    //    WinnerShowCaseScriptObj.SetActive(true);
+    //    if (playerWon)
+    //    {
+    //        HY_WinnerShowCase.instance.isPlayerWon = true;
+    //    }
+    //    else if (enemyWon)
+    //    {
+    //        HY_WinnerShowCase.instance.isPlayerWon = false;
+    //    }
 
 
 
-    }
+    //}
     void WhoWon()
     {
         if (playerWon && !once)
         {
             once = true;
 
-            StartCoroutine(ShowWinnerScreen());
+            //StartCoroutine(ShowWinnerScreen());
             winnerBGImg.SetActive(true);
             HY_AudioManager.instance.PlayAudioEffectOnce(winClip);
 
@@ -104,7 +104,7 @@ public class _CheckWinner : MonoBehaviour
             once = true;
 
             // winLooseTxt.text = "ELIMINATED";
-            StartCoroutine(ShowWinnerScreen());
+            //StartCoroutine(ShowWinnerScreen());
             HY_AudioManager.instance.PlayAudioEffectOnce(looseClip);
 
             looserBGImg.SetActive(true);

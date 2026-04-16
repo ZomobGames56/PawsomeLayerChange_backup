@@ -12,9 +12,7 @@ public class HY_Decide_Winner : MonoBehaviour
     [SerializeField]
     HY_NavMeshEnemy[] enemyRef;
     [SerializeField]
-    GameObject levelEndPanel, winnerBGImg, qualified, eliminated;
-    [SerializeField]
-    TextMeshProUGUI winLooseTxt;
+    GameObject qualified, eliminated;
     bool isCalled = false;
     [SerializeField]
     TextMeshProUGUI winnerCountTxt;
@@ -40,7 +38,7 @@ public class HY_Decide_Winner : MonoBehaviour
         count = 0;
         winnerCount = 0;
         playerRb = playerControl.GetComponent<Rigidbody>();
-    } 
+    }
     //void Update()
     //{
     //    if (isPlayerWin && !once)
@@ -74,19 +72,8 @@ public class HY_Decide_Winner : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(6);
-        asyncLoad.allowSceneActivation = false;
-
-        while (asyncLoad.progress < 0.9f)
-        {
-            // Update loading UI here (progress bar etc.)
-            yield return null;
-        }
-
-        // Small delay if you want
-        yield return new WaitForSeconds(0.5f);
-
-        asyncLoad.allowSceneActivation = true;
+        SceneManager.LoadScene(6);
+      
     }
 
     //IEnumerator ShowWinnerScreen()
@@ -148,7 +135,7 @@ public class HY_Decide_Winner : MonoBehaviour
             HY_Player_Control.canControl = false;
             playerControl.GetComponent<Animator>().SetTrigger("Defeat");
             playerRb.isKinematic = true;
-           
+
             // other.GetComponent<Animator>().SetTrigger("Victory");
             other.gameObject.GetComponent<HY_NavMeshEnemy>().touchedFinishLine = true;
             if (isCalled == false)
