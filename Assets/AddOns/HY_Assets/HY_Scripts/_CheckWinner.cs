@@ -38,22 +38,22 @@ public class _CheckWinner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (canRunUpdate)
-        {
-            if (enemyList.Count <= HY_DeathZone.enemyDeathCount)
-            {
-                Debug.Log("Player Winner");
-                playerWon = true;
-                //can avtive Panel
-                ref_Player.GetComponent<Rigidbody>().isKinematic = true;
-                canRunUpdate = false;
-            }
-            if (HY_DeathZone.enemyDeathCount < 0)
-            {
-                enemyWon = true;
+        //if (canRunUpdate)
+        //{
+        //    if (enemyList.Count <= HY_DeathZone.enemyDeathCount)
+        //    {
+        //        Debug.Log("Player Winner");
+        //        playerWon = true;
+        //        //can avtive Panel
+        //        ref_Player.GetComponent<Rigidbody>().isKinematic = true;
+        //        canRunUpdate = false;
+        //    }
+        //    if (HY_DeathZone.enemyDeathCount < 0)
+        //    {
+        //        enemyWon = true;
 
-            }
-        }
+        //    }
+        //}
         WhoWon();
 
     }

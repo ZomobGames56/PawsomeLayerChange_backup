@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class Level_2Winner : MonoBehaviour
@@ -12,29 +13,34 @@ public class Level_2Winner : MonoBehaviour
     HY_Player_Control playerControl;
     [SerializeField]
     NavMeshWithWayPointsAI[] enemyRef;
-
     bool isPlayerWin, isEnemyWin, isCalled;
-
     [SerializeField]
-    TextMeshProUGUI winLooseTxt;
-
-    [SerializeField]
-    GameObject levelEndPanel, looseBGImg,winnerBGImg,winningScreen;
+    GameObject  looseBGImg,winnerBGImg;
     int winnerCount;
    [SerializeField] TextMeshProUGUI winnerCountTxt;
     [SerializeField]
     AudioClip winnerClip,looseClip;
     [SerializeField]
-    GameObject playerModel, stoneModel;
+    GameObject playerModel;
     [SerializeField]
     float timeToShowWinnerScreen = 2.5f;
     [SerializeField]
-    GameObject mainCanvas, mainCamera, ShowWinnerScreenCamera, WinnerShowCaseScriptObj;
+    GameObject mainCanvas, mainCamera;
     [SerializeField]
     float playerRot;
     bool once;
-   // bool currentWinstatus;
-   // public bool isPlayerWon;
+
+  
+    [SerializeField]
+    List<GameObject> totalPlayers = new List<GameObject>();
+    [SerializeField]
+    List<Transform> otherPositions = new List<Transform>();
+    [SerializeField]
+    List<ZLerpMove> insideBox = new List<ZLerpMove>();
+    [SerializeField]
+    GameObject victoryPos,victoryBoxObj,cloudExit;
+    Rigidbody playerRb;
+
     void Start()
     {
         //winningScreen.SetActive(false);
@@ -44,64 +50,14 @@ public class Level_2Winner : MonoBehaviour
             playerControl = FindFirstObjectByType<HY_Player_Control>();
         }
         winnerCount = 0;
+        playerRb  = playerControl.GetComponent<Rigidbody>();   
+        victoryBoxObj.SetActive(false);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (isPlayerWin&&!once)
-        {
-            winnerBGImg.SetActive(true);
-            //StartCoroutine(ShowWinnerScreen());
-            //HY_WinnerShowCase.instance.isPlayerWon=true;
-            HY_AudioManager.instance.PlayAudioEffectOnce(winnerClip);
-            once = true;
-
-        }
-        if (isEnemyWin&&!once)
-        {
-            looseBGImg.SetActive(true);
-            winnerCount = 1;
-            //StartCoroutine(ShowWinnerScreen());
-           // HY_WinnerShowCase.instance.isPlayerWon=false;
-            HY_AudioManager.instance.PlayAudioEffectOnce(looseClip);
-            once = true;
-        }
-        winnerCountTxt.text = (winnerCount + "/1").ToString();
-        
-    }
-   
-    //IEnumerator ShowWinnerScreen()
-    //{
-    //    yield return new WaitForSeconds(timeToShowWinnerScreen);
-    //    // playerModel.GetComponent<Animator>().enabled = false;
-    //    playerModel.transform.SetParent(stoneModel.transform);
-    //    playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-    //    playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
-    //    playerModel.GetComponent<Animator>().ResetTrigger("Victory");
-    //    mainCamera.SetActive(false);
-    //    mainCanvas.SetActive(false);
-    //    //showWinnerScreenCanvas.SetActive(true);
-    //    ShowWinnerScreenCamera.SetActive(true);
-    //    WinnerShowCaseScriptObj.SetActive(true);
-    //    if(isPlayerWin)
-    //    {
-    //        HY_WinnerShowCase.instance.isPlayerWon = true;
-    //    }
-    //    else if(isEnemyWin)
-    //    {
-    //        HY_WinnerShowCase.instance.isPlayerWon = false;
-    //    }
-
-
-    //}
-
-
     void PlayerWon()
     {
         winnerBGImg.SetActive(true);
         HY_AudioManager.instance.PlayAudioEffectOnce(winnerClip);
-        StartCoroutine(LevelSelectionScene());
+       
         once = true;
     }
 
@@ -110,7 +66,7 @@ public class Level_2Winner : MonoBehaviour
         looseBGImg.SetActive(true);
         winnerCount = 1;
         HY_AudioManager.instance.PlayAudioEffectOnce(looseClip);
-        StartCoroutine(LevelSelectionScene());
+        
         once = true;
     }
 
@@ -120,6 +76,7 @@ public class Level_2Winner : MonoBehaviour
         {
             //Player Win //Active Win Screen.
             isPlayerWin = true;
+            PlayerWon();
             playerControl.GetComponent<Animator>().SetTrigger("Victory");
             winnerCount = 1;
             playerControl.GetComponent<Rigidbody>().isKinematic = true;
@@ -128,15 +85,24 @@ public class Level_2Winner : MonoBehaviour
             {
                 foreach (var item in enemyRef)
                 {
-                    item.GetComponent<NavMeshWithWayPointsAI>().agent.speed = 0;
                     item.GetComponent<Animator>().SetTrigger("Defeat");
-                   // item.rndSpeed = 0;
-                    item.canMove = false;
+                    item.GetComponent<NavMeshAgent>().enabled = false;
+                    item.GetComponent<NavMeshWithWayPointsAI>().enabled = false;
+                    //item.GetComponentInChildren<HY_EnemyRagdoll>().enabled = false;
                 }
+                
                 isCalled = true;
             }
-            PlayerWon();
-            //playerControl.GetComponent<Rigidbody>().position = Vector3.zero;
+            HY_Player_Control.canControl = false;
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            if (totalPlayers.Contains(other.gameObject))
+            {
+                totalPlayers.Remove(other.gameObject);
+            }
+            //StartCoroutine(LevelSelectionScene());
+            StartCoroutine(VictoryBox(rb));
+            
+           
         }
         if (other.tag == "Enemy")
         {
@@ -157,6 +123,7 @@ public class Level_2Winner : MonoBehaviour
                         item.GetComponent<Animator>().SetTrigger("Victory");
                         item.GetComponent<NavMeshWithWayPointsAI>().agent.speed = 0;
                         item.GetComponent<NavMeshWithWayPointsAI>().canMove = false;
+                        item.GetComponentInChildren<HY_EnemyRagdoll>().enabled = false;
                     }
                     else
                     {
@@ -173,24 +140,41 @@ public class Level_2Winner : MonoBehaviour
 
         }
     }
-
-    IEnumerator LevelSelectionScene()
+    IEnumerator VictoryBox(Rigidbody rb)
     {
         yield return new WaitForSeconds(3f);
+        //players repose
+        //main camera false
+        //canvas false
+        // direaction light false
+        rb.position = victoryPos.transform.position;
+        rb.rotation = victoryPos.transform.rotation;
+        mainCamera.SetActive(false);
+        mainCanvas.SetActive(false);
+        
+        victoryBoxObj.SetActive(true);
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(6);
-        asyncLoad.allowSceneActivation = false;
-
-        while (asyncLoad.progress < 0.9f)
+        for (int i = 0; i < totalPlayers.Count && i < otherPositions.Count; i++)
         {
-            // Update loading UI here (progress bar etc.)
-            yield return null;
+
+            totalPlayers[i].transform.SetPositionAndRotation(
+                otherPositions[i].position,
+                otherPositions[i].rotation
+            );
+            totalPlayers[i].gameObject.SetActive(true);
+            totalPlayers[i].GetComponent<Animator>().SetTrigger("Defeat");
         }
-
-        // Small delay if you want
-        yield return new WaitForSeconds(0.5f);
-
-        asyncLoad.allowSceneActivation = true;
+        yield return new WaitForSeconds(2f);
+        playerRb.isKinematic = false;
+        foreach (ZLerpMove z in insideBox)
+        {
+            z.pushOn = true;
+        }
+        yield return new WaitForSeconds(2f);
+        cloudExit.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(6);
     }
+   
 
 }

@@ -63,38 +63,7 @@ public class HY_EnemyRagdoll : MonoBehaviour, IHitAble
         if (movementAI != null)
             movementAI.ExitRagdollState();
     }
-    //private IEnumerator ResetRagdoll()
-    //{
-    //    yield return new WaitForSeconds(3f);
-
-    //    Vector3 targetPos = hip.position;
-
-    //    RaycastHit hit;
-
-    //    // 🔥 Cast ray downward to find ground
-    //    if (Physics.Raycast(targetPos + Vector3.up * 2f, Vector3.down, out hit, 10f))
-    //    {
-    //        // place slightly above ground to avoid clipping
-    //        targetPos = hit.point + Vector3.up * 0.1f;
-    //    }
-
-    //    // Move parent safely
-    //    Parent.transform.position = targetPos;
-
-    //    EnableKinematic();
-
-    //    animator.enabled = true;
-
-    //    agent.enabled = true;
-
-    //    // 🔥 IMPORTANT → warp instead of direct position
-    //    agent.Warp(targetPos);
-
-    //    agent.velocity = Vector3.zero;
-
-    //    if (movementAI != null)
-    //        movementAI.ExitRagdollState();
-    //}
+    
     // ---------------- RIGIDBODY HELPERS ----------------
 
     private void EnableKinematic()

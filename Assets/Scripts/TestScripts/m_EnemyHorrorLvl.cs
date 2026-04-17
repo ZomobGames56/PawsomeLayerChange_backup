@@ -78,6 +78,7 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
     private void FixedUpdate()
     {
         if (!HY_StartPause.countOver) return;
+
         CheckStuck();
         if (isStunned) return;
         switch (currentBasicState)

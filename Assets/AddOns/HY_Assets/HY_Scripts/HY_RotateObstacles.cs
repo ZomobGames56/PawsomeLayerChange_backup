@@ -7,12 +7,12 @@ public class HY_RotateObstacles : MonoBehaviour
     float finalSpeed;
     [SerializeField]
     float x, y, z;
+    public bool canRotate = true;
     // Update is called once per frame
-    private void Start()
-    {
-    }
+   
     void Update()
     {
+        if (!canRotate) return;
         // transform.rotation *= Quaternion.Euler(0, rotSpeed,0);
         transform.rotation *= Quaternion.Euler(x * Time.deltaTime, y * Time.deltaTime, z * Time.deltaTime);
 

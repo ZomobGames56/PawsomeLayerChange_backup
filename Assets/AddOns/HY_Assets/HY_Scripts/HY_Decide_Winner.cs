@@ -1,4 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,7 +13,7 @@ public class HY_Decide_Winner : MonoBehaviour
     [SerializeField]
     HY_NavMeshEnemy[] enemyRef;
     [SerializeField]
-    GameObject qualified, eliminated;
+    GameObject qualified, eliminated,cloudeExit;
     bool isCalled = false;
     [SerializeField]
     TextMeshProUGUI winnerCountTxt;
@@ -28,6 +29,16 @@ public class HY_Decide_Winner : MonoBehaviour
     int winnerCount;
     bool once;
     Rigidbody playerRb;
+    [SerializeField]
+    List<GameObject> totalPlayers = new List<GameObject>();
+    [SerializeField]
+    GameObject victoryPos;
+    [SerializeField]
+    GameObject mainCamera, mainCanvas, game_DL, victoryBoxObj;
+    [SerializeField]
+    List<Transform> otherPositions = new List<Transform>();
+    [SerializeField]
+    List<ZLerpMove> insideBox = new List<ZLerpMove>();
     private void Awake()
     {
         once = false;
@@ -38,71 +49,14 @@ public class HY_Decide_Winner : MonoBehaviour
         count = 0;
         winnerCount = 0;
         playerRb = playerControl.GetComponent<Rigidbody>();
+        victoryBoxObj.SetActive(false);
     }
-    //void Update()
-    //{
-    //    if (isPlayerWin && !once)
-    //    {
-    //        once = true;
-    //        winnerCount = 1;
-    //        qualified.gameObject.SetActive(true);
-    //        eliminated.gameObject.SetActive(false);
-    //        playerRb.isKinematic = true;
-    //        HY_AudioManager.instance.PlayAudioEffectOnce(winClip);
-    //        //StartCoroutine(ShowWinnerScreen());
-    //       // HY_WinnerShowCase.instance.isPlayerWon = true;
-    //    }
-    //    if (isEnemyWin && !once)
-    //    {
-    //        once = true;
-    //        //StartCoroutine(ShowWinnerScreen());
-    //        winnerCount = 1;
-    //        HY_AudioManager.instance.PlayAudioEffectOnce(looseClip);
-    //        qualified.gameObject.SetActive(false);
-    //        eliminated.gameObject.SetActive(true);
-    //       // HY_WinnerShowCase.instance.isPlayerWon = false;
-    //    }
-    //    winnerCountTxt.text = (winnerCount + "/1").ToString();
-    //}
+
     void UpdateUI()
     {
         winnerCountTxt.text = winnerCount + "/1";
     }
-    IEnumerator LevelSelectionScene()
-    {
-        yield return new WaitForSeconds(3f);
-
-        SceneManager.LoadScene(6);
-      
-    }
-
-    //IEnumerator ShowWinnerScreen()
-    //{
-    //    yield return new WaitForSeconds(timeToShowWinnerScreen);
-    //   // playerModel.GetComponent<Animator>().enabled = false;
-    //   playerModel.transform.SetParent(stoneModel.transform);
-
-    //    // playerModel.transform.localPosition = new Vector3(0, 0.001f, 0);
-    //    //playerModel.transform.localRotation = Quaternion.Euler(0, playerRot, 0);
-    //    Vector3 playerFinalPos = stoneModel.transform.position;
-    //    playerFinalPos.y += 0.3f;
-    //    playerRb.position = playerFinalPos;
-    //    playerRb.rotation = Quaternion.Euler(0, playerRot, 0);
-    //    playerModel.GetComponent<Animator>().ResetTrigger("Victory");
-    //    mainCamera.SetActive(false);
-    //    mainCanvas.SetActive(false);
-    //    //showWinnerScreenCanvas.SetActive(true);
-    //    ShowWinnerScreenCamera.SetActive(true);
-    //    WinnerShowCaseScriptObj.SetActive(true);
-    //    if (isPlayerWin)
-    //    {
-    //        HY_WinnerShowCase.instance.isPlayerWon = true;
-    //    }
-    //    else if (isEnemyWin)
-    //    {
-    //        HY_WinnerShowCase.instance.isPlayerWon = false;
-    //    }
-    //}
+    
 
 
     private void OnTriggerEnter(Collider other)
@@ -117,15 +71,21 @@ public class HY_Decide_Winner : MonoBehaviour
             {
                 foreach (var item in enemyRef)
                 {
-                    //item.GetComponent<NavMeshAgent>().speed = 0;
-                    item.rndSpeed = 0;
-                    item.canMove = false;
+                    item.GetComponent<Animator>().SetTrigger("Defeat");
+                    item.GetComponent<NavMeshAgent>().enabled = false;
+                    item.GetComponent<HY_NavMeshEnemy>().enabled = false;
                 }
                 isCalled = true;
             }
 
             HY_Player_Control.canControl = false;
-            StartCoroutine(LevelSelectionScene());
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            if (totalPlayers.Contains(other.gameObject))
+            {
+                totalPlayers.Remove(other.gameObject);
+            }
+            //StartCoroutine(LevelSelectionScene());
+            StartCoroutine(VictoryBox(rb));
         }
         if (other.tag == "Enemy")
         {
@@ -138,6 +98,14 @@ public class HY_Decide_Winner : MonoBehaviour
 
             // other.GetComponent<Animator>().SetTrigger("Victory");
             other.gameObject.GetComponent<HY_NavMeshEnemy>().touchedFinishLine = true;
+            other.gameObject.GetComponent<HY_NavMeshEnemy>().enabled = false;
+            other.gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            other.gameObject.GetComponent<Animator>().SetTrigger("Victory");
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            if (totalPlayers.Contains(other.gameObject))
+            {
+                totalPlayers.Remove(other.gameObject);
+            }
             if (isCalled == false)
             {
                 foreach (var item in enemyRef)
@@ -151,17 +119,20 @@ public class HY_Decide_Winner : MonoBehaviour
                         if (item.isActiveAndEnabled)
                         {
                             item.GetComponent<Animator>().SetTrigger("Defeat");
-                            item.GetComponent<NavMeshAgent>().speed = 0;
-                            item.canMove = false;
+                            item.GetComponent<NavMeshAgent>().enabled =false;
+                            item.GetComponent<HY_NavMeshEnemy>().enabled =false;
+                            //item.canMove = false;
                         }
                     }
                     isCalled = true;
                 }
             }
-            StartCoroutine(LevelSelectionScene());
+            //StartCoroutine(LevelSelectionScene());
 
+            StartCoroutine(VictoryBox(rb));
         }
     }
+    
     public void OnPlayerWin()
     {
         if (once) return;
@@ -193,7 +164,39 @@ public class HY_Decide_Winner : MonoBehaviour
 
         UpdateUI();
     }
+   
+    IEnumerator VictoryBox(Rigidbody rb)
+    {
+        yield return new WaitForSeconds(3f);
+        //players repose
+        //main camera false
+        //canvas false
+        // direaction light false
+        rb.position = victoryPos.transform.position;
+        rb.rotation = victoryPos.transform.rotation;
+        mainCamera.SetActive(false);
+        mainCanvas.SetActive(false);
+        game_DL.SetActive(false);
+        victoryBoxObj.SetActive(true);
 
+        for (int i = 0; i < totalPlayers.Count && i < otherPositions.Count; i++)
+        {
+            totalPlayers[i].transform.SetPositionAndRotation(
+                otherPositions[i].position,
+                otherPositions[i].rotation
+            );
+        }
+        yield return new WaitForSeconds(2f);
+        playerRb.isKinematic = false;    
+        foreach (ZLerpMove z in insideBox)
+        {
+            z.pushOn = true;
+        }
+        yield return new WaitForSeconds(2f);
+        cloudeExit.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(6);
+    }
 
 }
 

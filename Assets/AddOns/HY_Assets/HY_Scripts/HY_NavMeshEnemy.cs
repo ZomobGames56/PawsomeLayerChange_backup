@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -35,7 +34,7 @@ public class HY_NavMeshEnemy : MonoBehaviour
     {
         if (!HY_StartPause.countOver || !canMove || touchedFinishLine)
         {
-            agent.isStopped = true;
+            //agent.isStopped = true;
             return;
         }
 
@@ -106,7 +105,6 @@ public class HY_NavMeshEnemy : MonoBehaviour
         agent.CompleteOffMeshLink();
         agent.updatePosition = true;
         agent.isStopped = false;
-
         isJumping = false;
         //enmyAnim.SetFloat("Run", agent.velocity.magnitude);
     }
@@ -155,7 +153,7 @@ public class HY_NavMeshEnemy : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-       // enmyAnim.SetBool("Dash", false);
+        // enmyAnim.SetBool("Dash", false);
         agent.speed = originalSpeed;
     }
 

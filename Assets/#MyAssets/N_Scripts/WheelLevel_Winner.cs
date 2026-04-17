@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-public class TowerLevel_Winner : MonoBehaviour
+public class WheelLevel_Winner : MonoBehaviour
 {
     [SerializeField]
-    List<NavMeshAgent> towerLevlAI = new List<NavMeshAgent>();
+    GameObject winScreen, loseScreen;
     [SerializeField]
-    Rigidbody playerRef;
+    GameObject playerRef;
+    Rigidbody playerRb;
     [SerializeField]
-    GameObject winnerScreen, loseScreen;
-
+    WheelRotation_AI[] wheelAIRef;
     [SerializeField]
     List<GameObject> totalPlayers = new List<GameObject>();
     [SerializeField]
@@ -21,61 +20,66 @@ public class TowerLevel_Winner : MonoBehaviour
     List<ZLerpMove> insideBox = new List<ZLerpMove>();
     [SerializeField]
     GameObject victoryPos, cloudExit, mainCamera, mainCanvas, game_DL, victoryBoxObj;
-    private void Awake()
+    [SerializeField]
+    GameObject rotator;
+    private void Start()
     {
-        victoryBoxObj.SetActive(false);
+        playerRb = playerRef.GetComponent<Rigidbody>();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            playerRef.GetComponent<Rigidbody>().isKinematic = true;
-            winnerScreen.SetActive(true);
-            HY_Player_Control.canControl = false;
-            foreach (NavMeshAgent ai in towerLevlAI)
+            //
+            playerRb.isKinematic = true;
+            rotator.GetComponent<HY_RotateObstacles>().canRotate = false;
+            foreach (WheelRotation_AI ai in wheelAIRef)
             {
-                ai.GetComponent<NavMeshAgent>().enabled = false;
-                ai.GetComponent<UnpredictableClimber>().enabled = false;
-                ai.GetComponent<Animator>().SetTrigger("Defeat");
                 ai.GetComponent<Rigidbody>().isKinematic = true;
+                ai.GetComponent<WheelRotation_AI>().enabled = false;
+                ai.GetComponent<Animator>().SetTrigger("Defeat");
             }
+            winScreen.SetActive(true);
             if (totalPlayers.Contains(other.gameObject))
             {
                 totalPlayers.Remove(other.gameObject);
             }
-            StartCoroutine(VictoryBox(playerRef));
+            StartCoroutine(VictoryBox(playerRb));
         }
         if (other.CompareTag("Enemy"))
         {
-            playerRef.GetComponent<Rigidbody>().isKinematic = true;
-            loseScreen.SetActive(true);
-            NavMeshAgent _ai = other.gameObject.GetComponent<NavMeshAgent>();
-            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            //player lost
+            playerRb.isKinematic = true;
+            rotator.GetComponent<HY_RotateObstacles>().canRotate = false;
+            Rigidbody enmyRb = other.gameObject.GetComponent<Rigidbody>();
+            WheelRotation_AI _ai  = other.gameObject.GetComponent<WheelRotation_AI>();  
             if (totalPlayers.Contains(other.gameObject))
             {
                 totalPlayers.Remove(other.gameObject);
             }
-            rb.rotation = Quaternion.Euler(0, 0, 0);
-            foreach (NavMeshAgent ai in towerLevlAI)
+            
+            foreach (WheelRotation_AI ai in wheelAIRef)
             {
-                ai.GetComponent<NavMeshAgent>().enabled = false;
-                ai.GetComponent<UnpredictableClimber>().enabled = false;
+                ai.GetComponent<Rigidbody>().isKinematic = true;
+                ai.GetComponent<WheelRotation_AI>().enabled = false;
                 if (ai == _ai)
                 {
-                    ai.GetComponent<Animator>().enabled = true;
                     ai.GetComponent<Animator>().SetTrigger("Victory");
+                   
                 }
                 else
                 {
-                    ai.GetComponent<Animator>().enabled = true;
                     ai.GetComponent<Animator>().SetTrigger("Defeat");
+                  
                 }
-            }
-            playerRef.GetComponent<Animator>().SetTrigger("Defeat");
-            StartCoroutine(VictoryBox(rb));
 
+            }
+            //other.gameObject.GetComponent<Animator>().SetTrigger("Victory");
+            playerRef.GetComponent<Animator>().SetTrigger("Defeat");
+            StartCoroutine(VictoryBox(enmyRb));
         }
     }
+
     IEnumerator VictoryBox(Rigidbody rb)
     {
         yield return new WaitForSeconds(3f);
@@ -85,7 +89,6 @@ public class TowerLevel_Winner : MonoBehaviour
         // direaction light false
         rb.position = victoryPos.transform.position;
         rb.rotation = victoryPos.transform.rotation;
-        rb.rotation = Quaternion.Euler(0, 0, 0);
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
         game_DL.SetActive(false);
@@ -99,8 +102,8 @@ public class TowerLevel_Winner : MonoBehaviour
             );
             totalPlayers[i].GetComponent<Rigidbody>().isKinematic = false;
         }
-        playerRef.isKinematic = false;
-        playerRef.GetComponent<Animator>().SetTrigger("Victory");
+        playerRb.isKinematic = false;
+        playerRb.GetComponent<Animator>().SetTrigger("Victory");
         yield return new WaitForSeconds(2f);
         foreach (ZLerpMove z in insideBox)
         {
