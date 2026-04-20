@@ -18,7 +18,8 @@ public class HY_StartPause : MonoBehaviour
     AudioClip countDownSound, bgMusic;
     [SerializeField]
     GameObject clouds, pauseMenu, cloudForExit, instrctionScreen;
-
+    [SerializeField]
+    GameObject tileManagerObj;
 
     void Start()
     {
@@ -31,7 +32,6 @@ public class HY_StartPause : MonoBehaviour
         CountDownPanel.SetActive(false);
         cloudForExit.SetActive(false);
         clouds.SetActive(true);
-
     }
     private void Update()
     {
@@ -89,6 +89,10 @@ public class HY_StartPause : MonoBehaviour
         {
             Enemies.SetActive(true);
         }
+        //if (tileManagerObj != null)
+        //{
+        //    tileManagerObj.SetActive(true);
+        //}
         img.gameObject.SetActive(false);
         CountDownPanel.SetActive(false);
 

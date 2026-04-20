@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -21,7 +22,7 @@ public class HY_Decide_Winner : MonoBehaviour
     [SerializeField]
     AudioClip winClip, looseClip;
     [SerializeField]
-    GameObject playerModel;
+    GameObject playerModel,_Level_Object;
     [SerializeField]
     float timeToShowWinnerScreen = 2.5f;
     [SerializeField]
@@ -102,6 +103,7 @@ public class HY_Decide_Winner : MonoBehaviour
             other.gameObject.GetComponent<NavMeshAgent>().enabled = false;
             other.gameObject.GetComponent<Animator>().SetTrigger("Victory");
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            rb.transform.rotation = Quaternion.Euler(0, 0, 0);  
             if (totalPlayers.Contains(other.gameObject))
             {
                 totalPlayers.Remove(other.gameObject);
@@ -128,7 +130,7 @@ public class HY_Decide_Winner : MonoBehaviour
                 }
             }
             //StartCoroutine(LevelSelectionScene());
-
+            //rb.rotation = Quaternion.identity;
             StartCoroutine(VictoryBox(rb));
         }
     }
@@ -174,11 +176,12 @@ public class HY_Decide_Winner : MonoBehaviour
         // direaction light false
         rb.position = victoryPos.transform.position;
         rb.rotation = victoryPos.transform.rotation;
-        rb.rotation = Quaternion.Euler(0,0,0);
+        //rb.rotation = Quaternion.Euler(0,0,0);
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
         game_DL.SetActive(false);
         victoryBoxObj.SetActive(true);
+        _Level_Object.SetActive(false);
 
         for (int i = 0; i < totalPlayers.Count && i < otherPositions.Count; i++)
         {

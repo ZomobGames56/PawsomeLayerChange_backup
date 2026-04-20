@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RumbleTile : MonoBehaviour
@@ -15,11 +17,23 @@ public class RumbleTile : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         mr = GetComponent<MeshRenderer>();
 
-        rb.isKinematic = true;
+        //rb.isKinematic = true;
         rb.useGravity = false;
         mr.material = normalMat;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
     }
-
+    private void Start()
+    {
+        StartCoroutine(SetKinematic());
+    }
+    IEnumerator SetKinematic()
+    {
+        yield return new WaitForSeconds(0.75f);
+        rb.constraints = RigidbodyConstraints.FreezePositionX |
+                 RigidbodyConstraints.FreezePositionZ |
+                 RigidbodyConstraints.FreezeRotation;
+        rb.isKinematic = true;
+    }
     public void Mark()
     {
         if (IsMarked) return;

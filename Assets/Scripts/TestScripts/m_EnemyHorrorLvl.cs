@@ -9,7 +9,8 @@ public enum BasicState
     Chase,
     Search,
     Attack,
-    Stunned
+    Stunned,
+    Idle
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -371,6 +372,8 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
 
             case BasicState.Stunned:
                 rb.linearVelocity = Vector3.zero;
+                break;
+            case BasicState.Idle:
                 break;
         }
     }
