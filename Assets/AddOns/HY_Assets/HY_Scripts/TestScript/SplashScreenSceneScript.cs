@@ -8,11 +8,12 @@ public class SplashScreenSceneScript : MonoBehaviour
     private void Start()
     {
         once = false;
+        StartCoroutine(loadScene());
     }
     private void Update()
     {
         if(!once)
-        StartCoroutine(loadScene());
+       
         once = true;
     }
     IEnumerator loadScene()
