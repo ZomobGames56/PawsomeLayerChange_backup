@@ -823,14 +823,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_7
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Tower
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &165382829
@@ -1474,14 +1474,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_1
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Water
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &750221218
@@ -2242,14 +2242,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_8
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Horror
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &987161030
@@ -2776,14 +2776,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_3
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Hexagone
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1288283458
@@ -3661,14 +3661,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_4
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: FootBall
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1588452686
@@ -3833,14 +3833,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_6
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Wheel
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1622121352
@@ -4460,14 +4460,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_2
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: WindMill
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1880533014
@@ -4622,14 +4622,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: LoadHome
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1928325052
@@ -4894,14 +4894,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 588907469}
         m_TargetAssemblyTypeName: HY_LevelBtnManager, Assembly-CSharp
-        m_MethodName: Level_5
-        m_Mode: 1
+        m_MethodName: LoadGameLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: LogLevel
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1947971965

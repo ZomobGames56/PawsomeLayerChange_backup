@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HY_LevelBtnManager : MonoBehaviour
 {
@@ -21,78 +23,28 @@ public class HY_LevelBtnManager : MonoBehaviour
         HY_AudioManager.instance.PlayAudioEffectOnce(bgMucis);
         enterCloudObj.SetActive(true);
     }
-    public void Level_1()
+    public void LoadGameLevel(string levelName)
     {
-        //cloudObj.SetActive(true);
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-        StartCoroutine(LoadSceneAsync(2));
+        HY_AudioManager.instance.PlayAudioEffectOnce(bgMucis);
+        StartCoroutine(LoadScene(levelName));
     }
-
-    public void Level_2()
-    {
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-       // cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(3));
-    }
-
-    public void Level_3()
-    {
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-       // cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(4));
-    }
-
-    public void Level_4()
-    {
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-       // cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(5));
-    }
-
-    public void Level_5()
-    {
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-        // cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(8));
-    }
-
-    public void Level_6()
-    {
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-        // cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(9));
-    }
-
-    public void Level_7()
-    {
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-        // cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(10));
-    }
-    public void Level_8()
-    {
-        HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
-        // cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(11));
-    }
-    public void LoadHome()
+    IEnumerator LoadScene(string sceneKey)
     {
         cloudObj.SetActive(true);
-        StartCoroutine(LoadSceneAsync(1));
-        //SceneManager.LoadScene(1);
-    }
-    IEnumerator LoadSceneAsync(int index)
-    {
-        cloudObj.SetActive(true);
-        yield return new WaitForSeconds(3);
-        AsyncOperation operation = SceneManager.LoadSceneAsync(index);
-        while (!operation.isDone)
+        yield return new WaitForSeconds(1.55f);
+        var handle = Addressables.LoadSceneAsync(sceneKey, LoadSceneMode.Single);
+
+        while (!handle.IsDone)
         {
-            loadingScreen.SetActive(true);
-            progress = Mathf.Clamp01(operation.progress / .9f);
-            slider.fillAmount = progress;
-            //playerModel.SetActive(false);
+            float percent = handle.PercentComplete;
+
             yield return null;
         }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
+    
 }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class HY_DeathZone : MonoBehaviour
@@ -31,6 +33,7 @@ public class HY_DeathZone : MonoBehaviour
     List<Transform> otherPositions = new List<Transform>();
     [SerializeField]
     List<ZLerpMove> insideBox = new List<ZLerpMove>();
+    bool collide = false;
     void Start()
     {
         enemyDeathCount = 0;
@@ -43,6 +46,9 @@ public class HY_DeathZone : MonoBehaviour
         {
             case "Player":
 
+                if (collide) return;
+
+                collide = true;
                 other.GetComponent<Rigidbody>().isKinematic = true;
                 HY_Player_Control.canControl = false;
                 other.gameObject.SetActive(false);
@@ -51,18 +57,25 @@ public class HY_DeathZone : MonoBehaviour
                 //player die
                 looserBGImg.SetActive(true);
                 HY_AudioManager.instance.PlayAudioEffectOnce(looseClip);
-                int rnd = Random.Range(0, totalPlayers.Count);
+
+                int rnd = Random.Range(1, totalPlayers.Count);
                 print(rnd);
+
                 Rigidbody rb = totalPlayers[rnd].GetComponent<Rigidbody>();
-                rb.rotation = Quaternion.identity;
+
+                rb.isKinematic = true;
                 if (totalPlayers.Contains(totalPlayers[rnd]))
                 {
                     totalPlayers[rnd].GetComponent<HY_RayCastAi>().enabled = false;
                     totalPlayers[rnd].GetComponent<Animator>().SetTrigger("Victory");
 
+                    totalPlayers[rnd].SetActive(true);
+                    totalPlayers[rnd].transform.position = victoryPos.transform.position;
+                   
                     totalPlayers.Remove(totalPlayers[rnd]);
                 }
-                    StartCoroutine(VictoryBox(rb));
+                rb.rotation = Quaternion.Euler(0, 0, 0);
+                StartCoroutine(VictoryBox(rb));
                 break;
 
 
@@ -70,20 +83,23 @@ public class HY_DeathZone : MonoBehaviour
 
                 Instantiate(effect, other.transform.position, Quaternion.Euler(90, 0, 0));
                 other.gameObject.SetActive(false);
+                print(other.name + "False");
                 enemyDeathCount++;
                 count = enemyDeathCount;
                 eliminationTxt.text = count + "/6".ToString();
-                if(!totalPlayers.Contains(other.gameObject))
-                {
-                    totalPlayers.Add(other.gameObject);
-                }
+                //if (!totalPlayers.Contains(other.gameObject))
+                //{
+                //    totalPlayers.Remove(other.gameObject);
+                //}
 
                 if (count >= enemyList.Count)
                 {
                     //player win
                     playerRef.GetComponent<Rigidbody>().isKinematic = true;
+                    HY_Player_Control.canControl = true;
                     winnerBGImg.SetActive(true);
                     HY_AudioManager.instance.PlayAudioEffectOnce(winClip);
+                    Debug.Log("Player Win");
                     if (totalPlayers.Contains(playerRef.gameObject))
                     {
                         totalPlayers.Remove(playerRef.gameObject);
@@ -106,12 +122,11 @@ public class HY_DeathZone : MonoBehaviour
     IEnumerator VictoryBox(Rigidbody rb)
     {
         yield return new WaitForSeconds(3f);
-        //players repose
-        //main camera false
-        //canvas false
-        // direaction light false
+
         rb.position = victoryPos.transform.position;
         rb.rotation = victoryPos.transform.rotation;
+        rb.rotation = Quaternion.Euler(0, 0, 0);
+        rb.transform.rotation = Quaternion.Euler(0, 0, 0);
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
         game_DL.SetActive(false);
@@ -141,7 +156,19 @@ public class HY_DeathZone : MonoBehaviour
         yield return new WaitForSeconds(2f);
         cloudExit.SetActive(true);
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(6);
+        var handle = Addressables.LoadSceneAsync("LevelSelection",LoadSceneMode.Single);
+
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
 
 }

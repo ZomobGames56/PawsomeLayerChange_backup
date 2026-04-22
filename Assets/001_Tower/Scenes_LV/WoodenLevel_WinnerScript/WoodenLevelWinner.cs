@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class WoodenLevelWinner : MonoBehaviour
@@ -24,6 +26,7 @@ public class WoodenLevelWinner : MonoBehaviour
     List<Transform> otherPositions = new List<Transform>();
     [SerializeField]
     List<ZLerpMove> insideBox = new List<ZLerpMove>();
+    bool collide;
     private void Start()
     {
         //playerRb = GetComponent<Rigidbody>();
@@ -34,6 +37,9 @@ public class WoodenLevelWinner : MonoBehaviour
         switch (collision.transform.tag)
         {
             case "Player":
+                if (collide) return;
+
+                collide = true;
                 //player lost.
                 collision.gameObject.SetActive(false);
                 losePanel.SetActive(true);
@@ -41,15 +47,17 @@ public class WoodenLevelWinner : MonoBehaviour
                 {
                     r.GetComponent<Rigidbody>().isKinematic = true;
                 }
-                int rnd = Random.Range(0, totalPlayers.Count);
+                playerRb.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                HY_Player_Control.canControl = false;
+                int rnd = Random.Range(1, totalPlayers.Count);
                 print(rnd);
                 Rigidbody rb = totalPlayers[rnd].GetComponent<Rigidbody>();
-                rb.rotation = Quaternion.identity;
                 if (totalPlayers.Contains(totalPlayers[rnd]))
                 {
                     totalPlayers[rnd].GetComponent<WoodenLV_AI_WithAnimation>().enabled = false;
                     totalPlayers[rnd].GetComponent<Animator>().SetTrigger("Victory");
-
+                    totalPlayers[rnd].SetActive(true);
+                    totalPlayers[rnd].transform.position = victoryBoxObj.transform.position;
                     totalPlayers.Remove(totalPlayers[rnd]);
                 }
                 StartCoroutine(VictoryBox(rb));
@@ -61,6 +69,8 @@ public class WoodenLevelWinner : MonoBehaviour
                 {
                     winPanel.SetActive(true);
                     playerRb.GetComponent<Rigidbody>().isKinematic = true;
+                    playerRb.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                    HY_Player_Control.canControl = false;
                     if (totalPlayers.Contains(playerRb.gameObject))
                     {
                         totalPlayers.Remove(playerRb.gameObject);
@@ -76,10 +86,7 @@ public class WoodenLevelWinner : MonoBehaviour
     IEnumerator VictoryBox(Rigidbody rb)
     {
         yield return new WaitForSeconds(3f);
-        //players repose
-        //main camera false
-        //canvas false
-        // direaction light false
+       
         rb.position = victoryPos.transform.position;
         rb.rotation = victoryPos.transform.rotation;
         mainCamera.SetActive(false);
@@ -111,6 +118,18 @@ public class WoodenLevelWinner : MonoBehaviour
         yield return new WaitForSeconds(2f);
         cloudExit.SetActive(true);
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(6);
+
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
 }

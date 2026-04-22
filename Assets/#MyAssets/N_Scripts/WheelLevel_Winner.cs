@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class WheelLevel_Winner : MonoBehaviour
@@ -50,6 +52,7 @@ public class WheelLevel_Winner : MonoBehaviour
         {
             //player lost
             playerRb.isKinematic = true;
+            loseScreen.SetActive(true);
             rotator.GetComponent<HY_RotateObstacles>().canRotate = false;
             Rigidbody enmyRb = other.gameObject.GetComponent<Rigidbody>();
             WheelRotation_AI _ai  = other.gameObject.GetComponent<WheelRotation_AI>();  
@@ -112,6 +115,18 @@ public class WheelLevel_Winner : MonoBehaviour
         yield return new WaitForSeconds(2f);
         cloudExit.SetActive(true);
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(6);
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
 }

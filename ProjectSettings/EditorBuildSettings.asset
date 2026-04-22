@@ -5,44 +5,44 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/AddOns/HY_Assets/HY_Scenes/SplashScreen.unity
-    guid: ce08f11990a8cde43bd07ea014894ddd
   - enabled: 1
+    path: Assets/#MyAssets/H_Scenes/SplashScreen.unity
+    guid: ce08f11990a8cde43bd07ea014894ddd
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/StoryScene.unity
     guid: e67b044caa4505d4ebe61812e81652e3
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/0_MainMenu_.unity
     guid: b5f797743d756a344abdfa44d235819e
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/level_01.unity
     guid: f3dc754fb6928b64f987627c2c585f8a
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/Level_2New.unity
     guid: bcb9e11c823bf3444b5a171e85d1cd7d
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/Level_3.unity
     guid: cce4a64c57127484aba738c0fd1c5a5e
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/FootBallLevelScene.unity
     guid: 3a311806d5cdb28469b8e5a455f9ba03
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/_Level_Selection.unity
     guid: 88e0440632ef44b438ea6ffc67234d0e
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/01_Loading_Screen.unity
     guid: 292d404d36b6db948847b88fc467e539
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/WoodenRollerLevel.unity
     guid: bca00c2070e018840bcbb4dfde71d5e4
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/Level_5New.unity
     guid: 1cb9cbf9f6b9e974fb431652c2f2647f
-  - enabled: 1
+  - enabled: 0
     path: Assets/#MyAssets/H_Scenes/Tower_Level_WRK.unity
     guid: d36498585e487744b91678e144e2c9b7
-  - enabled: 1
-    path: Assets/HY_Assets/HorrorLevel.unity
+  - enabled: 0
+    path: Assets/#MyAssets/H_Scenes/HorrorLevel.unity
     guid: d54cb6b3e588ebf4b8eed7ec04b1d19a
   - enabled: 0
     path: Assets/HY_Assets/HorrorLevel_old.unity
@@ -50,5 +50,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/#MyAssets/CheckTest.unity
     guid: b55c323bab0594346a1199c2909d00cb
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: b99efa9901245fa4293f39cdb7d6e6cd,
+      type: 2}
   m_UseUCBPForAssetBundles: 0

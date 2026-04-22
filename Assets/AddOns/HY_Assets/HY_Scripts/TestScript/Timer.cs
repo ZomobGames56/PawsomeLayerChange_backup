@@ -2,6 +2,8 @@ using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class CountdownTimer : MonoBehaviour
@@ -119,7 +121,19 @@ public class CountdownTimer : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         //player sound 
-        SceneManager.LoadScene(6);
+        var handle = Addressables.LoadSceneAsync("LevelSelection",LoadSceneMode.Single);
+
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
 
 

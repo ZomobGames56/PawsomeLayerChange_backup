@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class TowerLevel_Winner : MonoBehaviour
@@ -21,6 +23,8 @@ public class TowerLevel_Winner : MonoBehaviour
     List<ZLerpMove> insideBox = new List<ZLerpMove>();
     [SerializeField]
     GameObject victoryPos, cloudExit, mainCamera, mainCanvas, game_DL, victoryBoxObj;
+    [SerializeField]
+    GameObject ballsObj;
     private void Awake()
     {
         victoryBoxObj.SetActive(false);
@@ -29,6 +33,7 @@ public class TowerLevel_Winner : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            ballsObj.SetActive(false);
             playerRef.GetComponent<Rigidbody>().isKinematic = true;
             winnerScreen.SetActive(true);
             HY_Player_Control.canControl = false;
@@ -36,6 +41,7 @@ public class TowerLevel_Winner : MonoBehaviour
             {
                 ai.GetComponent<NavMeshAgent>().enabled = false;
                 ai.GetComponent<UnpredictableClimber>().enabled = false;
+                ai.GetComponent<Animator>().enabled = true;
                 ai.GetComponent<Animator>().SetTrigger("Defeat");
                 ai.GetComponent<Rigidbody>().isKinematic = true;
             }
@@ -47,6 +53,7 @@ public class TowerLevel_Winner : MonoBehaviour
         }
         if (other.CompareTag("Enemy"))
         {
+            ballsObj.SetActive(false);
             playerRef.GetComponent<Rigidbody>().isKinematic = true;
             loseScreen.SetActive(true);
             NavMeshAgent _ai = other.gameObject.GetComponent<NavMeshAgent>();
@@ -64,11 +71,15 @@ public class TowerLevel_Winner : MonoBehaviour
                 {
                     ai.GetComponent<Animator>().enabled = true;
                     ai.GetComponent<Animator>().SetTrigger("Victory");
+                    ai.GetComponent<NavMeshAgent>().enabled = false;
+                    ai.GetComponent<UnpredictableClimber>().enabled = false;
                 }
                 else
                 {
-                    ai.GetComponent<Animator>().enabled = true;
                     ai.GetComponent<Animator>().SetTrigger("Defeat");
+                    ai.GetComponent<Animator>().enabled = true;
+                    ai.GetComponent<NavMeshAgent>().enabled = false;
+                    ai.GetComponent<UnpredictableClimber>().enabled = false;
                 }
             }
             playerRef.GetComponent<Animator>().SetTrigger("Defeat");
@@ -97,6 +108,12 @@ public class TowerLevel_Winner : MonoBehaviour
                 otherPositions[i].position,
                 otherPositions[i].rotation
             );
+            if (totalPlayers[i].GetComponent<NavMeshAgent>() != null)
+            {
+                totalPlayers[i].GetComponent<NavMeshAgent>().enabled = false;
+                
+            }
+            totalPlayers[i].GetComponent<Animator>().enabled = true;
             totalPlayers[i].GetComponent<Rigidbody>().isKinematic = false;
         }
         playerRef.isKinematic = false;
@@ -108,7 +125,20 @@ public class TowerLevel_Winner : MonoBehaviour
         }
         yield return new WaitForSeconds(2f);
         cloudExit.SetActive(true);
+
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(6);
+
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
 }

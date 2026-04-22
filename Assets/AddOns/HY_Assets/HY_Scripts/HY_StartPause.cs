@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -20,6 +22,8 @@ public class HY_StartPause : MonoBehaviour
     GameObject clouds, pauseMenu, cloudForExit, instrctionScreen;
     [SerializeField]
     GameObject tileManagerObj;
+    [SerializeField]
+    GameObject player;
 
     void Start()
     {
@@ -52,9 +56,9 @@ public class HY_StartPause : MonoBehaviour
     public void Leave()
     {
         Time.timeScale = 1;
-
-        cloudForExit.SetActive(true);
-        StartCoroutine(CloudWait());
+        pauseMenu?.SetActive(false);
+        instrctionScreen?.SetActive(false);
+        StartCoroutine(CloudWait("LevelSelection"));
         //SceneManager.LoadScene(6);
     }
     IEnumerator StartCount()
@@ -97,16 +101,33 @@ public class HY_StartPause : MonoBehaviour
         CountDownPanel.SetActive(false);
 
     }
-    IEnumerator CloudWait()
+    IEnumerator CloudWait(string sceneKey)
     {
-        yield return new WaitForSeconds(2.5f);
-        SceneManager.LoadScene(6);
-    }
+        cloudForExit.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
 
+        var handle = Addressables.LoadSceneAsync(sceneKey,LoadSceneMode.Single);
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
+    }
+    
     public void LetsGoBtn()
     {
         instrctionScreen.SetActive(false);
         CountDownPanel.SetActive(true);
+        if (player != null)
+        {
+            player.SetActive(true);
+        }
         StartCoroutine(StartCount());
     }
     void DeactiveAll()

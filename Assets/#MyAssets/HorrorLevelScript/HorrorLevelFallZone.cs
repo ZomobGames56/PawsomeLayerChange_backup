@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class HorrorLevelFallZone : MonoBehaviour
@@ -10,7 +12,7 @@ public class HorrorLevelFallZone : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             Horror_LvL_UIManager.PlayerDeadCheck();
-            StartCoroutine(LevelSelection("_Level_Selection"));
+            StartCoroutine(LevelSelection());
         }
         if (other.tag == "Enemy")
         {
@@ -22,10 +24,22 @@ public class HorrorLevelFallZone : MonoBehaviour
             other.gameObject.SetActive(false);
         }
     }
-    IEnumerator LevelSelection(string t)
+    IEnumerator LevelSelection()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(t);
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
 
     }
 }

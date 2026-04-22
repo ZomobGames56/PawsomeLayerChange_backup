@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class Horror_LvL_UIManager : MonoBehaviour
@@ -55,7 +57,7 @@ public class Horror_LvL_UIManager : MonoBehaviour
         if (count == totalPlayers.Count)
         {
             winScreen.SetActive(true);
-            StartCoroutine(LevelSelection("_Level_Selection"));
+            StartCoroutine(LevelSelection());
         }
     }
     public static void PlayerDeadCheck()
@@ -63,10 +65,22 @@ public class Horror_LvL_UIManager : MonoBehaviour
         _instance.loseScreen.SetActive(true);
        
     }
-    IEnumerator LevelSelection(string t)
+    IEnumerator LevelSelection()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(t);
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
 
     }
     

@@ -14,7 +14,7 @@ public class HY_Player_Control : MonoBehaviour
     Vector3 move;
     [SerializeField]
     float moveSpeed = 10f, force = 7f, defaultSpeed = 0.97f, onSliderSpeed = 2.0f,
-        waitForSec = 0.5f, transformMoveSpeed = 8f;//Jump Force
+        waitForSec = 0.5f, transformMoveSpeed = 8f,logMoveSpeed = 7f;//Jump Force
     [SerializeField]
     public Animator animator;
     [SerializeField]
@@ -59,6 +59,7 @@ public class HY_Player_Control : MonoBehaviour
     [SerializeField]
     Transform head;
     int mask;
+    public bool obstacleCollide = false;
     #endregion 
     void Start()
     {
@@ -389,7 +390,6 @@ public class HY_Player_Control : MonoBehaviour
     {
         if (collision.transform.tag == "Obstacle")
         {
-            // HY_AudioManager.instance.PlayAudioEffectOnce(collideSound);
             HY_PlayerRagdollActive.instance.OnObstacleCollide();
             print("Player");
         }

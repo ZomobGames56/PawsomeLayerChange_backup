@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 public class HY_Decide_Winner : MonoBehaviour
 {
@@ -199,7 +201,19 @@ public class HY_Decide_Winner : MonoBehaviour
         yield return new WaitForSeconds(2f);
         cloudeExit.SetActive(true);
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(6);
+
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
 
 }

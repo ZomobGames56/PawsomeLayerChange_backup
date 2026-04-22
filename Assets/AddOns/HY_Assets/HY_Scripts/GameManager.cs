@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class GameManager : MonoBehaviour
@@ -16,44 +18,34 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     StoryScript storyScript;
     [SerializeField]
-    public static bool storyOnStartOnly=false;
+    AudioClip bgMucis;
     private void Start()
     {
-        print(storyOnStartOnly);
-        //if(!storyOnStartOnly)
-        //{
-        //    storyPanel.SetActive(true);
-        //    storyScript.StartStory();
-        //    storyOnStartOnly = true;
-
-        //}
-        //else
-        //{
-        //    storyPanel.SetActive(false);
-        //    playerModel.SetActive(true);
-        //}
-        //levelIndex = Random.Range(1, 3);
         loadingScreen.SetActive(false);
         cloudCanvas.SetActive(false);
     }
-    public void PlayBtn()
+    public void PlayBtn(string levelName)
     {
-        StartCoroutine(LoadSceneAsync());
+        HY_AudioManager.instance.PlayAudioEffectOnce(bgMucis);
+        StartCoroutine(LoadScene(levelName));
     }
-    IEnumerator LoadSceneAsync()
+    
+    IEnumerator LoadScene(string sceneKey)
     {
-        cloudCanvas.SetActive(true);
-        yield return new WaitForSeconds(3);
+       cloudCanvas.SetActive(true);
+        yield return new WaitForSeconds(1.55f);
+        var handle = Addressables.LoadSceneAsync(sceneKey,LoadSceneMode.Single);
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync(6);
-        while (!operation.isDone)
+        while (!handle.IsDone)
         {
-            //loadingScreen.SetActive(true);
-            cloudCanvas.SetActive(true);
-            progress = Mathf.Clamp01(operation.progress / .9f);
-            slider.fillAmount = progress;
-            playerModel.SetActive(false);
+            float percent = handle.PercentComplete;
+
             yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
         }
     }
 }

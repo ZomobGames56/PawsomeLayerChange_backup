@@ -796,6 +796,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5237217948998210272, guid: efd303ffef5132048b90f4cc8bb56534,
+        type: 3}
+      propertyPath: time
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8226651640703844211, guid: efd303ffef5132048b90f4cc8bb56534,
         type: 3}
       propertyPath: m_Name
@@ -1396,6 +1401,7 @@ MonoBehaviour:
   cloudCanvas: {fileID: 396015921}
   storyPanel: {fileID: 0}
   storyScript: {fileID: 0}
+  bgMucis: {fileID: 0}
 --- !u!1 &1414885653
 GameObject:
   m_ObjectHideFlags: 0
@@ -6464,9 +6470,19 @@ PrefabInstance:
       objectReference: {fileID: 597170443}
     - target: {fileID: 602786388852633628, guid: 6395103e325922e41aa99a3ad6cd8227,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 602786388852633628, guid: 6395103e325922e41aa99a3ad6cd8227,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1397618847}
+    - target: {fileID: 602786388852633628, guid: 6395103e325922e41aa99a3ad6cd8227,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: LevelSelection
+      objectReference: {fileID: 0}
     - target: {fileID: 1058591005055770787, guid: 6395103e325922e41aa99a3ad6cd8227,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

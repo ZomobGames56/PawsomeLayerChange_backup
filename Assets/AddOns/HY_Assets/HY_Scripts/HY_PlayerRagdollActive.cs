@@ -23,7 +23,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     GameObject waterSplash;
     Coroutine coroutine;
     public bool collideWater = false;
-    bool once, ragdollActive;
+    bool once, ragdollActive,obstalceCollide;
 
     //public HY_NavMeshEnemy _refNavMesh;
     void Awake()
@@ -79,18 +79,18 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     // [System.Obsolete]
     private void OnCollisionEnter(Collision collision)
     {
-        switch (collision.gameObject.tag)
-        {
-            case "Obstacle":
-                HY_Player_Control.canControl = false;
-                animator.enabled = false;
-                DisableKinamatic();
-                parentRb.constraints = RigidbodyConstraints.FreezeAll;
-                //StartCoroutine(ResetRagoll(5f));
-                Debug.Log("Ragdoll " + gameObject.name);
+        //switch (collision.gameObject.tag)
+        //{
+        //    case "Obstacle":
+        //        HY_Player_Control.canControl = false;
+        //        animator.enabled = false;
+        //        DisableKinamatic();
+        //        parentRb.constraints = RigidbodyConstraints.FreezeAll;
+        //        //StartCoroutine(ResetRagoll(5f));
+        //        Debug.Log("Ragdoll " + gameObject.name);
 
-                break;
-        }
+        //        break;
+        //}
 
     }
     private void OnTriggerEnter(Collider other)
@@ -165,6 +165,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     IEnumerator RagDollWater(float wait)
     {
         yield return new WaitForSeconds(wait);
+        obstalceCollide = false;
         animator.enabled = true;
         once = false;
         ragdollActive = false;
@@ -203,8 +204,11 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     }
     public void OnObstacleCollide()
     {
+        if (obstalceCollide) return;
+        obstalceCollide = true;
         HY_Player_Control.canControl = false;
         animator.enabled = false;
+        parentRb.constraints = RigidbodyConstraints.FreezeAll;
         DisableKinamatic();
         //StartCoroutine(ResetRagoll(2.5f));
         StartCoroutine(RagDollWater(2.5f));

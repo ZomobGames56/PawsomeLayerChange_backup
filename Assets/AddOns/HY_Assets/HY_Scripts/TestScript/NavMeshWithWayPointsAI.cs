@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,8 +20,8 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
     Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp;
     [SerializeField]
     float force = 3f;
-    bool allow,once;
-    
+    bool allow, once;
+
     [SerializeField]
     float waitForSecond = 3.0f;
     bool isCalled;
@@ -70,7 +69,7 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
                 {
                     jumpCoroutine = StartCoroutine(JumpAcrossLink());
                 }
-                else if (!isJumping) 
+                else if (!isJumping)
                 {
                     if (allow)
                     {
@@ -170,8 +169,8 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
             agent.speed = rndSpeed * 1.5f;
         }
     }
-    
-    
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.tag == "WayPoints")
@@ -207,14 +206,14 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Obstacle") &&!once)
+        if (collision.gameObject.CompareTag("Obstacle") && !once)
         {
             Debug.Log("Collide" + gameObject.name);
             once = true;
             AbortOffMeshLink(); // 👈 ADD THIS
             //agent.enabled = false;
             allow = false;
-          GetComponent<NavMeshAgent>().enabled = false;
+            GetComponent<NavMeshAgent>().enabled = false;
             rb.isKinematic = false;
             GetComponentInChildren<HY_EnemyRagdoll>().EnemyRagdoll();
             rb.AddForce(Vector3.forward * force, ForceMode.Impulse);
@@ -229,11 +228,11 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
     {
         yield return new WaitForSeconds(waitForSecond);
         once = false;
-        //NavMeshHit hit;
-        //if (NavMesh.SamplePosition(spawnPoint.position, out hit, 2f, NavMesh.AllAreas))
-        //{
-        //    agent.Warp(hit.position);
-        //}
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(spawnPoint.position, out hit, 2f, NavMesh.AllAreas))
+        {
+            agent.Warp(hit.position);
+        }
         agent.enabled = false;
         agent.Warp(spawnPoint.position);
         agent.enabled = true;

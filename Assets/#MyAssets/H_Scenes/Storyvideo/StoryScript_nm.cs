@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
-using UnityEngine.SceneManagement;
-using System.Collections;
 public class StoryScript : MonoBehaviour
 {
     private static string vedioString = "vedioString";
@@ -37,7 +39,7 @@ public class StoryScript : MonoBehaviour
     }
     public void SkipButton()
     {
-        LoadSceneAsync("0_MainMenu_");
+        LoadSceneAsync("MainMenu");
     }
     public void LoadSceneAsync(string sceneName)
     {
@@ -46,14 +48,21 @@ public class StoryScript : MonoBehaviour
 
     IEnumerator Load(string sceneName)
     {
-        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+        var handle = Addressables.LoadSceneAsync(sceneName,LoadSceneMode.Single);
 
-        while (!op.isDone)
+        while (!handle.IsDone)
         {
-            Debug.Log(op.progress); // 0 → 0.9
+            float percent = handle.PercentComplete;
+
             yield return null;
         }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
+
     //public void SkipButton()
     //{
     //    Addressables.LoadSceneAsync("Jungle", LoadSceneMode.Single);

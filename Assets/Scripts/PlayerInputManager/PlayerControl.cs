@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -93,6 +95,11 @@ public class PlayerControl : MonoBehaviour, IDamageable
     [SerializeField]
     float inputDeadZone = 0.9f;
     RaycastHit hit;
+    [SerializeField]
+    LayerMask layer;
+    [SerializeField]
+    Transform head;
+    int mask;
     #endregion
     private void Awake()
     {
@@ -147,13 +154,13 @@ public class PlayerControl : MonoBehaviour, IDamageable
         if (move.magnitude > inputDeadZone)
         {
             Vector3 moveDir = move;
-            if (Physics.Raycast(transform.position, moveDir, out hit, 0.6f))
+            mask = ~layer;
+            if (Physics.Raycast(head.position, moveDir, out hit, 0.6f, mask, QueryTriggerInteraction.Ignore))
             {
                 moveDir = Vector3.ProjectOnPlane(moveDir, hit.normal);
             }
-            
-            velocity.x = move.x * moveSpeed;
-            velocity.z = move.z * moveSpeed;
+            velocity.x = moveDir.x * moveSpeed;
+            velocity.z = moveDir.z * moveSpeed;
 
         }
         else
@@ -505,14 +512,26 @@ public class PlayerControl : MonoBehaviour, IDamageable
         Instantiate(scareCrow, transform.position, Quaternion.Euler(0, 180, 0));
         //gameObject.SetActive(false);
         Horror_LvL_UIManager.PlayerDeadCheck();
-        StartCoroutine(LevelSelection("_Level_Selection"));
+        StartCoroutine(LevelSelection());
     }
 
     #endregion
-    IEnumerator LevelSelection(string t)
+    IEnumerator LevelSelection()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(t);
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
+
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
 
     }
     #region Click Attack System
