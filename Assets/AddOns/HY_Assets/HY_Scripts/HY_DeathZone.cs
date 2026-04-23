@@ -96,7 +96,7 @@ public class HY_DeathZone : MonoBehaviour
                 {
                     //player win
                     playerRef.GetComponent<Rigidbody>().isKinematic = true;
-                    HY_Player_Control.canControl = true;
+                    HY_Player_Control.canControl = false;
                     winnerBGImg.SetActive(true);
                     HY_AudioManager.instance.PlayAudioEffectOnce(winClip);
                     Debug.Log("Player Win");
