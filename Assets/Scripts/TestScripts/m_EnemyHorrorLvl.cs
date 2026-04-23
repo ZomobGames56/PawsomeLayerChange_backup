@@ -427,6 +427,7 @@ public class m_EnemyHorrorLvl : MonoBehaviour, IDamageable
         Instantiate(deathEffect, effectPos, Quaternion.Euler(-90, 0, 0));
         yield return new WaitForSeconds(2f);
         Instantiate(scareCrow, transform.position, Quaternion.identity);
+        healthImg.gameObject.SetActive(false);
         gameObject.SetActive(false);
         Horror_LvL_UIManager.AddCountDead();
     }

@@ -100,6 +100,13 @@ public class PlayerControl : MonoBehaviour, IDamageable
     [SerializeField]
     Transform head;
     int mask;
+
+
+    public bool CanMove
+    {
+        get {  return canMove; }
+        set { canMove = value; }
+    }
     #endregion
     private void Awake()
     {
@@ -110,7 +117,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        
+
         reactionLayer = animator.GetLayerIndex("Reaction Layer");
         actionLayer = animator.GetLayerIndex("Action Layer");
 
@@ -220,6 +227,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         // while in air
         while (!isGrounded)
         {
+            if (isStunned) yield break;
             PlayerAnimationStateUpdate(PlayerState.Hang, true, 0.5f);
             yield return null;
         }
@@ -243,9 +251,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     }
     void UpdateLocoMotion(float transactionTime = 0.2f)
     {
-        if (isStateLocked) return;
-        if (isStunned) return;
-
+        if (isStateLocked || isStunned) return;
 
         if (InAirCheck())
         {
@@ -329,6 +335,8 @@ public class PlayerControl : MonoBehaviour, IDamageable
     #region Attack Hold
     void OnHoldingAttack()
     {
+        if (isStunned) return;
+
         var state = animator.GetCurrentAnimatorStateInfo(actionLayer);
         var next = animator.GetNextAnimatorStateInfo(actionLayer);
 
@@ -345,7 +353,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     IEnumerator HandPunchAttack()
     {
         if (!canAttack) yield break;
-
+        if (isStunned) yield break;
 
         canAttack = false;
         isPunching = true;
@@ -462,6 +470,8 @@ public class PlayerControl : MonoBehaviour, IDamageable
         //can control fasle, rb's velocity = 0, add force dir 
         //  if (isPunching) return;
         if (isStunned) return;
+
+        ForceInterruptAll();
         canMove = false;
         isStunned = true;
         isStateLocked = true;
@@ -486,12 +496,16 @@ public class PlayerControl : MonoBehaviour, IDamageable
     {
         yield return new WaitForSeconds(1.5f);
 
-        canMove = true;
+        rb.linearVelocity = Vector3.zero;
+
         isStunned = false;
         isStateLocked = false;
+        canMove = true;
 
         animator.Play("Empty", reactionLayer);
         animator.SetLayerWeight(reactionLayer, 0f);
+
+        canAttack = true; 
     }
 
 
@@ -511,6 +525,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(2f);
         Instantiate(scareCrow, transform.position, Quaternion.Euler(0, 180, 0));
         //gameObject.SetActive(false);
+        
         Horror_LvL_UIManager.PlayerDeadCheck();
         StartCoroutine(LevelSelection());
     }
@@ -543,7 +558,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
             isInputStateLock = true;
             return;
         }
-
+        if (isStunned) return;
         isHolding = true;
         holdTimer = 0f;
         chargedFired = false;
@@ -554,6 +569,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     public void AttackHold()
     {
         if (!isHolding) return;
+        if (isStunned) return;
 
         holdTimer += Time.deltaTime;
         OnHoldingAttack();
@@ -586,6 +602,22 @@ public class PlayerControl : MonoBehaviour, IDamageable
 
         isHolding = false;
         holdTimer = 0f;
+    }
+    #endregion
+    #region ForceInterruptAll
+    void ForceInterruptAll()
+    {
+        StopAllCoroutines();
+
+        isPunching = false;
+        isHolding = false;
+        chargedFired = false;
+
+        canAttack = false; // temporarily block
+
+        // Reset layers
+        animator.Play("Empty", actionLayer);
+        animator.SetLayerWeight(actionLayer, 0f);
     }
     #endregion
     private void OnDrawGizmos()
