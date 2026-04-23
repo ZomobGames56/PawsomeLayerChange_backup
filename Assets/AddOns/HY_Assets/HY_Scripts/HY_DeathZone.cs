@@ -112,13 +112,6 @@ public class HY_DeathZone : MonoBehaviour
         }
 
     }
-
-    IEnumerator LevelSelectionScene()
-    {
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(6);
-
-    }
     IEnumerator VictoryBox(Rigidbody rb)
     {
         yield return new WaitForSeconds(3f);
