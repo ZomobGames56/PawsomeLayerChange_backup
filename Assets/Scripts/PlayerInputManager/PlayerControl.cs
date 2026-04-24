@@ -257,7 +257,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         if (InAirCheck())
         {
             PlayerAnimationStateUpdate(PlayerState.Hang, true, 0.5f);
-            Debug.Log("Hang");
+            //Debug.Log("Hang");
             return;
         }
 
@@ -639,17 +639,17 @@ public class PlayerControl : MonoBehaviour, IDamageable
         // Reset layers
         if (!isDead)
         {
-            animator.Play("Empty", actionLayer);
-            animator.SetLayerWeight(actionLayer, 0f);
-            Debug.LogError("Empty Calling");
+            animator.Play("Empty", reactionLayer);
+            animator.SetLayerWeight(reactionLayer, 0f);
+           
         }
         else
         {
-            animator.Play("Empty", actionLayer);
-            animator.SetLayerWeight(actionLayer, 0f);
+            animator.Play("Empty", reactionLayer);
+            animator.SetLayerWeight(reactionLayer, 0f);
             animator.Play("Attacked", 0);
             PlayerAnimationStateUpdate(PlayerState.Attacked, true, 0.1f);
-            Debug.LogError("attacked Calling");
+            
         }
 
     }
