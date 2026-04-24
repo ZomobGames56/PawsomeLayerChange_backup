@@ -100,11 +100,11 @@ public class PlayerControl : MonoBehaviour, IDamageable
     [SerializeField]
     Transform head;
     int mask;
-
+    bool isDead = false;
 
     public bool CanMove
     {
-        get {  return canMove; }
+        get { return canMove; }
         set { canMove = value; }
     }
     #endregion
@@ -238,6 +238,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     }
     void PlayerAnimationStateUpdate(PlayerState state, bool lockState = false, float transactionDuration = 0.2f)
     {
+        if (isDead) return;
         if (currentState == state) return;
         if (lockState)
         {
@@ -354,6 +355,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     {
         if (!canAttack) yield break;
         if (isStunned) yield break;
+        if (isDead) yield break;
 
         canAttack = false;
         isPunching = true;
@@ -469,6 +471,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     {
         //can control fasle, rb's velocity = 0, add force dir 
         //  if (isPunching) return;
+        if (isDead) return;
         if (isStunned) return;
 
         ForceInterruptAll();
@@ -505,15 +508,32 @@ public class PlayerControl : MonoBehaviour, IDamageable
         animator.Play("Empty", reactionLayer);
         animator.SetLayerWeight(reactionLayer, 0f);
 
-        canAttack = true; 
+        canAttack = true;
     }
 
 
     void Die()
     {
-        PlayerAnimationStateUpdate(PlayerState.Attacked, true, 0.1f);
+        //PlayerAnimationStateUpdate(PlayerState.Attacked, true, 0.1f);
+        //StartCoroutine(AfterDie());
 
+        if (isDead) return; // safety
+        isDead = true;
+
+        StopAllCoroutines(); // 🔥 stop stun / attack etc
+
+        canMove = false;
+        isStunned = true;
+        isStateLocked = true;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true; // optional but good
+
+        PlayerAnimationStateUpdate(PlayerState.Attacked, true, 0.1f);
+        animator.Play("Attacked", 0);
+        Debug.LogError("Dead  hn");
         StartCoroutine(AfterDie());
+
     }
 
     IEnumerator AfterDie()
@@ -525,9 +545,9 @@ public class PlayerControl : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(2f);
         Instantiate(scareCrow, transform.position, Quaternion.Euler(0, 180, 0));
         //gameObject.SetActive(false);
-        
         Horror_LvL_UIManager.PlayerDeadCheck();
-        StartCoroutine(LevelSelection());
+
+
     }
 
     #endregion
@@ -607,17 +627,31 @@ public class PlayerControl : MonoBehaviour, IDamageable
     #region ForceInterruptAll
     void ForceInterruptAll()
     {
+        //if(isDead) return;
         StopAllCoroutines();
-
+        Debug.LogWarning(isDead + "Kya hai");
         isPunching = false;
         isHolding = false;
         chargedFired = false;
 
         canAttack = false; // temporarily block
-
+        Debug.LogError("This is forcedIn");
         // Reset layers
-        animator.Play("Empty", actionLayer);
-        animator.SetLayerWeight(actionLayer, 0f);
+        if (!isDead)
+        {
+            animator.Play("Empty", actionLayer);
+            animator.SetLayerWeight(actionLayer, 0f);
+            Debug.LogError("Empty Calling");
+        }
+        else
+        {
+            animator.Play("Empty", actionLayer);
+            animator.SetLayerWeight(actionLayer, 0f);
+            animator.Play("Attacked", 0);
+            PlayerAnimationStateUpdate(PlayerState.Attacked, true, 0.1f);
+            Debug.LogError("attacked Calling");
+        }
+
     }
     #endregion
     private void OnDrawGizmos()

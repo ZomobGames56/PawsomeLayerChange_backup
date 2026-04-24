@@ -35,7 +35,8 @@ public class Horror_LvL_UIManager : MonoBehaviour
     Rigidbody playerRef;
     [SerializeField]
     PlayerControl playerControl;
-
+    [SerializeField]
+    List<GameObject> cloneAI = new List<GameObject>();
     bool died;
     private void Awake()
     {
@@ -68,13 +69,17 @@ public class Horror_LvL_UIManager : MonoBehaviour
         if (count == totalPlayers.Count)
         {
             winScreen.SetActive(true);
-            StartCoroutine(LevelSelection());
+
             ////win situation 
             //// take all the AIs
             //// stop there move | player position to victory pos | remain to other pos.
-            //playerControl.CanMove = false;
-            //playerRef.GetComponent<Rigidbody>().isKinematic = true;
-            //StartCoroutine(VictoryBox(playerRef));
+            playerControl.CanMove = false;
+            playerRef.GetComponent<Rigidbody>().isKinematic = true;
+            if (cloneAI.Contains(playerRef.gameObject))
+            {
+                cloneAI.Remove(playerRef.gameObject);
+            }
+            StartCoroutine(VictoryBox(playerRef));
 
         }
 
@@ -94,28 +99,20 @@ public class Horror_LvL_UIManager : MonoBehaviour
         playerControl.CanMove = false;
         playerRef.linearVelocity = Vector3.zero;
         GameObject playerObj = playerRef.gameObject;
-        if (!totalPlayers.Contains(playerObj))
+        foreach (GameObject g in totalPlayers)
         {
-            totalPlayers.Insert(0, playerObj);
+            g.gameObject.SetActive(false);
+        }
+        int rnd = Random.Range(1, cloneAI.Count);
+        Rigidbody rb = cloneAI[rnd].GetComponent<Rigidbody>();
+        print(rnd);
+        if (cloneAI.Contains(rb.gameObject))
+        {
+            cloneAI.Remove(rb.gameObject);
         }
 
-        int rnd = Random.Range(0, 10);
-        Rigidbody rb = totalPlayers[rnd].GetComponent<Rigidbody>();
-        print(rnd);
-        if (totalPlayers.Contains(rb.gameObject))
-        {
-            totalPlayers.Remove(rb.gameObject);
-        }
-        foreach (GameObject obj in totalPlayers)
-        {
-            if (obj.GetComponent<m_EnemyHorrorLvl>() != null)
-            {
-                obj.GetComponent<m_EnemyHorrorLvl>().enabled = false;
-                obj.GetComponent<Rigidbody>().isKinematic = true;
-            }
-        }
         rb.gameObject.SetActive(true);
-        rb.gameObject.GetComponent<m_EnemyHorrorLvl>().enabled = false;
+
         rb.transform.rotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(VictoryBox(rb));
     }
@@ -134,23 +131,19 @@ public class Horror_LvL_UIManager : MonoBehaviour
         game_DL.SetActive(false);
         victoryBoxObj.SetActive(true);
 
-        for (int i = 0; i < totalPlayers.Count && i < otherPositions.Count; i++)
+        for (int i = 0; i < cloneAI.Count && i < otherPositions.Count; i++)
         {
-            totalPlayers[i].GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+
             //totalPlayers[i].GetComponent<Rigidbody>().
 
-            totalPlayers[i].transform.SetPositionAndRotation(
+            cloneAI[i].transform.SetPositionAndRotation(
                 otherPositions[i].position,
                 otherPositions[i].rotation
             );
-            if (totalPlayers[i].GetComponent<m_EnemyHorrorLvl>() != null)
-            {
-                totalPlayers[i].GetComponent<m_EnemyHorrorLvl>().enabled = false;
 
-            }
-            totalPlayers[i].SetActive(true);
-            totalPlayers[i].GetComponent<Animator>().Play("Idle");
-            totalPlayers[i].GetComponent<Rigidbody>().isKinematic = false;
+            cloneAI[i].SetActive(true);
+            cloneAI[i].GetComponent<Animator>().Play("Idle");
+            cloneAI[i].GetComponent<Rigidbody>().isKinematic = false;
         }
         playerRef.isKinematic = false;
         playerRef.GetComponent<Animator>().Play("Idle");
