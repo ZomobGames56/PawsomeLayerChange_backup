@@ -482,7 +482,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         rb.AddForce(dir * force, ForceMode.Impulse);
         playerHelath -= 10;
         healthbarImg.fillAmount = (float)playerHelath / 100;
-
+        animator.SetLayerWeight(actionLayer, 0);
         if (playerHelath <= 0)
         {
             Die();

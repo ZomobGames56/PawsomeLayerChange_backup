@@ -139,7 +139,23 @@ public class Level_2Winner : MonoBehaviour
                     isCalled = true;
                 }
             }
-
+            
+            int rnd = Random.Range(1, totalPlayers.Count);
+            print(rnd);
+            Rigidbody rb = totalPlayers[rnd].GetComponent<Rigidbody>();
+            if (totalPlayers.Contains(totalPlayers[rnd]))
+            {
+                totalPlayers.Remove(totalPlayers[rnd]);
+            }
+            rb.transform.rotation = Quaternion.Euler(0, 0, 0);
+            if (!totalPlayers.Contains(playerModel))
+            {
+                totalPlayers.Add(playerModel);
+            }
+            rb.gameObject.GetComponent<Animator>().SetTrigger("Victory");
+            rb.gameObject.SetActive(true);
+            rb.transform.position = victoryPos.transform.position;
+            StartCoroutine(VictoryBox(rb));
         }
     }
     IEnumerator VictoryBox(Rigidbody rb)

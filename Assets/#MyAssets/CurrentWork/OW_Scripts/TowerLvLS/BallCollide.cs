@@ -18,6 +18,7 @@ public class BallCollide : MonoBehaviour
             // float impactStrength = collision.impulse.magnitude;
 
             float impactforce_ = rb.linearVelocity.magnitude;
+            print(impactforce_);
             if (impactforce_ < minImpactForce) // tweak value
                 return;
 
@@ -35,7 +36,7 @@ public class BallCollide : MonoBehaviour
             {
                 dmg.ApplyKnoackBackForce(dir, impactforce_, impactMultiplier);
             }
-
+            print("Forece added");
 
 
             //  HY_PlayerRagdollActive.instance.OnObstacleCollide();

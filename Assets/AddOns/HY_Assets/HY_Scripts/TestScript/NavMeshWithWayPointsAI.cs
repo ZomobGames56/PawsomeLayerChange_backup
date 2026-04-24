@@ -17,7 +17,7 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
     public bool canMove;
     public bool touchedFinishLine;
     [SerializeField]
-    Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp;
+    Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp,fourth_AI;
     [SerializeField]
     float force = 3f;
     bool allow, once;
@@ -29,8 +29,9 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
     [SerializeField] float jumpHeight = 2f;
     [SerializeField] float jumpDuration = 0.5f;
     Coroutine jumpCoroutine;
-
+    bool thirdIsPassed = false;
     bool isJumping = false;
+    
     void Start()
     {
         canMove = true;
@@ -196,9 +197,14 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
                 break;
             case "ThirdSp":
                 spawnPoint = thirdSp;
+                thirdIsPassed = true;
                 break;
             case "FourthSp":
                 spawnPoint = fourthSp;
+                fourth = true;
+                break;
+            case "Fourth_AI":
+                spawnPoint = fourth_AI;
                 break;
 
         }
@@ -219,11 +225,13 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
             rb.AddForce(Vector3.forward * force, ForceMode.Impulse);
             StartCoroutine(ResetPosition());
         }
+        
         if (collision.transform.CompareTag("Ground"))
         {
             enmyAnim.SetBool("Hanging", false);
         }
     }
+    bool fourth = false;
     IEnumerator ResetPosition()
     {
         yield return new WaitForSeconds(waitForSecond);

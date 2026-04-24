@@ -53,7 +53,7 @@ public class HY_EnemyRagdoll : MonoBehaviour, IHitAble
 
         // Snap character back to hips
         Parent.transform.position = hip.position;
-
+        print("Called");
         EnableKinematic();
 
         animator.enabled = true;

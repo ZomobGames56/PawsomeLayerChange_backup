@@ -1068,8 +1068,13 @@ PrefabInstance:
     - target: {fileID: 170267320871173146, guid: e0635a13e2606bf41a0d3956d1e3ceca,
         type: 3}
       propertyPath: bgClips.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 170267320871173146, guid: e0635a13e2606bf41a0d3956d1e3ceca,
+        type: 3}
+      propertyPath: 'bgClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 1f73cae1588d4824d987d7235ad5f2e7, type: 3}
     - target: {fileID: 2387856911833715600, guid: e0635a13e2606bf41a0d3956d1e3ceca,
         type: 3}
       propertyPath: m_Volume
@@ -1401,7 +1406,8 @@ MonoBehaviour:
   cloudCanvas: {fileID: 396015921}
   storyPanel: {fileID: 0}
   storyScript: {fileID: 0}
-  bgMucis: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: c3658247aafdad140ae3814ee20290d1, type: 3}
+  BgMusic: {fileID: 8300000, guid: 1f73cae1588d4824d987d7235ad5f2e7, type: 3}
 --- !u!1 &1414885653
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,15 +18,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     StoryScript storyScript;
     [SerializeField]
-    AudioClip bgMucis;
+    AudioClip audioClip,BgMusic;
     private void Start()
     {
         loadingScreen.SetActive(false);
         cloudCanvas.SetActive(false);
+        HY_AudioManager.instance.StartBackgroundMusic(BgMusic);
     }
     public void PlayBtn(string levelName)
     {
-        HY_AudioManager.instance.PlayAudioEffectOnce(bgMucis);
+        HY_AudioManager.instance.PlayAudioEffectOnce(audioClip);
         StartCoroutine(LoadScene(levelName));
     }
     
