@@ -201,8 +201,7 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
                 break;
             case "FourthSp":
                 spawnPoint = fourthSp;
-                fourth = true;
-                break;
+                 break;
             case "Fourth_AI":
                 spawnPoint = fourth_AI;
                 break;
@@ -231,7 +230,6 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
             enmyAnim.SetBool("Hanging", false);
         }
     }
-    bool fourth = false;
     IEnumerator ResetPosition()
     {
         yield return new WaitForSeconds(waitForSecond);
@@ -252,14 +250,12 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
         SetDestination();
 
     }
+
     IEnumerator SetPosition()
     {
         yield return new WaitUntil(() => HY_StartPause.countOver);
         SetDestination();
     }
-
-
-
     //---------------------------------------------------------------------------------\\
     public Color pathColor = Color.green;
     void OnDrawGizmos()

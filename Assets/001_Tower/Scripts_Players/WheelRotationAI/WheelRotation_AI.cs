@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class WheelRotation_AI : MonoBehaviour
 {
@@ -16,35 +15,39 @@ public class WheelRotation_AI : MonoBehaviour
 
     Rigidbody rb;
     Animator animator;
-
+    private Rigidbody[] childRbs;
     public bool isGrounded;
     public bool canMoveTowardTarget;
 
     [SerializeField] float stoppingDis = 1f;
     public bool once = true;
 
-    Transform previousMoveTarget,startMoveTarget;
+    Transform previousMoveTarget, startMoveTarget;
 
     [SerializeField] GameObject dummyPanel;
     public TextMeshProUGUI looseText;
-    public int deadCout =0;
+    public int deadCout = 0;
     [SerializeField] float checkRadius = 0.5f;
     [SerializeField] LayerMask obstacleLayer;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] float maxAdjustDistance = 2f;
 
+    public Transform hip;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        childRbs = GetComponentsInChildren<Rigidbody>();
+
         animator = GetComponent<Animator>();
 
         rb.freezeRotation = true;
         canMoveTowardTarget = true;
-        deadCout= 0;
+        deadCout = 0;
         // store initial target
         previousMoveTarget = moveTarget;
         startMoveTarget = moveTarget;
         moveForce = Random.Range(3, 6);
+        EnableKinematic();
     }
 
     void Update()
@@ -56,7 +59,10 @@ public class WheelRotation_AI : MonoBehaviour
             Respawn();
             return;
         }
-
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            EnemyRagdoll();
+        }
         UpdateAnimations();
 
         if (moveTarget != null && Vector3.Distance(transform.position, moveTarget.position) < stoppingDis)
@@ -114,7 +120,7 @@ public class WheelRotation_AI : MonoBehaviour
         toward.y = 0;
 
         transform.rotation = Quaternion.LookRotation(toward);
-        Vector3 rot = (moveTarget.position-transform.position).normalized;
+        Vector3 rot = (moveTarget.position - transform.position).normalized;
         transform.rotation = Quaternion.Euler(rot.normalized);
 
         rb.linearVelocity = Vector3.zero;
@@ -154,19 +160,6 @@ public class WheelRotation_AI : MonoBehaviour
             StartCoroutine(ChangeMoveTarget());
         }
 
-        if (other.CompareTag("Goal"))
-        {
-            //looseText.text = "Lose";
-            dummyPanel.SetActive(true);
-            StartCoroutine(LevelSelectionScene());
-            // Notfiy other to kinematic on.
-            
-        }
-    }
-    IEnumerator LevelSelectionScene()
-    {
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(6);
     }
     IEnumerator ChangeMoveTarget()
     {
@@ -183,7 +176,11 @@ public class WheelRotation_AI : MonoBehaviour
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-
+        rb.isKinematic = false;
+        if (transform.parent != null)
+        {
+            transform.SetParent(null);
+        }
         Vector3 spawnPos = GetSafeSpawnPosition();
 
         transform.position = spawnPos;
@@ -229,6 +226,68 @@ public class WheelRotation_AI : MonoBehaviour
         // fallback (if everything fails)
         return SnapToGround(basePos);
     }
+    // Collision with the obstacle---> don't allow another collsion--> Call Respawn-->
+    // if more than 2 sec respawn else fall logic gonna call just have to reset the enemy by turning all the things back
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Shovel") && once)
+        {
+            Debug.Log("Collide" + gameObject.name);
+            once = false;
+            //GetComponent<NavMeshAgent>().enabled = false;
+            rb.isKinematic = true;
+            transform.SetParent(null);
+            EnemyRagdoll();
+
+
+        }
+    }
+    #region
+    public void EnemyRagdoll()
+    {
+        StopAllCoroutines();
+        once = false;
+        animator.enabled = false;
+
+        DisableKinematic();
+
+        StartCoroutine(ResetRagdoll());
+    }
+
+    private IEnumerator ResetRagdoll()
+    {
+        yield return new WaitForSeconds(3f);
+        EnableKinematic();
+        animator.enabled = true;
+        if (!once)
+            Respawn();
+    }
+
+    // ---------------- RIGIDBODY HELPERS ----------------
+
+    private void EnableKinematic()
+    {
+        foreach (var rb in childRbs)
+        {
+            rb.isKinematic = true;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        this.rb.isKinematic = false;
+        this.rb.constraints = RigidbodyConstraints.FreezeRotation;
+    }
+
+    private void DisableKinematic()
+    {
+        foreach (var rb in childRbs)
+        {
+            rb.isKinematic = false;
+            rb.constraints = RigidbodyConstraints.None;
+        }
+        this.rb.isKinematic = true;
+    }
+    #endregion
 
     Vector3 SnapToGround(Vector3 pos)
     {
