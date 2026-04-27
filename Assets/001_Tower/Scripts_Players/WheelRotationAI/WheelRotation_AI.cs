@@ -15,6 +15,7 @@ public class WheelRotation_AI : MonoBehaviour
 
     Rigidbody rb;
     Animator animator;
+    [SerializeField]
     private Rigidbody[] childRbs;
     public bool isGrounded;
     public bool canMoveTowardTarget;

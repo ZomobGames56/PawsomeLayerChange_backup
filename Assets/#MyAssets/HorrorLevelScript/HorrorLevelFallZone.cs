@@ -12,7 +12,7 @@ public class HorrorLevelFallZone : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             Horror_LvL_UIManager.PlayerDeadCheck();
-            StartCoroutine(LevelSelection());
+           
         }
         if (other.tag == "Enemy")
         {
@@ -24,22 +24,5 @@ public class HorrorLevelFallZone : MonoBehaviour
             other.gameObject.SetActive(false);
         }
     }
-    IEnumerator LevelSelection()
-    {
-        yield return new WaitForSeconds(3f);
-        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
-
-        while (!handle.IsDone)
-        {
-            float percent = handle.PercentComplete;
-
-            yield return null;
-        }
-
-        if (handle.Status != AsyncOperationStatus.Succeeded)
-        {
-            Debug.LogError("Scene load failed");
-        }
-
-    }
+   
 }

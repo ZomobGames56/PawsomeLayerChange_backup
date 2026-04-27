@@ -224,7 +224,19 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
             rb.AddForce(Vector3.forward * force, ForceMode.Impulse);
             StartCoroutine(ResetPosition());
         }
-        
+        if (collision.gameObject.CompareTag("Shovel") && !once)
+        {
+            Debug.Log("Collide" + gameObject.name);
+            once = true;
+            AbortOffMeshLink(); // 👈 ADD THIS
+            //agent.enabled = false;
+            allow = false;
+            GetComponent<NavMeshAgent>().enabled = false;
+            rb.isKinematic = false;
+            GetComponentInChildren<HY_EnemyRagdoll>().EnemyRagdoll();
+            rb.AddForce(Vector3.forward * force, ForceMode.Impulse);
+            StartCoroutine(ResetPosition());
+        }
         if (collision.transform.CompareTag("Ground"))
         {
             enmyAnim.SetBool("Hanging", false);
@@ -235,7 +247,7 @@ public class NavMeshWithWayPointsAI : MonoBehaviour
         yield return new WaitForSeconds(waitForSecond);
         once = false;
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(spawnPoint.position, out hit, 2f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(spawnPoint.position, out hit, 5f, NavMesh.AllAreas))
         {
             agent.Warp(hit.position);
         }

@@ -111,6 +111,7 @@ public class Level_2Winner : MonoBehaviour
             //Player Loose //Active Loose Screen.
             isEnemyWin = true;
             playerControl.GetComponent<Animator>().SetTrigger("Defeat");
+            playerRb.isKinematic = true;
             HY_Player_Control.canControl = false;
             winnerCount = 1;
             // other.GetComponent<Animator>().SetTrigger("Victory");
@@ -152,8 +153,8 @@ public class Level_2Winner : MonoBehaviour
             {
                 totalPlayers.Add(playerModel);
             }
-            rb.gameObject.GetComponent<Animator>().SetTrigger("Victory");
             rb.gameObject.SetActive(true);
+            rb.gameObject.GetComponent<Animator>().SetTrigger("Victory");
             rb.transform.position = victoryPos.transform.position;
             StartCoroutine(VictoryBox(rb));
         }
