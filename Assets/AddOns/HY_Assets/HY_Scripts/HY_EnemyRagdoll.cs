@@ -40,7 +40,10 @@ public class HY_EnemyRagdoll : MonoBehaviour, IHitAble
             movementAI.EnterRagdollState();
 
         animator.enabled = false;
-        agent.enabled = false;
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
 
         DisableKinematic();
 
@@ -57,13 +60,16 @@ public class HY_EnemyRagdoll : MonoBehaviour, IHitAble
         EnableKinematic();
 
         animator.enabled = true;
-        agent.enabled = true;
-        agent.velocity = Vector3.zero;
+        if (agent != null)
+        {
+            agent.enabled = false;
+            agent.velocity = Vector3.zero;
+        }
 
         if (movementAI != null)
             movementAI.ExitRagdollState();
     }
-    
+
     // ---------------- RIGIDBODY HELPERS ----------------
 
     private void EnableKinematic()

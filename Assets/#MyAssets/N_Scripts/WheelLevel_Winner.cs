@@ -39,6 +39,7 @@ public class WheelLevel_Winner : MonoBehaviour
             {
                 ai.GetComponent<Rigidbody>().isKinematic = true;
                 ai.GetComponent<WheelRotation_AI>().enabled = false;
+                ai.GetComponent<Animator>().enabled = true;
                 ai.GetComponent<Animator>().SetTrigger("Defeat");
             }
             winScreen.SetActive(true);
@@ -64,6 +65,7 @@ public class WheelLevel_Winner : MonoBehaviour
             foreach (WheelRotation_AI ai in wheelAIRef)
             {
                 ai.GetComponent<Rigidbody>().isKinematic = true;
+                ai.GetComponent<Animator>().enabled = true;
                 ai.GetComponent<WheelRotation_AI>().enabled = false;
                 if (ai == _ai)
                 {

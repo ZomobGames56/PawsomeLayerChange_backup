@@ -3084,6 +3084,16 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Hip
       objectReference: {fileID: 0}
+    - target: {fileID: 3406274674776526457, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406274674776526457, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.04
+      objectReference: {fileID: 0}
     - target: {fileID: 3983429396597959875, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: m_TagString
@@ -22715,7 +22725,7 @@ GameObject:
   - component: {fileID: 215459571}
   m_Layer: 0
   m_Name: Object.356
-  m_TagString: Obstacle
+  m_TagString: Shovel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27315,7 +27325,7 @@ GameObject:
   - component: {fileID: 1794827676032949520}
   m_Layer: 0
   m_Name: Barrel
-  m_TagString: Obstacle
+  m_TagString: Shovel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27445,7 +27455,7 @@ GameObject:
   - component: {fileID: 544814178}
   m_Layer: 0
   m_Name: Object.311
-  m_TagString: Obstacle
+  m_TagString: Shovel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38919,7 +38929,7 @@ GameObject:
   - component: {fileID: 1417035416}
   m_Layer: 0
   m_Name: Object.357
-  m_TagString: Obstacle
+  m_TagString: Shovel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39381,7 +39391,7 @@ GameObject:
   - component: {fileID: 6403955221190897223}
   m_Layer: 0
   m_Name: Barrel
-  m_TagString: Obstacle
+  m_TagString: Shovel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

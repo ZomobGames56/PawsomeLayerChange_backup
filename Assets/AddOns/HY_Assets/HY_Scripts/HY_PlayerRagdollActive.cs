@@ -213,6 +213,59 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
         //StartCoroutine(ResetRagoll(2.5f));
         StartCoroutine(RagDollWater(2.5f));
     }
+    public void OnShovelHit()
+    {
+        if (obstalceCollide) return;
+        obstalceCollide = true;
+        HY_Player_Control.canControl = false;
+        animator.enabled = false;
+        parentRb.constraints = RigidbodyConstraints.FreezeAll;
+        DisableKinamatic();
+        //StartCoroutine(ResetRagoll(2.5f));
+        //StartCoroutine(RagDollWater(2.5f));
+        StartCoroutine(ShovelHitReset(2.5f));
+    }
+
+    IEnumerator ShovelHitReset(float wait)
+    {
+        yield return new WaitForSeconds(wait);
+        obstalceCollide = false;
+        animator.enabled = true;
+        once = false;
+        ragdollActive = false;
+        parentRb.constraints = RigidbodyConstraints.FreezeRotationX |
+                              RigidbodyConstraints.FreezeRotationY |
+                              RigidbodyConstraints.FreezeRotationZ;
+        if (!collideWater)
+        {
+            _hip.position = spawnPoint.position;
+            //parentRb.rotation = spawnPoint.rotation;
+            parentRb.position = _hip.position;
+
+        }
+        if (collideWater)
+        {
+            parentRb.rotation = spawnPoint.rotation;
+            Parent.transform.rotation = spawnPoint.rotation;
+            _hip.position = spawnPoint.position;
+            parentRb.position = _hip.position;
+        }
+
+
+        ShowPlayer(true);
+        parentRb.isKinematic = false;
+        collideWater = false;
+
+        foreach (var child in childRbs)
+        {
+            child.isKinematic = true;
+            child.constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+        HY_CameraControl.CameraSnapToPlayerDirection(parentRb.transform);
+        HY_Player_Control.canControl = true;
+    }
+
 
     public void ApplyKnoackBackForce(Vector3 knockBackDirection, float impactForce, float ImpactMultiplier)
     {
