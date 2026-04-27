@@ -128,7 +128,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         h = fixedJoystick.Horizontal;
         v = fixedJoystick.Vertical;
 
-        if (move.magnitude != 0)
+        if (move.magnitude != 0 && canMove)
         {
             Rotate();
         }

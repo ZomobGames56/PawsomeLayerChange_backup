@@ -128,6 +128,7 @@ public class Horror_LvL_UIManager : MonoBehaviour
         rb.position = victoryPos.transform.position;
         rb.rotation = victoryPos.transform.rotation;
         rb.rotation = Quaternion.Euler(0, 0, 0);
+        
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
         game_DL.SetActive(false);
