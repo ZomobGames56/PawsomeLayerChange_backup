@@ -185,19 +185,8 @@ public class UnpredictableClimber : MonoBehaviour
 
         if (animator) animator.enabled = false;
     }
-    //void StopMovement()
-    //{
-    //    agent.speed = 0;
-    //    // agent.isStopped = true;
-    //    dummyScreen.SetActive(true);
-    //    StartCoroutine(LevelSelectionScene());
-    //    animator.SetFloat("Run", 0);
-    //}
-    IEnumerator LevelSelectionScene()
-    {
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(6);
-    }
+   
+    
     public void ExitRagdollState()
     {
         if (currentState == AIState.GoalReached) return;
@@ -206,7 +195,7 @@ public class UnpredictableClimber : MonoBehaviour
 
         if (animator) animator.enabled = true;
 
-        agent.isStopped = false;
         UpdateRandomTarget(pathWaypoints[currentWaypointIndex].position);
+        agent.isStopped = false;
     }
 }

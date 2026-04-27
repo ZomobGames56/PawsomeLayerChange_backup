@@ -75,6 +75,7 @@ public class Horror_LvL_UIManager : MonoBehaviour
             //// stop there move | player position to victory pos | remain to other pos.
             playerControl.CanMove = false;
             playerRef.GetComponent<Rigidbody>().isKinematic = true;
+            playerRef.GetComponent <Rigidbody>().rotation = Quaternion.Euler(0,0,0);
             if (cloneAI.Contains(playerRef.gameObject))
             {
                 cloneAI.Remove(playerRef.gameObject);
@@ -147,29 +148,29 @@ public class Horror_LvL_UIManager : MonoBehaviour
             cloneAI[i].GetComponent<Rigidbody>().isKinematic = false;
         }
         playerRef.isKinematic = false;
-       
-        //yield return new WaitForSeconds(2f);
-        //foreach (ZLerpMove z in insideBox)
-        //{
-        //    z.pushOn = true;
-        //}
-        //yield return new WaitForSeconds(2f);
-        //cloudExit.SetActive(true);
 
-        //yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
+        foreach (ZLerpMove z in insideBox)
+        {
+            z.pushOn = true;
+        }
+        yield return new WaitForSeconds(2f);
+        cloudExit.SetActive(true);
 
-        //var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
-        //while (!handle.IsDone)
-        //{
-        //    float percent = handle.PercentComplete;
+        yield return new WaitForSeconds(1.5f);
 
-        //    yield return null;
-        //}
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
+        while (!handle.IsDone)
+        {
+            float percent = handle.PercentComplete;
 
-        //if (handle.Status != AsyncOperationStatus.Succeeded)
-        //{
-        //    Debug.LogError("Scene load failed");
-        //}
+            yield return null;
+        }
+
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError("Scene load failed");
+        }
     }
    
 

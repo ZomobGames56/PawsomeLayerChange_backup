@@ -40,11 +40,7 @@ public class HY_EnemyRagdoll : MonoBehaviour, IHitAble
             movementAI.EnterRagdollState();
 
         animator.enabled = false;
-        if (agent != null)
-        {
-            agent.enabled = false;
-        }
-
+        agent.enabled = false;
         DisableKinematic();
 
         StartCoroutine(ResetRagdoll());
@@ -58,13 +54,10 @@ public class HY_EnemyRagdoll : MonoBehaviour, IHitAble
         Parent.transform.position = hip.position;
         print("Called");
         EnableKinematic();
-
         animator.enabled = true;
-        if (agent != null)
-        {
-            agent.enabled = false;
-            agent.velocity = Vector3.zero;
-        }
+        agent.enabled = true;
+        agent.velocity = Vector3.zero;
+
 
         if (movementAI != null)
             movementAI.ExitRagdollState();
