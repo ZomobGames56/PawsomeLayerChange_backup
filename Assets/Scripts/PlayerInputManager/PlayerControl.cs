@@ -101,7 +101,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     Transform head;
     int mask;
     bool isDead = false;
-
+    bool isJumping = false;
     public bool CanMove
     {
         get { return canMove; }
@@ -191,12 +191,15 @@ public class PlayerControl : MonoBehaviour, IDamageable
     #region Jump Function
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded&& !isJumping)
         {
             if (isPunching) return;
             if (isStunned) return;
-            isStateLocked = true;
 
+            isStateLocked = true;
+            isJumping = true;
+
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);//New line added;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             //if (isStunned) return;
             PlayerAnimationStateUpdate(PlayerState.Jump, true, 0.05f);
@@ -206,13 +209,15 @@ public class PlayerControl : MonoBehaviour, IDamageable
 
     public void MobileJump()
     {
-        if (!isGrounded) return;
+        if(!isGrounded) return;
+        if (isJumping) return;
         if (isPunching) return;
         if (isStunned) return;
 
         isStateLocked = true;
-        isGrounded = false;
+        isJumping = true;
 
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);//New line added;
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         //if (isStunned) return;
         PlayerAnimationStateUpdate(PlayerState.Jump, true, 0.2f);
@@ -234,7 +239,9 @@ public class PlayerControl : MonoBehaviour, IDamageable
 
         // landed
         //isGrounded = true;
+        //reseting everything needed;
         isStateLocked = false;
+        isJumping = false;
     }
     void PlayerAnimationStateUpdate(PlayerState state, bool lockState = false, float transactionDuration = 0.2f)
     {
@@ -415,13 +422,10 @@ public class PlayerControl : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (count != 0) isGrounded = true;
         if (other.CompareTag("Ground"))
         {
             count++;
-            isStateLocked = false;
             isGrounded = true;
-            // UpdateLocoMotion();
         }
     }
 
@@ -429,16 +433,8 @@ public class PlayerControl : MonoBehaviour, IDamageable
     {
         if (other.CompareTag("Ground"))
         {
-            //  isStateLocked = true;
-            //isGrounded = false;
             count--;
-            if (count == 0)
-                isGrounded = false;
-            else
-                isGrounded = true;
-
-
-
+            isGrounded = count > 0;
         }
     }
 
@@ -634,6 +630,10 @@ public class PlayerControl : MonoBehaviour, IDamageable
         isHolding = false;
         chargedFired = false;
 
+        //New line---
+        isJumping = false;      
+        isStateLocked = false;
+        //---
         canAttack = false; // temporarily block
         Debug.LogError("This is forcedIn");
         // Reset layers
