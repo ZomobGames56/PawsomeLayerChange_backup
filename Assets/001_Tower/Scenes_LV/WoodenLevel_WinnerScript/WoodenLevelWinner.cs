@@ -60,6 +60,7 @@ public class WoodenLevelWinner : MonoBehaviour
                     totalPlayers[rnd].transform.position = victoryBoxObj.transform.position;
                     totalPlayers.Remove(totalPlayers[rnd]);
                 }
+                rb.gameObject.GetComponent<Animator>().SetTrigger("Victory");
                 StartCoroutine(VictoryBox(rb));
                 break;
             case "Enemy":
