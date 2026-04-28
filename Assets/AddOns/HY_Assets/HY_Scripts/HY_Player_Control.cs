@@ -59,6 +59,14 @@ public class HY_Player_Control : MonoBehaviour
     Transform head;
     int mask;
     public bool obstacleCollide = false;
+    [SerializeField]
+    int outOfBoundVal = -51;
+
+    // PLATFORM SYSTEM
+    private Rigidbody currentPlatformRb;
+    private Vector3 lastPlatformPos;
+    private Quaternion lastPlatformRot;
+
     #endregion 
     void Start()
     {
@@ -105,7 +113,7 @@ public class HY_Player_Control : MonoBehaviour
         {
             animator.SetBool("Hanging", false);
         }
-        
+
         if (canControl == true)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -121,6 +129,7 @@ public class HY_Player_Control : MonoBehaviour
         if (canControl == true)
         {
             PlayerMovement();
+            ApplyPlatformVelocity();
         }
     }
     void LateUpdate()
@@ -331,7 +340,7 @@ public class HY_Player_Control : MonoBehaviour
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
 
             isGrounded = false;
-            
+
 
             jumpRoutine = StartCoroutine(JumpUp());
         }
@@ -405,6 +414,16 @@ public class HY_Player_Control : MonoBehaviour
             inAir = false;
 
         }
+
+        if (collision.gameObject.CompareTag("Log"))
+        {
+            if (currentPlatformRb != collision.rigidbody)
+            {
+                currentPlatformRb = collision.rigidbody;
+                lastPlatformPos = currentPlatformRb.position;
+                lastPlatformRot = currentPlatformRb.rotation;
+            }
+        }
         //if (collision.transform.tag == "Ground")
         //{
         //    animator.SetBool("Hanging", false);
@@ -428,9 +447,16 @@ public class HY_Player_Control : MonoBehaviour
         //    OnCollideWater();
         //}
     }
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Log"))
+        {
+            currentPlatformRb = null;
+        }
+    }
     void PlayerOutOfBounds()
     {
-        if (transform.position.y <= -51 && !isCalled)
+        if (transform.position.y <= outOfBoundVal && !isCalled)
         {
             Debug.Log("Player out of bound");
             // gameObject.SetActive(false
@@ -497,13 +523,13 @@ public class HY_Player_Control : MonoBehaviour
                 spawnPoint = fourthSp;
                 break;
         }
-        if (other.CompareTag("Ground"))
+        if (other.CompareTag("Ground") || other.CompareTag("Log"))
         {
             count++;
             isGrounded = true;
             isCalled = false;
             collideToWater = false;
-           
+
             animator.SetBool("Jump", false);
             animator.SetBool("Hanging", false);
             inAir = false;
@@ -516,45 +542,40 @@ public class HY_Player_Control : MonoBehaviour
 
         }
     }
-    private void OnTriggerEnterL(Collider other)
+    Vector3 GetPlatformVelocity()
     {
-        if (other.CompareTag("Ground"))
-        {
-            count++;
-            isGrounded = true;
-        }
-    }
+        if (currentPlatformRb == null) return Vector3.zero;
 
-    private void OnTriggerExitL(Collider other)
+        Vector3 deltaPlatformPos = currentPlatformRb.position - lastPlatformPos;
+
+        Quaternion deltaRot = currentPlatformRb.rotation * Quaternion.Inverse(lastPlatformRot);
+
+        Vector3 relativePos = rb.position - currentPlatformRb.position;
+        Vector3 rotatedPos = deltaRot * relativePos;
+
+        Vector3 rotationMove = rotatedPos - relativePos;
+
+        lastPlatformPos = currentPlatformRb.position;
+        lastPlatformRot = currentPlatformRb.rotation;
+
+        return (deltaPlatformPos + rotationMove) / Time.fixedDeltaTime;
+    }
+    void ApplyPlatformVelocity()
     {
-        if (other.CompareTag("Ground"))
-        {
-            count--;
-            isGrounded = count > 0;
-        }
+        Vector3 platformVel = GetPlatformVelocity();
+
+        Vector3 velocity = rb.linearVelocity;
+
+        velocity += new Vector3(platformVel.x, 0, platformVel.z);
+
+        rb.linearVelocity = velocity;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Ground"))
+        if (other.CompareTag("Ground") || other.CompareTag("Log"))
         {
-
-            //count--;
-            //if (count == 0)
-            //{
-            //    isGrounded = false;
-            //    inAir = true;
-            //    HangingAnimation();
-            //}
-            //else
-            //{
-            //    isGrounded = true;
-            //    inAir = false;
-            //}
-            if (other.CompareTag("Ground"))
-            {
                 count--;
-
                 // 🔥 clamp count (VERY IMPORTANT)
                 if (count < 0) count = 0;
 
@@ -564,23 +585,8 @@ public class HY_Player_Control : MonoBehaviour
                 {
                     inAir = true; // 🔥 SET PROPERLY
                 }
-            }
-
-
         }
     }
-    //float InAirTime()
-    //{
-    //    if (!isGrounded && inAir && !isDashing)
-    //    {
-    //        inAirTime += Time.deltaTime;
-    //    }
-    //    else
-    //    {
-    //        inAirTime = 0;
-    //    }
-    //    return inAirTime;
-    //}
 
     void OnDrawGizmos()
     {
