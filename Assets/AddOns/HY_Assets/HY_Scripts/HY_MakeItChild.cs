@@ -13,13 +13,13 @@ public class HY_MakeItChild : MonoBehaviour
              other.gameObject.GetComponent<HY_Player_Control>().rigidBodyControl = false;
              other.gameObject.GetComponent<HY_Player_Control>().transformControl = true;
 
-            print("Trigger");
+            //print("Trigger");
 
         }
         if (other.tag == "Enemy")
         {
             other.transform.SetParent(transform);
-            Debug.Log("Enemy collide");
+            //Debug.Log("Enemy collide");
         }
     }
     private void OnTriggerExit(Collider other)
@@ -31,7 +31,7 @@ public class HY_MakeItChild : MonoBehaviour
             other.gameObject.GetComponent<HY_Player_Control>().rigidBodyControl = true;
             other.gameObject.GetComponent<HY_Player_Control>().transformControl = false;
 
-            print("Exit Trigger");
+            //print("Exit Trigger");
 
         }
         if (other.tag == "Enemy")

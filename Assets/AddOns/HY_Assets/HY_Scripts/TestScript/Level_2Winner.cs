@@ -111,6 +111,7 @@ public class Level_2Winner : MonoBehaviour
             //Player Loose //Active Loose Screen.
             isEnemyWin = true;
             playerControl.GetComponent<Animator>().SetTrigger("Defeat");
+            playerRb.isKinematic = true;
             HY_Player_Control.canControl = false;
             winnerCount = 1;
             // other.GetComponent<Animator>().SetTrigger("Victory");
@@ -140,20 +141,29 @@ public class Level_2Winner : MonoBehaviour
                 }
             }
             
-            int rnd = Random.Range(1, totalPlayers.Count);
-            print(rnd);
-            Rigidbody rb = totalPlayers[rnd].GetComponent<Rigidbody>();
-            if (totalPlayers.Contains(totalPlayers[rnd]))
+            //int rnd = Random.Range(1, totalPlayers.Count);
+            //print(rnd);
+            //if (totalPlayers.Contains(totalPlayers[rnd]))
+            //{
+            //    totalPlayers.Remove(totalPlayers[rnd]);
+            //}
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+            rb.gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            rb.gameObject.GetComponent<NavMeshWithWayPointsAI>().enabled = false;
+            for (int i = totalPlayers.Count - 1; i >= 0; i--)
             {
-                totalPlayers.Remove(totalPlayers[rnd]);
+                if (totalPlayers[i].name == rb.gameObject.name)
+                {
+                    totalPlayers.RemoveAt(i);
+                }
             }
             rb.transform.rotation = Quaternion.Euler(0, 0, 0);
             if (!totalPlayers.Contains(playerModel))
             {
                 totalPlayers.Add(playerModel);
             }
-            rb.gameObject.GetComponent<Animator>().SetTrigger("Victory");
             rb.gameObject.SetActive(true);
+            rb.gameObject.GetComponent<Animator>().SetTrigger("Victory");
             rb.transform.position = victoryPos.transform.position;
             StartCoroutine(VictoryBox(rb));
         }
@@ -161,10 +171,7 @@ public class Level_2Winner : MonoBehaviour
     IEnumerator VictoryBox(Rigidbody rb)
     {
         yield return new WaitForSeconds(3f);
-        //players repose
-        //main camera false
-        //canvas false
-        // direaction light false
+       
         rb.position = victoryPos.transform.position;
         rb.rotation = victoryPos.transform.rotation;
         mainCamera.SetActive(false);

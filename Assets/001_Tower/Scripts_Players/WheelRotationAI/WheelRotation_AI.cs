@@ -15,6 +15,7 @@ public class WheelRotation_AI : MonoBehaviour
 
     Rigidbody rb;
     Animator animator;
+    [SerializeField]
     private Rigidbody[] childRbs;
     public bool isGrounded;
     public bool canMoveTowardTarget;
@@ -33,6 +34,7 @@ public class WheelRotation_AI : MonoBehaviour
     [SerializeField] float maxAdjustDistance = 2f;
 
     public Transform hip;
+    bool isDead = false;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -203,6 +205,9 @@ public class WheelRotation_AI : MonoBehaviour
         // Step 1: Check if initial position is free
         if (!Physics.CheckSphere(basePos, checkRadius, obstacleLayer))
         {
+            Debug.Log("First");
+            Debug.Log($"TestPos: {basePos}");
+
             return SnapToGround(basePos);
         }
 
@@ -219,6 +224,7 @@ public class WheelRotation_AI : MonoBehaviour
 
             if (!Physics.CheckSphere(testPos, checkRadius, obstacleLayer))
             {
+                Debug.Log($"TestPos: {testPos}");
                 return SnapToGround(testPos);
             }
         }
@@ -232,10 +238,11 @@ public class WheelRotation_AI : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Shovel") && once)
+        if (collision.gameObject.CompareTag("Shovel"))
         {
+            
             Debug.Log("Collide" + gameObject.name);
-            once = false;
+            isDead = true;
             //GetComponent<NavMeshAgent>().enabled = false;
             rb.isKinematic = true;
             transform.SetParent(null);
@@ -247,11 +254,11 @@ public class WheelRotation_AI : MonoBehaviour
     #region
     public void EnemyRagdoll()
     {
-        StopAllCoroutines();
-        once = false;
+       //StopAllCoroutines();
+        isDead = true;
         animator.enabled = false;
-
         DisableKinematic();
+
 
         StartCoroutine(ResetRagdoll());
     }
@@ -261,8 +268,11 @@ public class WheelRotation_AI : MonoBehaviour
         yield return new WaitForSeconds(3f);
         EnableKinematic();
         animator.enabled = true;
-        if (!once)
+        
+        if (isDead)
             Respawn();
+
+        isDead  = false;
     }
 
     // ---------------- RIGIDBODY HELPERS ----------------

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HY_Player_Control : MonoBehaviour
@@ -14,7 +13,7 @@ public class HY_Player_Control : MonoBehaviour
     Vector3 move;
     [SerializeField]
     float moveSpeed = 10f, force = 7f, defaultSpeed = 0.97f, onSliderSpeed = 2.0f,
-        waitForSec = 0.5f, transformMoveSpeed = 8f,logMoveSpeed = 7f;//Jump Force
+        waitForSec = 0.5f, transformMoveSpeed = 8f, logMoveSpeed = 7f;//Jump Force
     [SerializeField]
     public Animator animator;
     [SerializeField]
@@ -98,10 +97,15 @@ public class HY_Player_Control : MonoBehaviour
     {
         testBool = canControl;
         PlayerOutOfBounds();
-        if (InAirTime() >= 0.15f)
+        if (!isGrounded && rb.linearVelocity.y < -0.1f)
         {
-            HangingAnimation();
+            animator.SetBool("Hanging", true);
         }
+        else
+        {
+            animator.SetBool("Hanging", false);
+        }
+        
         if (canControl == true)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -111,12 +115,20 @@ public class HY_Player_Control : MonoBehaviour
             CanAniamte();
         }
     }
+
     private void FixedUpdate()
     {
         if (canControl == true)
         {
             PlayerMovement();
         }
+    }
+    void LateUpdate()
+    {
+        if (count > 0)
+            isGrounded = true;
+        else
+            isGrounded = false;
     }
     void HangingAnimation()
     {
@@ -304,11 +316,14 @@ public class HY_Player_Control : MonoBehaviour
     }// joy stick movment.
     public void MobileJumpBtn()
     {
-        if (isGrounded && !inAir)
+        if (isGrounded && !jumpbtnPressed)
         {
             if (jumpRoutine != null)
                 StopCoroutine(jumpRoutine);
 
+            jumpbtnPressed = true;
+
+            Debug.Log("Jump Calling");
             animator.SetBool("Jump", true);
             animator.SetBool("Hanging", false);
 
@@ -316,7 +331,7 @@ public class HY_Player_Control : MonoBehaviour
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
 
             isGrounded = false;
-            inAir = true;
+            
 
             jumpRoutine = StartCoroutine(JumpUp());
         }
@@ -324,10 +339,17 @@ public class HY_Player_Control : MonoBehaviour
     IEnumerator JumpUp()
     {
         yield return new WaitForSeconds(0.2f);
-        
-            animator.SetBool("Jump", false);
+
+        animator.SetBool("Jump", false);
+        Debug.Log("Jumping");
+        while (!isGrounded)
+        {
             animator.SetBool("Hanging", true);
-        
+            yield return null;
+        }
+        animator.SetBool("Hanging", false);
+        jumpbtnPressed = false;
+
     }
     IEnumerator Dash()
     {
@@ -383,7 +405,10 @@ public class HY_Player_Control : MonoBehaviour
             inAir = false;
 
         }
-
+        //if (collision.transform.tag == "Ground")
+        //{
+        //    animator.SetBool("Hanging", false);
+        //}
 
     }
     private void OnCollisionEnter(Collision collision)
@@ -417,18 +442,6 @@ public class HY_Player_Control : MonoBehaviour
 
 
         }
-    }
-
-    //This function is responsible for Transform collide with water.
-    private void OnCollideWater()
-    {
-        canControl = false;
-        print("I Collide");
-        // HY_AudioManager.instance.PlayAudioEffectOnce(fallInWater);
-        Instantiate(effect, transform.position, Quaternion.Euler(90, 0, 0));
-        transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5f);
-
-        StartCoroutine(SpawnWait());
     }
     public IEnumerator SpawnWait()
     {
@@ -483,32 +496,42 @@ public class HY_Player_Control : MonoBehaviour
             case "FourthSp":
                 spawnPoint = fourthSp;
                 break;
-            case "Goal":
-                dummyScreen.SetActive(true);
-                //Time.timeScale = 0;
-                StartCoroutine(LevelSelectionScene());
-                rb.isKinematic = true;
-                break;
         }
         if (other.CompareTag("Ground"))
         {
-            collideToWater = false;
             count++;
-            isCalled = false;
             isGrounded = true;
+            isCalled = false;
+            collideToWater = false;
+           
+            animator.SetBool("Jump", false);
             animator.SetBool("Hanging", false);
-            jumpbtnPressed = false;
             inAir = false;
+            jumpbtnPressed = false;
             moveSpeed = defaultSpeed;
             animator.SetBool("Dash", false);
             isDashing = false;
+            Debug.Log($"IsGround: {isGrounded}");
+
 
         }
     }
-    IEnumerator LevelSelectionScene()
+    private void OnTriggerEnterL(Collider other)
     {
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(6);
+        if (other.CompareTag("Ground"))
+        {
+            count++;
+            isGrounded = true;
+        }
+    }
+
+    private void OnTriggerExitL(Collider other)
+    {
+        if (other.CompareTag("Ground"))
+        {
+            count--;
+            isGrounded = count > 0;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -516,35 +539,48 @@ public class HY_Player_Control : MonoBehaviour
         if (other.CompareTag("Ground"))
         {
 
-            count--;
-            if (count == 0)
+            //count--;
+            //if (count == 0)
+            //{
+            //    isGrounded = false;
+            //    inAir = true;
+            //    HangingAnimation();
+            //}
+            //else
+            //{
+            //    isGrounded = true;
+            //    inAir = false;
+            //}
+            if (other.CompareTag("Ground"))
             {
-                isGrounded = false;
-                inAir = true;
-                HangingAnimation();
-            }
-            else
-            {
-                isGrounded = true;
-                inAir = false;
-            }
+                count--;
 
+                // 🔥 clamp count (VERY IMPORTANT)
+                if (count < 0) count = 0;
+
+                isGrounded = count > 0;
+
+                if (!isGrounded)
+                {
+                    inAir = true; // 🔥 SET PROPERLY
+                }
+            }
 
 
         }
     }
-    float InAirTime()
-    {
-        if (!isGrounded && inAir && !isDashing)
-        {
-            inAirTime += Time.deltaTime;
-        }
-        else
-        {
-            inAirTime = 0;
-        }
-        return inAirTime;
-    }
+    //float InAirTime()
+    //{
+    //    if (!isGrounded && inAir && !isDashing)
+    //    {
+    //        inAirTime += Time.deltaTime;
+    //    }
+    //    else
+    //    {
+    //        inAirTime = 0;
+    //    }
+    //    return inAirTime;
+    //}
 
     void OnDrawGizmos()
     {

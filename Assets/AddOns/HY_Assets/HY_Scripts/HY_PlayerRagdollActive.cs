@@ -16,14 +16,14 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     public GameObject Parent;
     [SerializeField] GameObject effect;
     [SerializeField]
-    Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp,cloneSpawnPoint;
+    Transform spawnPoint, firstSp, secondSp, thirdSp, fourthSp, cloneSpawnPoint;
     [SerializeField]
     Rigidbody _hip, parentRb;
     [SerializeField]
     GameObject waterSplash;
     Coroutine coroutine;
     public bool collideWater = false;
-    bool once, ragdollActive,obstalceCollide;
+    bool once, ragdollActive, obstalceCollide;
 
     //public HY_NavMeshEnemy _refNavMesh;
     void Awake()
@@ -95,7 +95,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Water")&& !once)
+        if (other.CompareTag("Water") && !once)
         {
             if (coroutine != null)
             {
@@ -153,9 +153,9 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
                                RigidbodyConstraints.FreezeRotationZ;
 
         Parent.transform.position = spawnPoint.position;
-      
+
         HY_Player_Control.canControl = true;
-       
+
         foreach (var child in childRbs)
         {
             child.isKinematic = true;
@@ -187,11 +187,11 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             parentRb.position = _hip.position;
         }
 
-        
+
         ShowPlayer(true);
         parentRb.isKinematic = false;
         collideWater = false;
-      
+
         foreach (var child in childRbs)
         {
             child.isKinematic = true;
@@ -229,6 +229,8 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
     IEnumerator ShovelHitReset(float wait)
     {
         yield return new WaitForSeconds(wait);
+
+        if (once) yield break;
         obstalceCollide = false;
         animator.enabled = true;
         once = false;

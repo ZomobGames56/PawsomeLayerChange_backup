@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1195351437891390261}
   - component: {fileID: -8674447075922303841}
   - component: {fileID: -6344006441350699985}
-  - component: {fileID: -8574140775749482483}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Obstacle
@@ -154,17 +153,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb063bfd85f94344b555263f94bfb04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8574140775749482483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4454487335397014277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2441955a239a4c458da5869fa2fa644, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BallCollide
-  minImpactForce: 3
-  impactMultiplier: 5

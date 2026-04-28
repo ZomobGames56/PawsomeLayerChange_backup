@@ -75,10 +75,12 @@ public class Horror_LvL_UIManager : MonoBehaviour
             //// stop there move | player position to victory pos | remain to other pos.
             playerControl.CanMove = false;
             playerRef.GetComponent<Rigidbody>().isKinematic = true;
+            playerRef.GetComponent <Rigidbody>().rotation = Quaternion.Euler(0,0,0);
             if (cloneAI.Contains(playerRef.gameObject))
             {
                 cloneAI.Remove(playerRef.gameObject);
             }
+            playerRef.GetComponent<Animator>().Play("Victory");
             StartCoroutine(VictoryBox(playerRef));
 
         }
@@ -112,7 +114,7 @@ public class Horror_LvL_UIManager : MonoBehaviour
         }
 
         rb.gameObject.SetActive(true);
-
+        rb.gameObject.GetComponent<Animator>().Play("Victory");
         rb.transform.rotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(VictoryBox(rb));
     }
@@ -126,6 +128,7 @@ public class Horror_LvL_UIManager : MonoBehaviour
         rb.position = victoryPos.transform.position;
         rb.rotation = victoryPos.transform.rotation;
         rb.rotation = Quaternion.Euler(0, 0, 0);
+        
         mainCamera.SetActive(false);
         mainCanvas.SetActive(false);
         game_DL.SetActive(false);
@@ -142,11 +145,11 @@ public class Horror_LvL_UIManager : MonoBehaviour
             );
 
             cloneAI[i].SetActive(true);
-            cloneAI[i].GetComponent<Animator>().Play("Idle");
+            cloneAI[i].GetComponent<Animator>().Play("Defeat");
             cloneAI[i].GetComponent<Rigidbody>().isKinematic = false;
         }
         playerRef.isKinematic = false;
-        playerRef.GetComponent<Animator>().Play("Idle");
+
         yield return new WaitForSeconds(2f);
         foreach (ZLerpMove z in insideBox)
         {
@@ -170,23 +173,6 @@ public class Horror_LvL_UIManager : MonoBehaviour
             Debug.LogError("Scene load failed");
         }
     }
-    IEnumerator LevelSelection()
-    {
-        yield return new WaitForSeconds(3f);
-        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
-
-        while (!handle.IsDone)
-        {
-            float percent = handle.PercentComplete;
-
-            yield return null;
-        }
-
-        if (handle.Status != AsyncOperationStatus.Succeeded)
-        {
-            Debug.LogError("Scene load failed");
-        }
-
-    }
+   
 
 }
