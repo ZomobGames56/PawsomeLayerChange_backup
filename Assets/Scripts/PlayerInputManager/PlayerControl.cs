@@ -191,7 +191,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
     #region Jump Function
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded&& !isJumping)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
         {
             if (isPunching) return;
             if (isStunned) return;
@@ -209,7 +209,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
 
     public void MobileJump()
     {
-        if(!isGrounded) return;
+        if (!isGrounded) return;
         if (isJumping) return;
         if (isPunching) return;
         if (isStunned) return;
@@ -237,8 +237,6 @@ public class PlayerControl : MonoBehaviour, IDamageable
             yield return null;
         }
 
-        // landed
-        //isGrounded = true;
         //reseting everything needed;
         isStateLocked = false;
         isJumping = false;
@@ -353,8 +351,6 @@ public class PlayerControl : MonoBehaviour, IDamageable
 
         animator.SetLayerWeight(actionLayer, 1f);
         animator.CrossFade("HandRotate", 0.08f, actionLayer);
-
-
     }
     #endregion
     #region  Punch Attack
@@ -437,14 +433,6 @@ public class PlayerControl : MonoBehaviour, IDamageable
             isGrounded = count > 0;
         }
     }
-
-    void HangingAniamtion()
-    {
-        if (InAirCheck())
-            PlayerAnimationStateUpdate(PlayerState.Hang, true, 0.2f);
-        else
-            UpdateLocoMotion(0.1f);
-    }
     bool InAirCheck()
     {
         if (isGrounded)
@@ -472,6 +460,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
 
         ForceInterruptAll();
         canMove = false;
+        attackBtn.interactable = true;
         isStunned = true;
         isStateLocked = true;
         rb.linearVelocity = Vector3.zero;
@@ -500,19 +489,18 @@ public class PlayerControl : MonoBehaviour, IDamageable
         isStunned = false;
         isStateLocked = false;
         canMove = true;
+        canAttack = true;
+        attackBtn.interactable  = true;
+        img.color = Color.white;
 
         animator.Play("Empty", reactionLayer);
         animator.SetLayerWeight(reactionLayer, 0f);
 
-        canAttack = true;
     }
 
 
     void Die()
     {
-        //PlayerAnimationStateUpdate(PlayerState.Attacked, true, 0.1f);
-        //StartCoroutine(AfterDie());
-
         if (isDead) return; // safety
         isDead = true;
 
@@ -631,7 +619,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         chargedFired = false;
 
         //New line---
-        isJumping = false;      
+        isJumping = false;
         isStateLocked = false;
         //---
         canAttack = false; // temporarily block
@@ -641,7 +629,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         {
             animator.Play("Empty", reactionLayer);
             animator.SetLayerWeight(reactionLayer, 0f);
-           
+
         }
         else
         {
@@ -649,7 +637,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
             animator.SetLayerWeight(reactionLayer, 0f);
             animator.Play("Attacked", 0);
             PlayerAnimationStateUpdate(PlayerState.Attacked, true, 0.1f);
-            
+
         }
 
     }
