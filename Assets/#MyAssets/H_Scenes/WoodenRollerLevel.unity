@@ -2449,6 +2449,12 @@ Transform:
   - {fileID: 1480351126}
   m_Father: {fileID: 89390245}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &205061748 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6940094141228531500, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1827842654}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &210364080
 GameObject:
   m_ObjectHideFlags: 0
@@ -19823,7 +19829,7 @@ PrefabInstance:
         type: 3}
       propertyPath: lookAt
       value: 
-      objectReference: {fileID: 1827842656}
+      objectReference: {fileID: 205061748}
     - target: {fileID: 4139911821551715629, guid: f9cfa429a895dad4a9a902147dfa15ab,
         type: 3}
       propertyPath: player
@@ -20898,7 +20904,7 @@ PrefabInstance:
     - target: {fileID: 8554527208338914459, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: m_Interpolate
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8554527208338914459, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
@@ -20908,7 +20914,7 @@ PrefabInstance:
     - target: {fileID: 8554527208338914459, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: m_CollisionDetection
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}

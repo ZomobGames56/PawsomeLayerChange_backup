@@ -8391,6 +8391,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6079256261082411493, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 8554527208338914459, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: m_IsKinematic
@@ -8405,7 +8410,7 @@ PrefabInstance:
         type: 3}
       propertyPath: head
       value: 
-      objectReference: {fileID: 761194056}
+      objectReference: {fileID: 0}
     - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: joystick

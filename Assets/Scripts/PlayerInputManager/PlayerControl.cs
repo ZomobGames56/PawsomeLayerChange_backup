@@ -199,7 +199,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
             isStateLocked = true;
             isJumping = true;
 
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);//New line added;
+           // rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);//New line added;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             //if (isStunned) return;
             PlayerAnimationStateUpdate(PlayerState.Jump, true, 0.05f);

@@ -114,21 +114,36 @@ public class WheelRotation_AI : MonoBehaviour
         );
     }
 
+    //void Jump()
+    //{
+    //    if (!isGrounded) return;
+
+    //    Vector3 toward = (jumpTarget.position - transform.position).normalized;
+    //    toward.y = 0;
+
+    //    transform.rotation = Quaternion.LookRotation(toward);
+    //    Vector3 rot = (moveTarget.position - transform.position).normalized;
+    //    transform.rotation = Quaternion.Euler(rot.normalized);
+
+    //    rb.linearVelocity = Vector3.zero;
+    //    rb.AddForce(toward * forwardForce + Vector3.up * upForce, ForceMode.Impulse);
+    //}
     void Jump()
     {
         if (!isGrounded) return;
 
-        Vector3 toward = (jumpTarget.position - transform.position).normalized;
+        Vector3 toward = (jumpTarget.position - transform.position);
         toward.y = 0;
 
-        transform.rotation = Quaternion.LookRotation(toward);
-        Vector3 rot = (moveTarget.position - transform.position).normalized;
-        transform.rotation = Quaternion.Euler(rot.normalized);
+        if (toward.sqrMagnitude < 0.01f) return;
+
+        // ✅ correct rotation
+        transform.rotation = Quaternion.LookRotation(toward.normalized);
 
         rb.linearVelocity = Vector3.zero;
-        rb.AddForce(toward * forwardForce + Vector3.up * upForce, ForceMode.Impulse);
-    }
 
+        rb.AddForce(toward.normalized * forwardForce + Vector3.up * upForce, ForceMode.Impulse);
+    }
     // ===================== GROUND CHECK =====================
     private void OnTriggerStay(Collider other)
     {

@@ -40,6 +40,7 @@ public class WoodenLevelWinner : MonoBehaviour
                 if (collide) return;
 
                 collide = true;
+                HY_StartPause.countOver = false;
                 //player lost.
                 collision.gameObject.SetActive(false);
                 losePanel.SetActive(true);
