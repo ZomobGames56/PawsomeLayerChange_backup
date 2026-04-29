@@ -61,7 +61,14 @@ public class WheelLevel_Winner : MonoBehaviour
             {
                 totalPlayers.Remove(other.gameObject);
             }
-            
+            for (int i = totalPlayers.Count - 1; i >= 0; i--)
+            {
+                if (totalPlayers[i].name == enmyRb.gameObject.name)
+                {
+                    totalPlayers.RemoveAt(i);
+                }
+            }
+
             foreach (WheelRotation_AI ai in wheelAIRef)
             {
                 ai.GetComponent<Rigidbody>().isKinematic = true;
@@ -105,6 +112,8 @@ public class WheelLevel_Winner : MonoBehaviour
                 otherPositions[i].position,
                 otherPositions[i].rotation
             );
+            totalPlayers[i].SetActive(true);
+            totalPlayers[i].GetComponent<Animator>().SetTrigger("Defeat");
             totalPlayers[i].GetComponent<Rigidbody>().isKinematic = false;
         }
         playerRb.isKinematic = false;
