@@ -19,13 +19,18 @@ public class HY_OnJumper : MonoBehaviour
         {
             JumperForce = 55f;
             rb.AddForce(Vector3.up * JumperForce,ForceMode.Impulse);
-            playerAnim.SetBool("Hanging", true);
+            //playerAnim.ResetTrigger("Dashing");
+            //playerAnim.SetBool("Dash",false);
+            //playerAnim.SetBool("Hanging",true);
+
         }
         if (collision.transform.tag == "JumperTrigger")
         {
             JumperForce = 30f;
             rb.AddForce(Vector3.up * JumperForce, ForceMode.Impulse);
-            playerAnim.SetBool("Hanging", true);
+            //playerAnim.ResetTrigger("Dashing");
+            //playerAnim.SetBool("Dash", false);
+            //playerAnim.SetBool("Hanging", true);
             Debug.Log("Print");
         }
     }

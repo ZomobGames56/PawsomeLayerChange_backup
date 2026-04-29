@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
@@ -16,7 +15,7 @@ public class HY_Decide_Winner : MonoBehaviour
     [SerializeField]
     HY_NavMeshEnemy[] enemyRef;
     [SerializeField]
-    GameObject qualified, eliminated,cloudeExit;
+    GameObject qualified, eliminated, cloudeExit;
     bool isCalled = false;
     [SerializeField]
     TextMeshProUGUI winnerCountTxt;
@@ -24,7 +23,7 @@ public class HY_Decide_Winner : MonoBehaviour
     [SerializeField]
     AudioClip winClip, looseClip;
     [SerializeField]
-    GameObject playerModel,_Level_Object;
+    GameObject playerModel, _Level_Object;
     [SerializeField]
     float timeToShowWinnerScreen = 2.5f;
     [SerializeField]
@@ -59,7 +58,7 @@ public class HY_Decide_Winner : MonoBehaviour
     {
         winnerCountTxt.text = winnerCount + "/1";
     }
-    
+
 
 
     private void OnTriggerEnter(Collider other)
@@ -98,14 +97,14 @@ public class HY_Decide_Winner : MonoBehaviour
             HY_Player_Control.canControl = false;
             playerControl.GetComponent<Animator>().SetTrigger("Defeat");
             playerRb.isKinematic = true;
-
+            //playerRb.position = otherPositions[0].position;
             // other.GetComponent<Animator>().SetTrigger("Victory");
             other.gameObject.GetComponent<HY_NavMeshEnemy>().touchedFinishLine = true;
             other.gameObject.GetComponent<HY_NavMeshEnemy>().enabled = false;
             other.gameObject.GetComponent<NavMeshAgent>().enabled = false;
             other.gameObject.GetComponent<Animator>().SetTrigger("Victory");
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
-            rb.transform.rotation = Quaternion.Euler(0, 0, 0);  
+            rb.transform.rotation = Quaternion.Euler(0, 0, 0);
             if (totalPlayers.Contains(other.gameObject))
             {
                 totalPlayers.Remove(other.gameObject);
@@ -123,8 +122,8 @@ public class HY_Decide_Winner : MonoBehaviour
                         if (item.isActiveAndEnabled)
                         {
                             item.GetComponent<Animator>().SetTrigger("Defeat");
-                            item.GetComponent<NavMeshAgent>().enabled =false;
-                            item.GetComponent<HY_NavMeshEnemy>().enabled =false;
+                            item.GetComponent<NavMeshAgent>().enabled = false;
+                            item.GetComponent<HY_NavMeshEnemy>().enabled = false;
                             //item.canMove = false;
                         }
                     }
@@ -136,7 +135,7 @@ public class HY_Decide_Winner : MonoBehaviour
             StartCoroutine(VictoryBox(rb));
         }
     }
-    
+
     public void OnPlayerWin()
     {
         if (once) return;
@@ -168,7 +167,7 @@ public class HY_Decide_Winner : MonoBehaviour
 
         UpdateUI();
     }
-   
+
     IEnumerator VictoryBox(Rigidbody rb)
     {
         yield return new WaitForSeconds(3f);
@@ -183,17 +182,19 @@ public class HY_Decide_Winner : MonoBehaviour
         mainCanvas.SetActive(false);
         game_DL.SetActive(false);
         victoryBoxObj.SetActive(true);
-        _Level_Object.SetActive(false);
 
+        totalPlayers[0].GetComponent<Rigidbody>().position = otherPositions[0].transform.position;
         for (int i = 0; i < totalPlayers.Count && i < otherPositions.Count; i++)
         {
+
             totalPlayers[i].transform.SetPositionAndRotation(
                 otherPositions[i].position,
                 otherPositions[i].rotation
             );
         }
         yield return new WaitForSeconds(2f);
-        playerRb.isKinematic = false;    
+        playerRb.isKinematic = false;
+        _Level_Object.SetActive(false);
         foreach (ZLerpMove z in insideBox)
         {
             z.pushOn = true;

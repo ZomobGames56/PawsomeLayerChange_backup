@@ -46,7 +46,7 @@ public class HY_BricksBehaviour : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
-          //  transform.localPosition = new Vector3(transform.localPosition.x, 0f, transform.localPosition.z);
+            collision.gameObject.GetComponent<Animator>().SetBool("Hanging", true);
         }
     }
     private void OnCollisionStay(Collision collision)

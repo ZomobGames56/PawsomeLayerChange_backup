@@ -197,7 +197,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             child.isKinematic = true;
             child.constraints = RigidbodyConstraints.FreezeAll;
         }
-
+        animator.SetBool("Dash",false);
         HY_CameraControl.CameraSnapToPlayerDirection(parentRb.transform);
         HY_Player_Control.canControl = true;
 
@@ -263,7 +263,7 @@ public class HY_PlayerRagdollActive : MonoBehaviour, IHitAble
             child.isKinematic = true;
             child.constraints = RigidbodyConstraints.FreezeAll;
         }
-
+        animator.Rebind();
         HY_CameraControl.CameraSnapToPlayerDirection(parentRb.transform);
         HY_Player_Control.canControl = true;
     }

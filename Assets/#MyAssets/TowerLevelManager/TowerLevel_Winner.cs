@@ -25,14 +25,18 @@ public class TowerLevel_Winner : MonoBehaviour
     GameObject victoryPos, cloudExit, mainCamera, mainCanvas, game_DL, victoryBoxObj;
     [SerializeField]
     GameObject ballsObj;
+    bool crownTouched = false;
     private void Awake()
     {
         victoryBoxObj.SetActive(false);
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (crownTouched) return;
+
+        if (other.CompareTag("Player") && !crownTouched)
         {
+            crownTouched = true;
             ballsObj.SetActive(false);
             playerRef.GetComponent<Rigidbody>().isKinematic = true;
             winnerScreen.SetActive(true);
@@ -51,18 +55,22 @@ public class TowerLevel_Winner : MonoBehaviour
             }
             StartCoroutine(VictoryBox(playerRef));
         }
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && !crownTouched)
         {
+            crownTouched = true;
+
             ballsObj.SetActive(false);
             playerRef.GetComponent<Rigidbody>().isKinematic = true;
             loseScreen.SetActive(true);
+            HY_Player_Control.canControl = false;
+
             NavMeshAgent _ai = other.gameObject.GetComponent<NavMeshAgent>();
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            rb.rotation = Quaternion.Euler(0, 0, 0);
             if (totalPlayers.Contains(other.gameObject))
             {
                 totalPlayers.Remove(other.gameObject);
             }
-            rb.rotation = Quaternion.Euler(0, 0, 0);
             foreach (NavMeshAgent ai in towerLevlAI)
             {
                 ai.GetComponent<NavMeshAgent>().enabled = false;
@@ -111,7 +119,7 @@ public class TowerLevel_Winner : MonoBehaviour
             if (totalPlayers[i].GetComponent<NavMeshAgent>() != null)
             {
                 totalPlayers[i].GetComponent<NavMeshAgent>().enabled = false;
-                
+
             }
             totalPlayers[i].GetComponent<Animator>().enabled = true;
             totalPlayers[i].GetComponent<Rigidbody>().isKinematic = false;

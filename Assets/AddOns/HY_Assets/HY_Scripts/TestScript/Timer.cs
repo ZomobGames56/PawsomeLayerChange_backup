@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -19,20 +18,22 @@ public class CountdownTimer : MonoBehaviour
     [SerializeField]
     public bool playerWon, enemyWon;
     public int redTeamScore, blueTeamScroce;
-   
+
+    GameObject balls;
     void Start()
     {
         once = false;
         currentTime = timeInMinutes * 60; // Convert minutes to seconds
         UpdateTimerText();
         playerWon = false;
-        enemyWon=false;
+        enemyWon = false;
+
     }
 
     void Update()
     {
         redTeamScore = RedGoalPostHit.Instance.redBallScore;
-        blueTeamScroce=BlueGoalPost.Instance.blueBallScore;
+        blueTeamScroce = BlueGoalPost.Instance.blueBallScore;
         if (HY_StartPause.countOver)
         {
             if (currentTime > 0)
@@ -43,22 +44,22 @@ public class CountdownTimer : MonoBehaviour
             }
             if (currentTime <= 0)
             {
-                
+
                 // //  redTeamScore = GoalPostHit.Instance.redBallScore;
                 ////   blueTeamScroce=GoalPostHit.Instance.blueBallScore;
                 //   print("RedTeamScore" + redTeamScore + " " + "BlueTeamScore" + blueTeamScroce);
                 // //  print(GoalPostHit.Instance.gameObject.name);
-               if (redTeamScore < blueTeamScroce)
+                if (redTeamScore < blueTeamScroce)
                 {
                     playerWon = true;
                     enemyWon = false;
                 }
-               else if(blueTeamScroce < redTeamScore)
+                else if (blueTeamScroce < redTeamScore)
                 {
                     enemyWon = true;
-                    playerWon=false;
+                    playerWon = false;
                 }
-               else if (blueTeamScroce == redTeamScore)
+                else if (blueTeamScroce == redTeamScore)
                 {
                     currentTime = 0.5f * 60;
                 }
@@ -69,6 +70,7 @@ public class CountdownTimer : MonoBehaviour
         if (playerWon)
         {
             WinnerImg.SetActive(true);
+            
 
         }
         else if (enemyWon)
@@ -94,13 +96,15 @@ public class CountdownTimer : MonoBehaviour
 
     void WinnerCheck()
     {
-        if (playerWon &&!once)
+        if (playerWon && !once)
         {
             //WinnerImg.SetActive(true);
             //LooserImg.SetActive(false);
             HY_AudioManager.instance.PlayAudioEffectOnce(winClip);
             playerWon = true;
             once = true;
+            HY_Player_Control.canControl = false;
+            balls.SetActive(false);
             StartCoroutine(LoadScene());
 
         }
@@ -111,6 +115,9 @@ public class CountdownTimer : MonoBehaviour
             //WinnerImg.SetActive(false);
             enemyWon = true;
             once = true;
+            HY_Player_Control.canControl = false;
+            balls.SetActive(false);
+
             StartCoroutine(LoadScene());
 
 
@@ -121,7 +128,7 @@ public class CountdownTimer : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         //player sound 
-        var handle = Addressables.LoadSceneAsync("LevelSelection",LoadSceneMode.Single);
+        var handle = Addressables.LoadSceneAsync("LevelSelection", LoadSceneMode.Single);
 
         while (!handle.IsDone)
         {

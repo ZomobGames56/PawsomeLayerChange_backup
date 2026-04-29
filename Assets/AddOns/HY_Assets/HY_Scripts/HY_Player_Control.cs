@@ -325,7 +325,7 @@ public class HY_Player_Control : MonoBehaviour
     }// joy stick movment.
     public void MobileJumpBtn()
     {
-        if (isGrounded && !jumpbtnPressed)
+        if ((isGrounded || isDashing) && !jumpbtnPressed)
         {
             if (jumpRoutine != null)
                 StopCoroutine(jumpRoutine);
@@ -441,17 +441,19 @@ public class HY_Player_Control : MonoBehaviour
         {
             HY_PlayerRagdollActive.instance.OnShovelHit();
         }
-        //if (collision.transform.tag == "Water" && !collideToWater)
-        //{
-        //    collideToWater = true;
-        //    OnCollideWater();
-        //}
     }
     void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Log"))
         {
             currentPlatformRb = null;
+        }
+
+        if (collision.gameObject.CompareTag("Slider"))
+        {
+            isDashing = false; // 🔥 IMPORTANT
+           
+            //animator.SetBool("Dash", false);
         }
     }
     void PlayerOutOfBounds()
@@ -575,17 +577,20 @@ public class HY_Player_Control : MonoBehaviour
     {
         if (other.CompareTag("Ground") || other.CompareTag("Log"))
         {
-                count--;
-                // 🔥 clamp count (VERY IMPORTANT)
-                if (count < 0) count = 0;
+            count--;
 
-                isGrounded = count > 0;
+            if (count < 0) count = 0;
 
-                if (!isGrounded)
-                {
-                    inAir = true; // 🔥 SET PROPERLY
-                }
+            isGrounded = count > 0;
+
+            if (!isGrounded)
+            {
+                inAir = true;
+                animator.SetBool("Hanging", true);
+
+            }
         }
+
     }
 
     void OnDrawGizmos()

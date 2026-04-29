@@ -7,8 +7,9 @@ public class HexaStartBricks : MonoBehaviour
     {
         if (HY_StartPause.countOver)
         {
-            transform.localScale = Vector3.zero;
 
+            transform.localScale = Vector3.zero;
+            gameObject.GetComponent<BoxCollider>().isTrigger = true;
         }
     }
 }

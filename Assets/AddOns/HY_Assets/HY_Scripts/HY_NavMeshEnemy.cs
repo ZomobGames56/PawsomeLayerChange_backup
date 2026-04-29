@@ -108,13 +108,16 @@ public class HY_NavMeshEnemy : MonoBehaviour
         isJumping = false;
         //enmyAnim.SetFloat("Run", agent.velocity.magnitude);
     }
-
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Slider"))
         {
             StartCoroutine(HandleSlider());
         }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        
 
         if (other.CompareTag("Finish"))
         {

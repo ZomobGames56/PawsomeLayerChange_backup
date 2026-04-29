@@ -74,6 +74,8 @@ public class Level_2Winner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(isPlayerWin || isEnemyWin) return;
+
         if (other.tag == "Player")
         {
             //Player Win //Active Win Screen.

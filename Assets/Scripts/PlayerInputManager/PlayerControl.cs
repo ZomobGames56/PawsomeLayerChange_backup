@@ -468,6 +468,7 @@ public class PlayerControl : MonoBehaviour, IDamageable
         playerHelath -= 10;
         healthbarImg.fillAmount = (float)playerHelath / 100;
         animator.SetLayerWeight(actionLayer, 0);
+        img.color = Color.grey;
         if (playerHelath <= 0)
         {
             Die();

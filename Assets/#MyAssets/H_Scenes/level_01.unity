@@ -2219,7 +2219,7 @@ PrefabInstance:
         type: 3}
       propertyPath: joystick
       value: 
-      objectReference: {fileID: 798964931}
+      objectReference: {fileID: 1536775530}
     - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: secondSp
@@ -3104,7 +3104,7 @@ MonoBehaviour:
   target: {fileID: 1545754199}
   agent: {fileID: 0}
   enmyAnim: {fileID: 0}
-  rndSpeed: 3
+  rndSpeed: 4
   onSliderSpeed: 14
   jumpHeight: 2
   jumpDuration: 0.5
@@ -3423,7 +3423,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   enmyAnim: {fileID: 0}
   rndSpeed: 5
-  onSliderSpeed: 0
+  onSliderSpeed: 12
   jumpHeight: 2
   jumpDuration: 0.5
   canMove: 1
@@ -12786,7 +12786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedVersion: 1
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0.0000031141665, y: 1.219738, z: -8.17671}
+  m_StartPoint: {x: -0.94983965, y: 2.8654442, z: -6.9245715}
   m_EndPoint: {x: 0.000008359956, y: -1.2261639, z: 5.3928194}
   m_StartTransform: {fileID: 0}
   m_EndTransform: {fileID: 0}
@@ -17357,18 +17357,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 796670748}
   m_Mesh: {fileID: 2297425034801156755, guid: 56a99e88afb788e4cba0902ea15bfd5e, type: 3}
---- !u!114 &798964931 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7653834199629029522, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
-    type: 3}
-  m_PrefabInstance: {fileID: 1345311727}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a47f546fc70ec8428172694e78e4288, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &800581917
 GameObject:
   m_ObjectHideFlags: 0
@@ -25101,7 +25089,7 @@ Transform:
   m_GameObject: {fileID: 1150050429}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.792039, y: -6.97, z: 13.595344}
+  m_LocalPosition: {x: -10.792039, y: -6.87, z: 13.595344}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29284,7 +29272,7 @@ PrefabInstance:
     - target: {fileID: 978203158326804820, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2281850350572837261, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
@@ -29300,6 +29288,11 @@ PrefabInstance:
         type: 3}
       propertyPath: testText
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5229702047601110932, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7075410975716871232, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
@@ -29334,7 +29327,7 @@ PrefabInstance:
     - target: {fileID: 7970201072070721426, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8050963021197776284, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
@@ -31990,6 +31983,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1534589163}
   m_Mesh: {fileID: 8393969432434051992, guid: 56a99e88afb788e4cba0902ea15bfd5e, type: 3}
+--- !u!114 &1536775530 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2698056928542829497, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 1345311727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1540686542
 GameObject:
   m_ObjectHideFlags: 0
@@ -32191,7 +32196,7 @@ PrefabInstance:
     - target: {fileID: 9000107344292248105, guid: 62259160fc67cfc4c91d247d4100151c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.77
+      value: -6.72
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -42208,7 +42213,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   enmyAnim: {fileID: 0}
   rndSpeed: 7
-  onSliderSpeed: 0
+  onSliderSpeed: 12
   jumpHeight: 2
   jumpDuration: 0.5
   canMove: 1
@@ -146375,7 +146380,7 @@ MonoBehaviour:
   target: {fileID: 23421322}
   agent: {fileID: 8890424120863820712}
   enmyAnim: {fileID: 0}
-  rndSpeed: 8
+  rndSpeed: 7
   onSliderSpeed: 14
   jumpHeight: 2
   jumpDuration: 0.5
@@ -231841,7 +231846,7 @@ MonoBehaviour:
   target: {fileID: 23421322}
   agent: {fileID: 35639904806908593}
   enmyAnim: {fileID: 0}
-  rndSpeed: 8
+  rndSpeed: 7
   onSliderSpeed: 14
   jumpHeight: 2
   jumpDuration: 0.5
