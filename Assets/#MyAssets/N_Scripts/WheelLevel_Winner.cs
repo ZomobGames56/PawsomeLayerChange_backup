@@ -24,15 +24,20 @@ public class WheelLevel_Winner : MonoBehaviour
     GameObject victoryPos, cloudExit, mainCamera, mainCanvas, game_DL, victoryBoxObj;
     [SerializeField]
     GameObject rotator;
+    bool gameOver = false;
     private void Start()
     {
         playerRb = playerRef.GetComponent<Rigidbody>();
+        gameOver = false;
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (gameOver) return;
         if (other.CompareTag("Player"))
         {
             //
+            gameOver = true;
+            HY_Player_Control.canControl = false;
             playerRb.isKinematic = true;
             rotator.GetComponent<HY_RotateObstacles>().canRotate = false;
             foreach (WheelRotation_AI ai in wheelAIRef)
@@ -51,12 +56,15 @@ public class WheelLevel_Winner : MonoBehaviour
         }
         if (other.CompareTag("Enemy"))
         {
-            //player lost
+
+            gameOver = true;
+
+            HY_Player_Control.canControl = false;
             playerRb.isKinematic = true;
             loseScreen.SetActive(true);
             rotator.GetComponent<HY_RotateObstacles>().canRotate = false;
             Rigidbody enmyRb = other.gameObject.GetComponent<Rigidbody>();
-            WheelRotation_AI _ai  = other.gameObject.GetComponent<WheelRotation_AI>();  
+            WheelRotation_AI _ai = other.gameObject.GetComponent<WheelRotation_AI>();
             if (totalPlayers.Contains(other.gameObject))
             {
                 totalPlayers.Remove(other.gameObject);
@@ -77,12 +85,12 @@ public class WheelLevel_Winner : MonoBehaviour
                 if (ai == _ai)
                 {
                     ai.GetComponent<Animator>().SetTrigger("Victory");
-                   
+
                 }
                 else
                 {
                     ai.GetComponent<Animator>().SetTrigger("Defeat");
-                  
+
                 }
 
             }
