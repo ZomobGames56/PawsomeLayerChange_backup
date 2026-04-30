@@ -9835,7 +9835,7 @@ PrefabInstance:
     - target: {fileID: 7181318664031202534, guid: 1d230bd5a56b2954fab8317af3128507,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 7181318664031202534, guid: 1d230bd5a56b2954fab8317af3128507,
         type: 3}
@@ -11066,7 +11066,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1525650408 stripped
@@ -14615,7 +14615,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00012207031, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1920998101
@@ -14657,6 +14657,7 @@ MonoBehaviour:
   enemyWon: 0
   redTeamScore: 0
   blueTeamScroce: 0
+  balls: {fileID: 1411423806}
 --- !u!4 &1920998103
 Transform:
   m_ObjectHideFlags: 0

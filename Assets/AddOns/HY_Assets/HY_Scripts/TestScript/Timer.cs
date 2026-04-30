@@ -18,7 +18,7 @@ public class CountdownTimer : MonoBehaviour
     [SerializeField]
     public bool playerWon, enemyWon;
     public int redTeamScore, blueTeamScroce;
-
+    [SerializeField]
     GameObject balls;
     void Start()
     {

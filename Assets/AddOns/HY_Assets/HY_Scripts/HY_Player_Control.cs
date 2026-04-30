@@ -257,7 +257,7 @@ public class HY_Player_Control : MonoBehaviour
                     rb.linearVelocity = velocity;
                 }
             }
-            if (move.magnitude != 0)
+            if (move.magnitude != 0 && canControl)
             {
                 Rotate();
                 // dustEffect.Play();

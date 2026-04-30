@@ -4935,7 +4935,7 @@ PrefabInstance:
     - target: {fileID: 5229702047601110932, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 5686067060631460229, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
@@ -20742,7 +20742,7 @@ Transform:
   m_GameObject: {fileID: 1952789898}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.27, y: 1.2, z: 0.59}
+  m_LocalPosition: {x: -1.27, y: 1.3, z: 0.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20763,11 +20763,11 @@ MonoBehaviour:
   m_SerializedVersion: 1
   m_AgentTypeID: 0
   m_StartPoint: {x: 0.00000003059306, y: 0, z: -2.3233597}
-  m_EndPoint: {x: -0.000000107349486, y: -0.74346244, z: 7.9194875}
+  m_EndPoint: {x: -0.00000021870117, y: -0.23808551, z: 6.9854016}
   m_StartTransform: {fileID: 0}
   m_EndTransform: {fileID: 0}
   m_Activated: 1
-  m_Width: 19.937748
+  m_Width: 0
   m_CostModifier: 1
   m_IsOverridingCost: 0
   m_Bidirectional: 1
