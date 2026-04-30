@@ -29,7 +29,10 @@ public class HY_NavMeshEnemy : MonoBehaviour
 
         agent.speed = rndSpeed;
     }
-
+    private void Start()
+    {
+        onSliderSpeed = Random.Range(10,14);
+    }
     void Update()
     {
         if (!HY_StartPause.countOver || !canMove || touchedFinishLine)
@@ -113,6 +116,7 @@ public class HY_NavMeshEnemy : MonoBehaviour
         if (other.CompareTag("Slider"))
         {
             StartCoroutine(HandleSlider());
+            Debug.Log("Collide with the collider");
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -129,6 +133,7 @@ public class HY_NavMeshEnemy : MonoBehaviour
             jumpHeight = 7;
             jumpDuration = 1.35f;
             rndSpeed = Random.Range(4, 6);
+            onSliderSpeed = rndSpeed;
             Debug.Log("Val Changed");
         }
         if (other.CompareTag("RestVal"))
@@ -143,6 +148,7 @@ public class HY_NavMeshEnemy : MonoBehaviour
     {
         if (other.CompareTag("Slider"))
         {
+            Debug.Log("Exit");
             enmyAnim.SetBool("Dash", false);
         }
     }

@@ -183,7 +183,8 @@ public class HY_Decide_Winner : MonoBehaviour
         game_DL.SetActive(false);
         victoryBoxObj.SetActive(true);
 
-        totalPlayers[0].GetComponent<Rigidbody>().position = otherPositions[0].transform.position;
+        totalPlayers[0].GetComponent<Rigidbody>().position = otherPositions[0].position;
+        totalPlayers[0].GetComponent<Rigidbody>().rotation = otherPositions[0].rotation;
         for (int i = 0; i < totalPlayers.Count && i < otherPositions.Count; i++)
         {
 
