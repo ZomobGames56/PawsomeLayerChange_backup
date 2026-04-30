@@ -24,7 +24,8 @@ public class HY_StartPause : MonoBehaviour
     GameObject tileManagerObj;
     [SerializeField]
     GameObject player;
-
+    [SerializeField]
+    GameObject victoryBoxObj;
     void Start()
     {
         if (pauseMenu != null)
@@ -39,7 +40,7 @@ public class HY_StartPause : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Escape) && !clouds.activeInHierarchy)
+        if (Input.GetKeyUp(KeyCode.Escape) && !clouds.activeInHierarchy && !victoryBoxObj.activeInHierarchy)
         {
             clouds.SetActive(false);
             pauseMenu.SetActive(true);

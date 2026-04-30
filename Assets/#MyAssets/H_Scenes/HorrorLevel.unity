@@ -5210,7 +5210,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4260910913259739616, guid: d4a198ea95035b949a3a98ffae2d97d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2024285859}
   m_SourcePrefab: {fileID: 100100000, guid: d4a198ea95035b949a3a98ffae2d97d0, type: 3}
 --- !u!1 &342946534 stripped
 GameObject:
@@ -6218,7 +6222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &406519493
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10386,6 +10390,7 @@ GameObject:
   - component: {fileID: 685423813}
   - component: {fileID: 685423812}
   - component: {fileID: 685423811}
+  - component: {fileID: 685423816}
   m_Layer: 13
   m_Name: Panda (1)
   m_TagString: Enemy
@@ -10517,6 +10522,29 @@ Transform:
   - {fileID: 20932639}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 159.526, z: 0}
+--- !u!136 &685423816
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685423810}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &686714056 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2903288909390036216, guid: 72eadb1280d5e794aaebfbdd0a618cff,
@@ -17031,6 +17059,11 @@ PrefabInstance:
       objectReference: {fileID: 567976176}
     - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
         type: 3}
+      propertyPath: victoryBoxObj
+      value: 
+      objectReference: {fileID: 2084780932}
+    - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
+        type: 3}
       propertyPath: CountDownPanel
       value: 
       objectReference: {fileID: 1187313724}
@@ -21852,6 +21885,29 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1419483304}
   m_PrefabAsset: {fileID: 0}
+--- !u!136 &1321843446
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321843440}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &1321930287
 GameObject:
   m_ObjectHideFlags: 0
@@ -23921,7 +23977,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4260910913259739616, guid: d4a198ea95035b949a3a98ffae2d97d0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1321843446}
   m_SourcePrefab: {fileID: 100100000, guid: d4a198ea95035b949a3a98ffae2d97d0, type: 3}
 --- !u!114 &1419483305 stripped
 MonoBehaviour:
@@ -29821,7 +29881,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 150, y: 0}
-  m_SizeDelta: {x: 950, y: 500}
+  m_SizeDelta: {x: 900, y: 400}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1716340619
 MonoBehaviour:
@@ -33761,6 +33821,29 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 340941220}
   m_PrefabAsset: {fileID: 0}
+--- !u!136 &2024285859
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024285858}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &2029722558
 GameObject:
   m_ObjectHideFlags: 0
@@ -39864,6 +39947,7 @@ GameObject:
   - component: {fileID: 919132148002481985}
   - component: {fileID: 919132148002481984}
   - component: {fileID: 919132148002481983}
+  - component: {fileID: 919132148002481987}
   m_Layer: 13
   m_Name: Hippo
   m_TagString: Enemy
@@ -39976,6 +40060,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132148002481987
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148002481982}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132148443192063
 GameObject:
   m_ObjectHideFlags: 0
@@ -39989,6 +40096,7 @@ GameObject:
   - component: {fileID: 919132148443192066}
   - component: {fileID: 919132148443192065}
   - component: {fileID: 919132148443192064}
+  - component: {fileID: 919132148443192068}
   m_Layer: 13
   m_Name: Rhino
   m_TagString: Enemy
@@ -40101,6 +40209,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132148443192068
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148443192063}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132148673667665
 GameObject:
   m_ObjectHideFlags: 0
@@ -40130,6 +40261,7 @@ GameObject:
   - component: {fileID: 919132148955769920}
   - component: {fileID: 919132148955769919}
   - component: {fileID: 919132148955769918}
+  - component: {fileID: 919132148955769922}
   m_Layer: 13
   m_Name: Lion
   m_TagString: Enemy
@@ -40242,6 +40374,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132148955769922
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148955769917}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132148960744472
 GameObject:
   m_ObjectHideFlags: 0
@@ -40255,6 +40410,7 @@ GameObject:
   - component: {fileID: 919132148960744475}
   - component: {fileID: 919132148960744474}
   - component: {fileID: 919132148960744473}
+  - component: {fileID: 919132148960744477}
   m_Layer: 13
   m_Name: Cow (1)
   m_TagString: Enemy
@@ -40367,6 +40523,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132148960744477
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148960744472}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132149055711158
 GameObject:
   m_ObjectHideFlags: 0
@@ -40380,6 +40559,7 @@ GameObject:
   - component: {fileID: 919132149055711161}
   - component: {fileID: 919132149055711160}
   - component: {fileID: 919132149055711159}
+  - component: {fileID: 919132149055711163}
   m_Layer: 13
   m_Name: Zebra
   m_TagString: Enemy
@@ -40492,6 +40672,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132149055711163
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149055711158}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132149085342936
 GameObject:
   m_ObjectHideFlags: 0
@@ -40505,6 +40708,7 @@ GameObject:
   - component: {fileID: 919132149085342939}
   - component: {fileID: 919132149085342938}
   - component: {fileID: 919132149085342937}
+  - component: {fileID: 919132149085342941}
   m_Layer: 13
   m_Name: Rabbit
   m_TagString: Enemy
@@ -40617,6 +40821,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132149085342941
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149085342936}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132149170351271
 GameObject:
   m_ObjectHideFlags: 0
@@ -40649,6 +40876,7 @@ GameObject:
   - component: {fileID: 919132149231128936}
   - component: {fileID: 919132149231128935}
   - component: {fileID: 919132149231128934}
+  - component: {fileID: 919132149231128938}
   m_Layer: 13
   m_Name: Cat
   m_TagString: Enemy
@@ -40761,6 +40989,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132149231128938
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149231128933}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132149328913880
 GameObject:
   m_ObjectHideFlags: 0
@@ -40774,6 +41025,7 @@ GameObject:
   - component: {fileID: 919132149328913883}
   - component: {fileID: 919132149328913882}
   - component: {fileID: 919132149328913881}
+  - component: {fileID: 919132149328913885}
   m_Layer: 13
   m_Name: Pig
   m_TagString: Enemy
@@ -40886,6 +41138,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132149328913885
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149328913880}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132149359739961
 GameObject:
   m_ObjectHideFlags: 0
@@ -40899,6 +41174,7 @@ GameObject:
   - component: {fileID: 919132149359739964}
   - component: {fileID: 919132149359739963}
   - component: {fileID: 919132149359739962}
+  - component: {fileID: 919132149359739966}
   m_Layer: 13
   m_Name: Deer
   m_TagString: Enemy
@@ -41011,6 +41287,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132149359739966
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149359739961}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1 &919132149388639785
 GameObject:
   m_ObjectHideFlags: 0
@@ -41024,6 +41323,7 @@ GameObject:
   - component: {fileID: 919132149388639788}
   - component: {fileID: 919132149388639787}
   - component: {fileID: 919132149388639786}
+  - component: {fileID: 919132149388639790}
   m_Layer: 13
   m_Name: Panda
   m_TagString: Enemy
@@ -41136,6 +41436,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!136 &919132149388639790
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149388639785}
+  m_Material: {fileID: 13400000, guid: 839eb8c379bd64d4d81bd2a6f386ebc1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 12845047
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 4.779266
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.169633, z: 0}
 --- !u!1001 &923777090166553560
 PrefabInstance:
   m_ObjectHideFlags: 0

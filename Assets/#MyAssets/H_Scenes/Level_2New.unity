@@ -403,7 +403,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 100, y: -5.9}
-  m_SizeDelta: {x: 1000, y: 550}
+  m_SizeDelta: {x: 900, y: 400}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &17642781
 MonoBehaviour:
@@ -1919,7 +1919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &183238664
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4918,6 +4918,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 978203158326804820, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1201423242448336925, guid: d29a1f0d1c963fd4f8b2f93dd44534fe,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -7999,8 +8004,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8.616258, y: 1, z: 0.21190664}
-  m_Center: {x: 0.25331238, y: -3.0254435e-15, z: -0.011709458}
+  m_Size: {x: 10.234385, y: 4.1339474, z: 0.21190664}
+  m_Center: {x: 0.18004093, y: 1.5669736, z: -0.011709459}
 --- !u!1 &761325765
 GameObject:
   m_ObjectHideFlags: 0
@@ -9537,8 +9542,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 13.266949, y: 1, z: 0.13746184}
-  m_Center: {x: -0.23830657, y: -0.000000016261982, z: -0.015533648}
+  m_Size: {x: 15.172284, y: 3.229, z: 0.13746184}
+  m_Center: {x: -0.54822505, y: 1.1144994, z: -0.015533648}
 --- !u!1 &855213822
 GameObject:
   m_ObjectHideFlags: 0
@@ -11454,8 +11459,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 22.90708, y: 1, z: 0.15298347}
-  m_Center: {x: -0.11398752, y: 3.784443e-15, z: 0.021376787}
+  m_Size: {x: 24.687235, y: 2.6449108, z: 0.15298347}
+  m_Center: {x: -0.34920847, y: 0.8224554, z: 0.021376787}
 --- !u!1001 &1037511076
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14877,8 +14882,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.4979887, y: 1, z: 0.16388312}
-  m_Center: {x: -0.10652032, y: -0.000000005834628, z: -0.009364939}
+  m_Size: {x: 5.7412744, y: 2.764098, z: 0.16388312}
+  m_Center: {x: -0.099761076, y: 0.8820498, z: -0.009364939}
 --- !u!1 &1430341879
 GameObject:
   m_ObjectHideFlags: 0
@@ -20510,6 +20515,11 @@ PrefabInstance:
       propertyPath: cloudForExit
       value: 
       objectReference: {fileID: 839831025}
+    - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
+        type: 3}
+      propertyPath: victoryBoxObj
+      value: 
+      objectReference: {fileID: 1469599481}
     - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
         type: 3}
       propertyPath: CountDownPanel

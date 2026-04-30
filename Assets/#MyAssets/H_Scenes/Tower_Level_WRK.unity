@@ -2644,7 +2644,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &157359026
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23682,7 +23682,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 100, y: -5.9}
-  m_SizeDelta: {x: 950, y: 450}
+  m_SizeDelta: {x: 900, y: 400}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1636348119
 MonoBehaviour:
@@ -25120,6 +25120,11 @@ PrefabInstance:
       propertyPath: cloudForExit
       value: 
       objectReference: {fileID: 198768149}
+    - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
+        type: 3}
+      propertyPath: victoryBoxObj
+      value: 
+      objectReference: {fileID: 830420839}
     - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
         type: 3}
       propertyPath: CountDownPanel

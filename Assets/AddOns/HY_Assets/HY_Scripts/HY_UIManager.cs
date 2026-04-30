@@ -28,16 +28,23 @@ public class HY_UIManager : MonoBehaviour
     
     private void Update()
     {
-        //if()
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            exitPanel.SetActive(true);
+            playerModel.SetActive(false);
+            HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
+        }
     }
     public void ExitCross()//
     {
         exitPanel.SetActive(true);
+        playerModel.SetActive(false);
         HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
     }
     public void ContinuePlayBtn()//
     {
         exitPanel.SetActive(false);
+        playerModel.SetActive(true);
         HY_AudioManager.instance.PlayAudioEffectOnce(clickClip);
 
     }

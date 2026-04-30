@@ -2199,7 +2199,7 @@ PrefabInstance:
         type: 3}
       propertyPath: head
       value: 
-      objectReference: {fileID: 996246402}
+      objectReference: {fileID: 1261384199}
     - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
       propertyPath: firstSp
@@ -2269,6 +2269,11 @@ PrefabInstance:
         type: 3}
       propertyPath: outOfBoundVal
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+        type: 3}
+      propertyPath: obstacleCollide
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8994991294693874505, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
         type: 3}
@@ -21568,12 +21573,6 @@ Rigidbody:
     type: 3}
   m_PrefabInstance: {fileID: 112110363}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &996246402 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 509798972437619949, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
-    type: 3}
-  m_PrefabInstance: {fileID: 112110363}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &999166610
 GameObject:
   m_ObjectHideFlags: 0
@@ -27425,6 +27424,12 @@ Transform:
   - {fileID: 220273231}
   m_Father: {fileID: 543399448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1261384199 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3861725457133349613, guid: 032970822fe15bb4aad7f18cbc4d8a4d,
+    type: 3}
+  m_PrefabInstance: {fileID: 112110363}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1265512931
 GameObject:
   m_ObjectHideFlags: 0
@@ -41616,7 +41621,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 100, y: -5.9}
-  m_SizeDelta: {x: 1000, y: 550}
+  m_SizeDelta: {x: 900, y: 400}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &2015464841
 MonoBehaviour:
@@ -129215,7 +129220,7 @@ PrefabInstance:
     - target: {fileID: 8154260916155318842, guid: 8d8c7a01938bab04595dfde572f940a1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1897.8
+      value: 4749
       objectReference: {fileID: 0}
     - target: {fileID: 8154260916155318842, guid: 8d8c7a01938bab04595dfde572f940a1,
         type: 3}
@@ -257193,6 +257198,11 @@ PrefabInstance:
       propertyPath: cloudForExit
       value: 
       objectReference: {fileID: 1611341120}
+    - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
+        type: 3}
+      propertyPath: victoryBoxObj
+      value: 
+      objectReference: {fileID: 63324967}
     - target: {fileID: 3050103526012813475, guid: 8ff25a553b2a21c4783a34a93c1c8822,
         type: 3}
       propertyPath: CountDownPanel
