@@ -29,6 +29,7 @@ public class StoryScript : MonoBehaviour
             // Subscribe to the event
             videoPlayer.loopPointReached += OnVideoFinished;
         }
+        AnalyticsEvents.StoryCalled();
     }
 
     // This will be called when the video finishes

@@ -106,3 +106,35 @@ InitTestScene*.unity*
 # Addressables runtime data
 /ServerData/*
 /Assets/StreamingAssets/aa/*
+
+# =========================
+# 🔥 Firebase (Unity)
+# =========================
+
+# Keep these (DO NOT ignore)
+# google-services.json
+# GoogleService-Info.plist
+
+# Unity Firebase generated copies (safe to ignore)
+/Assets/StreamingAssets/google-services-desktop.json
+/Assets/Plugins/Android/FirebaseApp.androidlib/
+/Assets/Plugins/Android/FirebaseCrashlytics.androidlib/
+/Assets/Plugins/Android/FirebaseMessaging.androidlib/
+
+# Firebase editor/cache files
+/Assets/Firebase/Editor/*.xml
+/Assets/Firebase/Editor/*.json
+
+# Crashlytics generated
+crashlytics-build.properties
+
+# Firebase logs
+firebase-debug.log
+firebase-debug.*.log
+
+# Firebase CLI (if used)
+.firebase/
+.firebaserc
+
+# Emulator / export files
+firebase-export-*.json

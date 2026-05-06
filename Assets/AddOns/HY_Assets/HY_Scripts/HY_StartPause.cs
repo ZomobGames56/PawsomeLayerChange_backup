@@ -37,6 +37,8 @@ public class HY_StartPause : MonoBehaviour
         CountDownPanel.SetActive(false);
         cloudForExit.SetActive(false);
         clouds.SetActive(true);
+        string sceneName = SceneManager.GetActiveScene().name;
+        AnalyticsEvents.LevelStartEvent(sceneName);
     }
     private void Update()
     {
