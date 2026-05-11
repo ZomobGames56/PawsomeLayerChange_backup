@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -10,21 +9,28 @@ public class HY_LevelBtnManager : MonoBehaviour
 {
 
     [SerializeField]
-    GameObject loadingScreen,cloudObj,enterCloudObj;//, playerModel;
+    GameObject loadingScreen, cloudObj, enterCloudObj;//, playerModel;
     [SerializeField]
     Image slider;
     float progress;
     int levelIndex;
     [SerializeField]
     AudioClip bgMucis, clickClip;
+    public static bool canShowAd = false;
+
     // Start is called before the first frame update
     private void Start()
     {
         HY_AudioManager.instance.PlayAudioEffectOnce(bgMucis);
         enterCloudObj.SetActive(true);
+        if (HY_Unity_LevelPlay_Ads.IsAdInitialize && canShowAd)
+        {
+            HY_Unity_LevelPlay_Ads.instance.ShowInterstitialAd();
+        }
     }
     public void LoadGameLevel(string levelName)
     {
+        
         HY_AudioManager.instance.PlayAudioEffectOnce(bgMucis);
         StartCoroutine(LoadScene(levelName));
     }
@@ -46,5 +52,5 @@ public class HY_LevelBtnManager : MonoBehaviour
             Debug.LogError("Scene load failed");
         }
     }
-    
+
 }

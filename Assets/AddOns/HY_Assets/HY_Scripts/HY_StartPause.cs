@@ -39,6 +39,8 @@ public class HY_StartPause : MonoBehaviour
         clouds.SetActive(true);
         string sceneName = SceneManager.GetActiveScene().name;
         AnalyticsEvents.LevelStartEvent(sceneName);
+
+        HY_LevelBtnManager.canShowAd = true;
     }
     private void Update()
     {
