@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class AdvancedBootstrapLoader : MonoBehaviour
+public class m_Addressable_Script : MonoBehaviour
 {
     public string sceneKey;
 
@@ -31,7 +31,13 @@ public class AdvancedBootstrapLoader : MonoBehaviour
 
         StartCoroutine(StartLoader());
     }
+    public void BeginLoading()
+    {
+        retryButton.SetActive(false);
+        noInternetPanel.SetActive(false);
 
+        StartCoroutine(StartLoader());
+    }
     public void Retry()
     {
         retryButton.SetActive(false);

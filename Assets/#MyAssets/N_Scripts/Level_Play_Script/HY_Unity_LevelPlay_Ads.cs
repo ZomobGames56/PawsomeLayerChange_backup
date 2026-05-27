@@ -34,13 +34,15 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
 
         
         LevelPlay.ValidateIntegration();
+        LevelPlay.SetMetaData("is_test_suite", "enable");
+
 
         LevelPlay.OnInitSuccess += SdkInitializationCompletedEvent;
         LevelPlay.OnInitFailed += SdkInitializationFailedEvent;
 
         LevelPlay.Init(AdConfig.AppKey);
 
-        showAdButton.interactable = false; 
+        //showAdButton.interactable = false; 
     }
     void EnableAds()
     {
@@ -102,7 +104,8 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
         if (!enableAd || interstitialAd == null)
         {
             Debug.Log("Ads not initialized yet");
-            text.text = "Ads not initialized yet";
+            //text.text = "Ads not initialized yet";
+
             return;
         }
         interstitialAd.LoadAd();
@@ -113,7 +116,7 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
         if (!enableAd || rewardedVideoAd == null)
         {
             Debug.Log("Ad not initialized yet");
-            text.text = "Ad not initialized yet";
+            //text.text = "Ad not initialized yet";
             return;
         }
 
@@ -125,7 +128,7 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
         {
 
             Debug.Log("Ad not ready yet");
-            text.text = "Ad not ready yet "+rewardedVideoAd.IsAdReady();
+            //text.text = "Ad not ready yet "+rewardedVideoAd.IsAdReady();
         }
 
     }
@@ -142,7 +145,8 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
     private void SdkInitializationCompletedEvent(LevelPlayConfiguration configuration)
     {
         Debug.Log("SDK Init Success");
-        text.text = "SDK Init Success";
+        //text.text = "SDK Init Success";
+        LevelPlay.LaunchTestSuite();
 
         EnableAds();
         enableAd = true;
@@ -154,7 +158,7 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
     private void SdkInitializationFailedEvent(LevelPlayInitError error)
     {
         Debug.Log($"Init Failed: {error}");
-        text.text = $"Init Failed: {error}";
+        //text.text = $"Init Failed: {error}";
     }
 
 
@@ -162,35 +166,35 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
     private void InterstitialOnAdInfoChangedEvent(LevelPlayAdInfo info)
     {
         string log = $"Received InterstitialOnAdInfoChangedEvent With AdInfo: {info}";
-        text.text = log;
+        //text.text = log;
     }
 
     void InterstitialOnAdLoadedEvent(LevelPlayAdInfo adInfo)
     {
         Debug.Log("Ad Loaded");
-        text.text = $"Ad Loaded: {adInfo.AdNetwork}";
+        //text.text = $"Ad Loaded: {adInfo.AdNetwork}";
 
-        showAdButton.interactable = true; // ✅ enable button
+        //showAdButton.interactable = true; // ✅ enable button
     }
 
     void InterstitialOnAdLoadFailedEvent(LevelPlayAdError error)
     {
         Debug.Log($"Load Failed: {error}");
-        text.text = $"Load Failed: {error}";
+        //text.text = $"Load Failed: {error}";
     }
 
     void InterstitialOnAdDisplayedEvent(LevelPlayAdInfo adInfo)
     {
         Debug.Log("Ad Displayed");
-        text.text = "Ad Displayed";
+        //text.text = "Ad Displayed";
 
-        showAdButton.interactable = false; // ❌ disable while showing
+        //showAdButton.interactable = false; // ❌ disable while showing
     }
 
     void InterstitialOnAdClosedEvent(LevelPlayAdInfo adInfo)
     {
         Debug.Log("Ad Closed");
-        text.text = $"Ad Closed: {adInfo.AdNetwork}";
+        //text.text = $"Ad Closed: {adInfo.AdNetwork}";
 
 
         //showAdButton.interactable = false;
@@ -207,15 +211,21 @@ public class HY_Unity_LevelPlay_Ads : MonoBehaviour
     void InterstitialOnAdDisplayFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error)
     {
         Debug.Log($"Display Failed: {error}");
-        text.text = $"Display Failed: {error}";
-
+        //text.text = $"Display Failed: {error}";
+        //TextUpdate(error);
         interstitialAd.LoadAd(); // retry
     }
-
+    void TextUpdate(LevelPlayAdError m_error)
+    {
+        if (this.text != null)
+        {
+            text.text = $"Display Failed: {m_error}";
+        }
+    }
     void RewardedVideoOnLoadedEvent(LevelPlayAdInfo adInfo)
     {
         Debug.Log($"Received RewardedVideoOnLoadedEvent With AdInfo: {adInfo}");
-        text.text = $"[Harsh Test] Received RewardedVideoOnLoadedEvent With AdInfo: {adInfo}";
+        //text.text = $"[Harsh Test] Received RewardedVideoOnLoadedEvent With AdInfo: {adInfo}";
     }
 
     void RewardedVideoOnAdLoadFailedEvent(LevelPlayAdError error)
