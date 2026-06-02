@@ -11,19 +11,24 @@ public class m_InAppUpdateManager : MonoBehaviour
     [SerializeField] private GameObject updatePopup;
     [SerializeField]
     private m_Addressable_Script addressable_Script;
+
+    [SerializeField]
+    string URL = "https://play.google.com/store/apps/details?id=com.mailtoalbatrossgamingstudios.PawSomeAdventure&hl=en_IN";
     private void Start()
     {
+        Debug.Log("Update Manager");
         // Hide popup initially
         updatePopup.SetActive(false);
 
         // Start update check
         StartCoroutine(CheckForUpdate());
-       
-       
+
+
     }
-   
+
     IEnumerator CheckForUpdate()
     {
+        Debug.Log("try to call");
         appUpdateManager = new AppUpdateManager();
 
         // Request update info
@@ -31,6 +36,7 @@ public class m_InAppUpdateManager : MonoBehaviour
             appUpdateManager.GetAppUpdateInfo();
 
         yield return appUpdateInfoOperation;
+        Debug.Log("after Return");
 
         // Check if request successful
         if (appUpdateInfoOperation.IsSuccessful)
@@ -47,21 +53,31 @@ public class m_InAppUpdateManager : MonoBehaviour
             }
             else
             {
-                addressable_Script.BeginLoading();
+                StartCoroutine(StartAddressableAfterDelay());
                 Debug.Log("No Update Available");
             }
         }
         else
         {
-            addressable_Script.BeginLoading();
+            StartCoroutine(StartAddressableAfterDelay());
             Debug.Log("Update Check Failed");
         }
     }
 
+    IEnumerator StartAddressableAfterDelay()
+    {
+        Debug.Log("BeginLoading Called");
+        yield return new WaitForSeconds(0f);
+
+        addressable_Script.BeginLoading();
+    }
+
+
     // Button Function
     public void OnClickUpdate()
     {
-        StartCoroutine(StartFlexibleUpdate());
+        //StartCoroutine(StartFlexibleUpdate());
+        Application.OpenURL(URL);
     }
 
     IEnumerator StartFlexibleUpdate()
@@ -83,7 +99,7 @@ public class m_InAppUpdateManager : MonoBehaviour
 
             yield return startUpdateRequest;
 
-           
+
         }
     }
 }

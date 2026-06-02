@@ -29,7 +29,7 @@ public class m_Addressable_Script : MonoBehaviour
         retryButton.SetActive(false);
         noInternetPanel.SetActive(false);
 
-        StartCoroutine(StartLoader());
+       
     }
     public void BeginLoading()
     {
@@ -59,7 +59,7 @@ public class m_Addressable_Script : MonoBehaviour
     }
     IEnumerator CheckCatalogUpdate()
     {
-        statusText.text = "Checking Updates......";
+        //statusText.text = "Checking Updates......";
 
         var checkHandle = Addressables.CheckForCatalogUpdates();
         yield return checkHandle;
@@ -85,6 +85,7 @@ public class m_Addressable_Script : MonoBehaviour
 
         if (catalogs != null && catalogs.Count > 0)
         {
+            //Downloading Essential Asset...(27/100)%
             statusText.text = "Updating Content";
 
             var updateHandle = Addressables.UpdateCatalogs(catalogs);
@@ -145,7 +146,9 @@ public class m_Addressable_Script : MonoBehaviour
 
     IEnumerator Download(long totalBytes)
     {
-        statusText.text = "Downloading......";
+        //Downloading Essential Asset...(27/100)%
+        //statusText.text = "Downloading......";
+        //statusText.text  = 
 
         var handle = Addressables.DownloadDependenciesAsync(sceneKey);
 
@@ -164,7 +167,9 @@ public class m_Addressable_Script : MonoBehaviour
 
             progressSlider.fillAmount = percent;
             percentText.text = (percent * 100f).ToString("F0") + "%";
+            //Downloading Essential Asset...(27/100)%
 
+            statusText.text = $"Downloading Essential Assets...({percent * 100f:F0}/100)%";
             float downloadedMB = status.DownloadedBytes / 1024f / 1024f;
             float totalMB = totalBytes / 1024f / 1024f;
 
@@ -212,7 +217,7 @@ public class m_Addressable_Script : MonoBehaviour
 
             progressSlider.fillAmount = percent;
             percentText.text = "("+(percent * 100f).ToString("F0")+"/" +"100)"+ "%";
-
+            statusText.text = $"Loading Scene...({percent * 100f:F0}/100)%";
             yield return null;
         }
 
